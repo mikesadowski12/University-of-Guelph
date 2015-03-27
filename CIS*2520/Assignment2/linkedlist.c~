@@ -1,0 +1,70 @@
+
+
+Nickname *AddNewNicknameNode(Nickname *newHead, char* nickname, char*realname)
+{
+
+
+
+}
+
+/*
+This function takes in the head of a linked list, and adds new nodes. It sorts the nodes by ___.
+It return the new head of the list, with the added node now inside the list in the correct position.
+*/
+Nickname *AddNewNicknameNode(Nickname *newHead, char* nickname, char*realname)
+{
+	Nickname *newBlock = NULL;
+	Nickname *ptr = NULL;
+	Nickname *prev = NULL;
+
+	newBlock = (Nickname *)malloc(sizeof(Nickname));
+	if (newBlock == NULL)
+	{
+		printf("Error: No Memory\n");
+		return NULL;	
+	}
+
+	strcpy(newBlock->NickName,nickname);
+	strcpy(newBlock->RealName, realname);
+	newBlock->next = NULL;	
+	
+	/*if the list is empty, it is the new head of the list*/
+	if (newHead == NULL)
+	{
+		newHead = newBlock;	
+	}
+	/*Check if it can be stored at the beginning of the list*/
+	else if (strcmp(newHead->RealName, newBlock->RealName) >= 0)
+	{
+		newBlock->next = newHead;
+		newHead = newBlock;
+	}
+	/*Find where it can be stored and store it*/
+	else
+	{
+		prev = newHead;
+		ptr = newHead->next;
+		
+		while (ptr != NULL)
+		{
+			if (strcmp(newHead->RealName, newBlock->RealName) >= 0)
+			{
+				break;/*if position to place was found, break out of loop*/
+			}
+			else
+			{
+				/*continue through the list*/
+				prev = ptr;
+				ptr = ptr->next;
+
+			}		
+
+		}
+
+		/*set the node to the correct position found in the above loop*/
+		newBlock->next = ptr;
+		prev->next = newBlock;
+	}
+
+	return newHead;/*always return the head of the list*/
+}
