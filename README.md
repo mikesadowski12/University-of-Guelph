@@ -1,2 +1,3 @@
 # UOGUELPH
-Work done at University Of Guelph 2013-2017
+# BCH.SENG
+Work @ University of Guelph [2013-2017]
