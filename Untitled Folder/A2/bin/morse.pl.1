@@ -1,0 +1,18 @@
+<html><head><title>Morse Code Translator</title></head><body>Enter text (or morse code) in the box below, click translate.<br><table width=600><tr><td><form method="post" action="/cgi-bin/morse.pl" enctype="multipart/form-data">
+<textarea NAME="message" ROWS=24 COLS=80></textarea>
+<br><input type="submit" name="button" value="Translate" /></form><p><b>Note:</b> For Morse to English: For best results, each grouping of morse symbols that translates to a letter should be separated with a space, and each word with two spaces. One space will be eliminated between each morse character, so this will yield natural looking english. 
+<p>For example, SOS SINKING should be entered as:
+<p>... --- ...(two spaces here)&nbsp;&nbsp;... .. -. -.- .. -. --.
+
+<p>For English to Morse: A space will be inserted between characters unless there is already something between them; if there is only a space, two spaces will be inserted to preserve word separations.
+<hr>
+<b>Other Hints</b>
+<p>The forward slash / can be translated to morse, so please don't use that as a word separater. 
+<p>If you lump a bunch of dots and dashes together you'll probably get nothing like what you expected. But short of some complicated string alignment program exploring all possible boundaries to see which give translations that are in the dictionary, that's the best that can be done. Because of how regular expressions work, the longest matching morse character will be pulled off the front of any space-deliniated section that is not itself an entire morse character.  
+</td></tr></table><p><script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-2331026-1";
+urchinTracker();
+</script>
+268742</body></html>

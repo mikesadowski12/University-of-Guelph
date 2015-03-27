@@ -1,0 +1,37 @@
+AC/DC,What Do You Do For Money Honey,216,3481.6,a
+AC/DC,Have A Drink On Me,238,3788.8,b
+The Beatles,Good Morning Good Morning,161,2560,b
+The Beatles,A Hard Day's Night,153,2457.6,b
+The Beatles,Get Back,192,3072,b
+Bill Hutton,Close Every Door,193,3072,b
+Billy Joel,Big Shot,244,3891.2,b
+The Blues Brothers,Sweet Home Chicago,472,7372.8,b
+Collective Soul,Gel,180,2969.6,b
+Cowboy Junkies,Now I Know,142,2252.8,b
+Creedence Clearwater Revival,Up Around The Bend,162,2560,b
+David Byrne and Brian Eno,Home,306,11980.8,b
+Enya,Book Of Days,176,2867.2,b
+Godsmack,Whatever,206,3276.8,b
+J.J. Ipsen And The Paper Crown,Good To Be Me,228,5427.2,b
+J.J. Ipsen And The Paper Crown,Crossword Puzzle Riddles,223,5324.8,b
+Jayme Stone,Andrea Berget,205,6656,b
+Jim Cuddy,Second Son,263,8499.2,b
+Jim Cuddy,Too Many Hands,312,10342.4,b
+Joe Jackson,San Francisco Fan,269,4198.4,b
+The Kills,Baby Says,269,8499.2,b
+The Kinks,A Rock n Roll Fantasy,301,4710.4,b
+Leonard Cohen,Take This Waltz,360,7065.6,b
+Les Batinses,Track 99,41,623,b
+The National,Start A War,196,4300.8,b
+Neil Young,Welfare Mothers,229,3584,b
+Olenka And The Autumn Lovers,Sweet Little Road,160,5120,b
+Paul Simon,You Can Call Me Al,280,4505.6,b
+Pink Floyd,Goodbye Blue Sky,169,2662.4,b
+Pink Floyd,Young Lust,213,3379.2,b
+Sex Pistols,Submission,253,3993.6,b
+Sheryl Crow,Run  Baby  Run,293,4608,b
+Simon & Garfunkel,Scarborough Fair,193,3072,b
+Simon & Garfunkel,For Emily Whenever I May Find Her,126,2048,a
+Stan Rogers,Canol Road,191,3072,b
+Tennessee Ernie Ford ,Sixteen Tons,157,2560,b
+The Who,Squeeze Box,160,2560,b

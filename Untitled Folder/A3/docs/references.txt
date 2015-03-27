@@ -1,0 +1,2 @@
+- used the ncurses manual for function information on their website
+- nothing else aided me

@@ -1,0 +1,26 @@
+studentWork/msadowsk/coursework/A4/src/linkedList.c:31:  Missing space before {  [whitespace/braces] [5]
+studentWork/msadowsk/coursework/A4/src/linkedList.c:80:  Missing space before {  [whitespace/braces] [5]
+studentWork/msadowsk/coursework/A4/src/linkedList.c:94:  Missing space before {  [whitespace/braces] [5]
+studentWork/msadowsk/coursework/A4/src/linkedList.c:110:  Missing space before {  [whitespace/braces] [5]
+studentWork/msadowsk/coursework/A4/src/linkedList.c:113:  Missing space before {  [whitespace/braces] [5]
+studentWork/msadowsk/coursework/A4/src/linkedList.c:133:  Missing space before {  [whitespace/braces] [5]
+studentWork/msadowsk/coursework/A4/src/linkedList.c:136:  Missing space before {  [whitespace/braces] [5]
+studentWork/msadowsk/coursework/A4/src/linkedList.c:140:  Missing space before {  [whitespace/braces] [5]
+studentWork/msadowsk/coursework/A4/src/linkedList.c:153:  Missing space before {  [whitespace/braces] [5]
+studentWork/msadowsk/coursework/A4/src/linkedList.c:166:  Missing space before {  [whitespace/braces] [5]
+studentWork/msadowsk/coursework/A4/src/linkedList.c:178:  Missing space before {  [whitespace/braces] [5]
+Done processing studentWork/msadowsk/coursework/A4/src/linkedList.c
+Done processing studentWork/msadowsk/coursework/A4/src/main.c
+studentWork/msadowsk/coursework/A4/src/musicFile.c:25:  Missing space before {  [whitespace/braces] [5]
+studentWork/msadowsk/coursework/A4/src/musicFile.c:33:  Missing space before {  [whitespace/braces] [5]
+studentWork/msadowsk/coursework/A4/src/musicFile.c:38:  Missing space before {  [whitespace/braces] [5]
+studentWork/msadowsk/coursework/A4/src/musicFile.c:41:  Missing space before ( in if(  [whitespace/parens] [5]
+studentWork/msadowsk/coursework/A4/src/musicFile.c:42:  Missing space before {  [whitespace/braces] [5]
+studentWork/msadowsk/coursework/A4/src/musicFile.c:67:  Missing space before {  [whitespace/braces] [5]
+studentWork/msadowsk/coursework/A4/src/musicFile.c:100:  Missing space before {  [whitespace/braces] [5]
+studentWork/msadowsk/coursework/A4/src/musicFile.c:128:  Missing space before {  [whitespace/braces] [5]
+Done processing studentWork/msadowsk/coursework/A4/src/musicFile.c
+Category 'whitespace/braces' errors found: 18
+Category 'whitespace/parens' errors found: 1
+Total errors found: 19
+LOC: 513

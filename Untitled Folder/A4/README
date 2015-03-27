@@ -1,0 +1,10 @@
+You must copy these files to your own A4 folder.  
+
+Be sure to put the files in the correct subdirectories.  
+
+DO NOT CHANGE the contents of the linkedList.h file or the listTest.c file
+YOU MUST call your linked list file linkedList.c
+
+Your job is to write all of the required functions for the linkedList.c file (i.e. every function that is declared in linkedList.h) and then to write a music library program that uses your linked list.
+
+You may use the listTest.c file to test your linkedList to make sure it is working.   type make test on the command line (assuming you copy the provided Makefile)

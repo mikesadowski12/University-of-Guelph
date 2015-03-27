@@ -1,0 +1,2 @@
+- used cplusplus.com for information about strtok 
+- nothing else aided me

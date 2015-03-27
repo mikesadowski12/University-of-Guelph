@@ -1,0 +1,14 @@
+Assignment four grading results 
+Code version graded (git branch): * master
+
+Total time incorrect. Expected: 02:15:32
+Found: 
+ Time difference of 9999 minutes and 9999 seconds
+Line Number:1
+ 	expected: 02:15:32
+ 	found: 
+number of lint errors:  19
+number of errors in music file: 1
+different in minutes: 9999
+difference in seconds: 9999
+difference in average: 0.000000
