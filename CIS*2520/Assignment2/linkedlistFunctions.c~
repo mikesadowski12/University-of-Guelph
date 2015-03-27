@@ -1,0 +1,310 @@
+#include "carStructs.h"
+
+
+
+/* MENU OPTION 2
+This function takes in the head of the AvailableToRent linked list, and adds new nodes from the Rented Linked list. It sorts the nodes by mileage. It returns the new head of the list, with the added node now inside the list in the correct position. It duplicates the old node by just copying all the information inside over to the new node, and placing the new node into 
+the list.
+*/
+CarStructure *addRentedToAvailable(CarStructure *availableHead, CarStructure *newNode)
+{
+	CarStructure *ptr = NULL;
+	CarStructure *prev = NULL;
+	CarStructure *newBlock = NULL;
+
+	newBlock = (CarStructure *)malloc(sizeof(CarStructure));
+	if (newBlock == NULL)
+	{
+		printf("Error: No Memory\n");
+		return availableHead;	
+	}
+
+	newBlock->mileage = newNode->mileage;
+	newBlock->charge = 0.00;
+	newBlock->returnDate = newNode->returnDate;
+	strcpy(newBlock->plateNumber, newNode->plateNumber);
+	delete_node(newNode);
+
+	/*if the list is empty, it is the new head of the list*/
+	if (availableHead == NULL)
+	{
+		availableHead = newBlock;	
+	}
+	/*Check if it can be stored at the beginning of the list*/
+	else if (availableHead->mileage <= newBlock->mileage)
+	{
+		newBlock->next = availableHead;
+		availableHead = newBlock;
+	}
+	/*Find where it can be stored and store it*/
+	else
+	{
+		prev = availableHead;
+		ptr = availableHead->next;
+		
+		while (ptr != NULL)
+		{
+			if (availableHead->mileage <= newBlock->mileage)
+			{
+				break;/*if position to place was found, break out of loop*/
+			}
+			else
+			{
+				/*continue through the list*/
+				prev = ptr;
+				ptr = ptr->next;
+			}		
+		}
+
+		/*set the node to the correct position found in the above loop*/
+		newBlock->next = ptr;
+		prev->next = newBlock;
+	}
+
+	return availableHead;/*always return the head of the list*/
+}
+
+/* MENU OPTION 3
+This function takes in the head of the InRepair linked list, and adds new nodes from the Rented Linked list. It sorts the nodes by mileage. It returns the new head of the list, with the added node now inside the list in the correct position. It duplicates the old node by just copying all the information inside over to the new node, and placing the new node into 
+the list.
+*/
+CarStructure *addRentedToInRepair(CarStructure *inRepairHead, CarStructure *newNode)
+{
+	CarStructure *ptr = NULL;
+	CarStructure *prev = NULL;
+	CarStructure *newBlock;
+
+	newBlock = (CarStructure *)malloc(sizeof(CarStructure));
+	if (newBlock == NULL)
+	{
+		printf("Error: No Memory\n");
+		return inRepairHead;	
+	}
+
+	newBlock->mileage = newNode->mileage;
+	newBlock->charge = 0.00;
+	newBlock->returnDate = newNode->returnDate;
+	strcpy(newBlock->plateNumber, newNode->plateNumber);
+	delete_node(newNode);
+
+	/*if the list is empty, it is the new head of the list*/
+	if (inRepairHead == NULL)
+	{
+		inRepairHead = newBlock;	
+	}
+	/*Check if it can be stored at the beginning of the list*/
+	else if (inRepairHead->mileage <= newBlock->mileage)
+	{
+		newBlock->next = inRepairHead;
+		inRepairHead = newBlock;
+	}
+	/*Find where it can be stored and store it*/
+	else
+	{
+		prev = inRepairHead;
+		ptr = inRepairHead->next;
+		
+		while (ptr != NULL)
+		{
+			if (inRepairHead->mileage <= newBlock->mileage)
+			{
+				break;/*if position to place was found, break out of loop*/
+			}
+			else
+			{
+				/*continue through the list*/
+				prev = ptr;
+				ptr = ptr->next;
+			}		
+		}
+
+		/*set the node to the correct position found in the above loop*/
+		newBlock->next = ptr;
+		prev->next = newBlock;
+	}
+
+	return inRepairHead;/*always return the head of the list*/
+}
+
+/* MENU OPTION 4
+This function takes in the head of the AvailableToRent linked list, and adds new nodes from the InRepair Linked list. It sorts the nodes by mileage. It returns the new head of the list, with the added node now inside the list in the correct position. It duplicates the old node by just copying all the information inside over to the new node, and placing the new node into 
+the list.
+*/
+CarStructure *addInRepairToAvailable(CarStructure *availableHead, CarStructure *newNode)
+{
+	CarStructure *ptr = NULL;
+	CarStructure *prev = NULL;
+	CarStructure *newBlock;
+
+	newBlock = (CarStructure *)malloc(sizeof(CarStructure));
+	if (newBlock == NULL)
+	{
+		printf("Error: No Memory\n");
+		return availableHead;	
+	}
+
+	newBlock->mileage = newNode->mileage;
+	newBlock->charge = 0.00;
+	newBlock->returnDate = newNode->returnDate;
+	strcpy(newBlock->plateNumber, newNode->plateNumber);
+	delete_node(newNode);
+
+	
+	/*if the list is empty, it is the new head of the list*/
+	if (availableHead == NULL)
+	{
+		availableHead = newBlock;	
+	}
+	/*Check if it can be stored at the beginning of the list*/
+	else if (availableHead->mileage <= newBlock->mileage)
+	{
+		newBlock->next = availableHead;
+		availableHead = newBlock;
+	}
+	/*Find where it can be stored and store it*/
+	else
+	{
+		prev = availableHead;
+		ptr = availableHead->next;
+		
+		while (ptr != NULL)
+		{
+			if (availableHead->mileage <= newBlock->mileage)
+			{
+				break;/*if position to place was found, break out of loop*/
+			}
+			else
+			{
+				/*continue through the list*/
+				prev = ptr;
+				ptr = ptr->next;
+			}		
+		}
+
+		/*set the node to the correct position found in the above loop*/
+		newBlock->next = ptr;
+		prev->next = newBlock;
+	}
+
+	return availableHead;/*always return the head of the list*/
+}
+
+/* MENU OPTION 5
+Function takes in 2 heads, one is the AvailableToRent linked list, and the other is the Rented list. It takes the first node
+of the AvailableToRent list, copies it, deletes the node from the linked list, and stores it in the Rented list, sorting the nodes by
+their return date.
+*/
+CarStructure *addAvailableToRented(CarStructure *availableNode, CarStructure *rentedHead)
+{	
+	CarStructure *ptr = NULL;
+	CarStructure *prev = NULL;
+	CarStructure *newBlock;
+	
+	/*copy the first node in the Available list to be of type Rented*/
+	newBlock = (CarStructure *)malloc(sizeof(CarStructure));
+	newBlock->plateNumber = (char *)malloc(sizeof(char));
+	if (newBlock == NULL)
+	{
+		printf("Error: No Memory\n");
+		return rentedHead;	
+	}
+
+	newBlock->mileage = availableNode->mileage;
+	newBlock->returnDate = availableNode->returnDate;
+	newBlock->next = NULL;
+	strcpy(newBlock->plateNumber, availableNode->plateNumber);
+	delete_node_start(availableNode);/*delete the copied node from Available list to the Rented list*/
+
+	/*if the list is empty, it is the new head of the list*/
+	if (rentedHead == NULL)
+	{
+		rentedHead = newBlock;	
+	}
+	/*Check if it can be stored at the beginning of the list*/
+	else if (rentedHead->returnDate <= newBlock->returnDate)
+	{
+		newBlock->next = rentedHead;
+		rentedHead = newBlock;
+	}
+	/*Find where it can be stored and store it*/
+	else
+	{
+		prev = rentedHead;
+		ptr = rentedHead->next;
+		
+		while (ptr != NULL)
+		{
+			if (rentedHead->returnDate <= newBlock->returnDate)
+			{
+				break;/*if position to place was found, break out of loop*/
+			}
+			else
+			{
+				/*continue through the list*/
+				prev = ptr;
+				ptr = ptr->next;
+			}		
+		}
+
+		/*set the node to the correct position found in the above loop*/
+		newBlock->next = ptr;
+		prev->next = newBlock;
+	}
+
+	return rentedHead;/*always return the head of the list*/
+}
+
+
+/*
+Returns the node matched to the plate number from the list given
+*/
+CarStructure* getNodeFromList(char* plateNumber, CarStructure* newHead)
+{
+	CarStructure *current = newHead;
+
+	/*Check if list is empty*/
+	if (current == NULL)
+	{
+		return NULL;
+	}
+
+	do
+	{
+		if(strcmp(plateNumber, current->plateNumber) == 0)
+		{
+			return current;
+		}	
+		current = current->next;
+	}while(current != NULL);/*keep going until match is found, or end of list*/
+
+	return NULL;
+}
+
+
+/* 
+NOT WRITTEN BY ME, GOT IT FROM STACKOVERFLOW EXAMPLE AND MODIFIED TO FIT THE ASSIGNMENT:
+stackoverflow.com/questions/69209/deleting-a-middle-node-from-a-single-linked-list-when-pointer-to-the-previous-no
+*/
+void delete_node(CarStructure* pNode)
+{
+	CarStructure* pTemp = pNode->next->next;
+	getchar();
+	getchar();
+
+	pNode->mileage = pNode->next->mileage;
+	pNode->returnDate = pNode->next->returnDate;
+	pNode->charge = pNode->next->charge;
+	strcpy(pNode->plateNumber, pNode->next->plateNumber);
+	free(pNode->next);
+	pNode->next = pTemp;
+}
+
+void delete_node_start(CarStructure* pNode)
+{
+	CarStructure* pTemp = pNode;
+	
+	pNode = pNode->next;
+	free(pTemp->plateNumber);
+	free(pTemp);
+
+}

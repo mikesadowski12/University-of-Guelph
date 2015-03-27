@@ -1,0 +1,13 @@
+#NAME: Mike Sadowski
+#DATE: October 14th, 2014
+#STUDENT ID: 0864810
+#ASSIGNEMNT: Data Structures Assignment 2
+
+all: a2_1 a2_2
+
+a2_1: q1.c CarStructure.c
+	gcc -Wall q1.c CarStructure.c -o a2_1
+a2_2: q2.c 
+	gcc -Wall q2.c -o a2_2
+clean: 
+	rm -rf *o a2_1 1 a2_2 
