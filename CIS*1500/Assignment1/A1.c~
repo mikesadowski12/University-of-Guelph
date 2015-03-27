@@ -1,0 +1,63 @@
+//NAME: Mike Sadowski
+//STUDENT NUMBER: 0864810
+//DATE: September 12th, 2013
+
+
+//INCLUDE STATEMENTS
+#include <stdio.h>
+
+//CONSTANTS
+#define magicBMInum 703
+
+//PROTOTYPES
+float CalculateBMI(float Height, float Weight);
+void printBMIcategory(float BMI);
+
+void main(void)
+{
+	float weight = 0.0;
+	float height = 0.0;
+	float bmi = 0.0;
+
+	printf("Please enter a height: ");
+	fgets(height, sizeof(height), stdin);
+
+	printf("Please enter a weight: ");
+	fgets(weight, sizeof(weight), stdin);
+	
+	bmi = CalculateBMI(height, weight);
+
+}
+
+
+//NAME: CalculateBMI
+//DESCRIPTION: Calculate the users Body Mass Index based on their height and weight
+//PARAMETERS: Two floats representing height and weight
+//RETURNS: New BMI as a float
+float CalculateBMI(float Height, float Weight)
+{
+	float newBMI = 0.0;
+	
+	//BMI = ( Weight in Pounds / ( Height in inches x Height in inches ) ) x 703
+	newBMI = (weight / (height * height)) * magicBMInum);
+
+	return newBMI;
+}
+
+void printBMIcategory(float BMI)
+{
+
+/*
+    //Underweight = less than 18.5
+    //Normal weight = 18.5 to 24.9
+    //Overweight = 25 to 29.9
+    //Obesity = BMI of 30 or greater
+*/
+	if (BMI < 18.5)
+	{
+
+	}	
+
+
+}
+
