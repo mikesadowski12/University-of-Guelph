@@ -1,0 +1,28 @@
+/*
+#NAME: Mike Sadowski
+#DATE: January 18th, 2015
+#STUDENT ID: 0864810
+#ASSIGNEMNT: CIS2750 A1
+*/
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "HashTable.h"
+
+int main()
+{
+	HashTable* table = createTable(50, , );
+
+	if(table == NULL)
+	{
+		return 1;
+	}
+	addElementToTable(table, "elem1", mallocNewString("HAHA"));
+	addElementToTable(table, "elem2", mallocNewString("HELO"));
+
+	printf("%s\n", (char*) getTableElement(table, "elem1"));
+	printf("%s\n", (char*) getTableElement(table, "elem"));
+	return 0;
+}
+

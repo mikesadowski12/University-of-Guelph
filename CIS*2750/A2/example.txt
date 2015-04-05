@@ -1,0 +1,17 @@
+#
+# Sample configuration file for a1example.c
+#
+
+name   = "Bill Jones"; # whitespace is irrelavent outside quoted strings
+id     =               # no spaces here, but shouldn't matter
+# no spaces here, but shouldn't matter#       		
+	-129;  	# no spaces here, but shouldn't matter#
+regstat=true;          # no spaces here, but shouldn't matter
+
+marks  = { "60",
+           "70",
+           "80", # no spaces here, but shouldn't matter
+           "75" };
+average = -79.9;
+test = {};
+# average is absent in this file - optional parameter in example
