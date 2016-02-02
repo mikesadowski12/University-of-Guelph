@@ -1,0 +1,57 @@
+00008000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.02
+Created On: 11/6/2014 11:44:28 AM
+
+00008000                             1          ORG     $8000
+00008000                             2  
+00008000  3F39 00009000              3  START      MOVE.W x,-(sp)
+00008006  3F39 00009002              4             MOVE.W y,-(sp)
+0000800C  3F39 00009004              5             MOVE.W z,-(sp)
+00008012  4EB9 0000801E              6             jsr solve_quad
+00008018  4FEF 000C                  7             lea 12(sp),sp
+0000801C  4E4E                       8             TRAP #14
+0000801E                             9  
+0000801E                            10  
+0000801E                            11  solve_quad ;movem.L D0-D2,-(sp)
+0000801E  2F02                      12             move.l d2,-(sp)
+00008020  2F00                      13             move.l d0,-(sp)
+00008022                            14             
+00008022  302F 000C                 15             move.w 12(sp),d0 ;move z into d0
+00008026  322F 000E                 16             move.w 14(sp),d1 ;move y into d1
+0000802A  342F 0010                 17             move.w 16(sp),d2 ;move x into d2
+0000802E                            18  
+0000802E  C5C2                      19             muls d2,d2
+00008030  C5FC 0005                 20             muls #5,d2   ;5*x^2
+00008034                            21  
+00008034  C3EF 0010                 22             muls 16(sp),d1 ;2*x*y
+00008038  C3FC 0002                 23             muls #2,d1
+0000803C                            24             
+0000803C  C1C0                      25             muls d0,d0
+0000803E                            26  
+0000803E  9441                      27             sub.w d1,d2 ;left - right side
+00008040  D440                      28             add.w d0,d2
+00008042                            29             
+00008042  3202                      30             move.w d2,d1
+00008044  4CDF 0007                 31             movem.l (sp)+,D0-D2
+00008048                            32                        
+00008048  4E75                      33             rts
+0000804A                            34  
+00009000                            35             ORG                $9000
+00009000= 0005                      36  x DC.W  5
+00009002= 0006                      37  y DC.W  6
+00009004= 0007                      38  z DC.W  7
+00009006                            39  
+00009006                            40             END START
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+SOLVE_QUAD          801E
+START               8000
+X                   9000
+Y                   9002
+Z                   9004

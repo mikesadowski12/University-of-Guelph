@@ -1,0 +1,24 @@
+
+Source file: L2_5.X68
+Assembled on: 14-09-25 at: 09:35:35
+          by: X68K PC-2.2 Copyright (c) University of Teesside 1989,96
+Defaults: ORG $0/FORMAT/OPT A,BRL,CEX,CL,FRL,MC,MD,NOMEX,NOPCO
+
+    1                        *L2_5.x68: A program that uses MULS, DIVS, EXT and SWAP
+    2                        
+    3                        
+    4  00008000                        ORG       $8000
+    5  00008000 343C0009     PROGRAM:  MOVE.W    #9,D2
+    6  00008004 163C00FE               MOVE.B    #-2,D3
+    7  00008008 C5C2                   MULS      D2,D2
+    8  0000800A 4883                   EXT.W     D3
+    9  0000800C 85C3                   DIVS.W    D3,D2
+   10  0000800E 4281                   CLR.L     D1
+   11  00008010 3202                   MOVE.W    D2,D1
+   12  00008012 2002                   MOVE.L    D2,D0
+   13  00008014 4240                   CLR.W     D0
+   14  00008016 4840                   SWAP      D0
+   15  00008018 4E4E                   TRAP      #14
+   16           00008000               END       PROGRAM
+
+Lines: 16, Errors: 0, Warnings: 0.

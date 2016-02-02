@@ -1,0 +1,43 @@
+00008000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.02
+Created On: 11/19/2014 4:24:30 PM
+
+00000000  =0000C001                  1  DUART   EQU     $00C001
+00000000  =0000000A                  2  ISR     EQU     $A
+00000000  =00000008                  3  ACR     EQU     4*2
+00000000  =0000000C                  4  CTUR    EQU     6*2
+00000000  =0000001E                  5  STOP    EQU     $1E
+00000000  =0000001C                  6  OPR_SET EQU     $1C
+00000000  =0000E100                  7  COUNT   EQU     57600
+00000000                             8  
+00008000                             9          ORG     $8000
+00008000  207C 0000C001             10  EIGHTHZ MOVEA.L #DUART,A0
+00008006  303C E100                 11          MOVE.W  #COUNT,D0
+0000800A  0188 000C                 12          MOVEP.W D0,CTUR(A0)
+0000800E  123C 0011                 13          MOVE.B  #$11,D1
+00008012                            14  
+00008012  1028 000A                 15  LOOP    MOVE.B  ISR(A0),D0
+00008016  C03C 0008                 16          AND.B   #8,D0
+0000801A  67F6                      17          BEQ     LOOP
+0000801C  4A28 001E                 18          TST.B   STOP(A0)
+00008020  4601                      19          NOT.B   D1
+00008022  1141 001C                 20          MOVE.B  D1,OPR_SET(A0)
+00008026  60EA                      21          BRA     LOOP
+00008028                            22          END     EIGHTHZ
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+ACR                 8
+COUNT               E100
+CTUR                C
+DUART               C001
+EIGHTHZ             8000
+ISR                 A
+LOOP                8012
+OPR_SET             1C
+STOP                1E

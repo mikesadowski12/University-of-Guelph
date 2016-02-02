@@ -1,0 +1,27 @@
+
+Source file: L5_3.X68
+Assembled on: 14-10-16 at: 09:46:26
+          by: X68K PC-2.2 Copyright (c) University of Teesside 1989,96
+Defaults: ORG $0/FORMAT/OPT A,BRL,CEX,CL,FRL,MC,MD,NOMEX,NOPCO
+
+    1                        *Lab5_3.x68: Signed and Unsigned Branches      
+    2                          
+    3  00008000                        ORG       $8000
+    4  00008000 103C0007     START:    MOVE.B    #7,D0
+    5  00008004 123900009001           MOVE.B    CHARCODE,D1
+    6                                 
+    7  0000800A 0C3900270000           CMPI.B    #39,HEXVALUE,
+                9000        
+    8  00008012 6C000004               BGE       EXIT                  ;;if #39 > HEXVALUE
+    9                                
+   10  00008016 D001                   ADD.B     D1,D0                 ;;add 0x07 to CHARCODE
+   11                                      
+   12  00008018 4E4E         EXIT:     TRAP      #14
+   13                                   
+   14                                  
+   15  00009000                        ORG       $9000
+   16  00009000 29           HEXVALUE: DC.B      41
+   17  00009001 2B           CHARCODE: DC.B      43
+   18           00008000               END       START
+
+Lines: 18, Errors: 0, Warnings: 0.

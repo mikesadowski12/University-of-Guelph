@@ -1,0 +1,48 @@
+
+Source file: L9_1.X68
+Assembled on: 14-11-13 at: 11:09:09
+          by: X68K PC-2.2 Copyright (c) University of Teesside 1989,96
+Defaults: ORG $0/FORMAT/OPT A,BRL,CEX,CL,FRL,MC,MD,NOMEX,NOPCO
+
+    1  00008000                        ORG       $8000
+    2                        
+    3  00008000 3F3C04D2     START:    MOVE.W    #1234,-(SP)
+    4  00008004 4EB900008010           JSR       DISPLAY
+    5  0000800A 4FEF0002               LEA       2(SP),SP
+    6  0000800E 4E4E                   TRAP      #14
+    7                        
+    8  00008010 4E56FFFC     DISPLAY:  LINK      A6,#-4
+    9  00008014 48E7E002               MOVEM.L   D0-D2/A6,-(SP)
+   10  00008018 4281                   CLR.L     D1
+   11  0000801A 4282                   CLR.L     D2
+   12  0000801C 342E0008               MOVE.W    8(A6),D2
+   13                        
+   14  00008020 0C6E00000008           CMPI      #0,8(A6)              ;;if(n==0)
+   15  00008026 6600000A               BNE       AA
+   16  0000802A 342E0008               MOVE.W    8(A6),D2              ;;return n
+   17  0000802E 6000002C               BRA       BB
+   18                        
+   19                        
+   20  00008032 322E0008     AA:       MOVE      8(A6),D1              ;; remainder = n % 10
+   21  00008036 82FC000A               DIVU      #10,D1
+   22  0000803A 4841                   SWAP      D1
+   23  0000803C 3F01                   MOVE.W    D1,-(SP)              ;;push remainder onto stack
+   24                        
+   25  0000803E 4281                   CLR.L     D1
+   26                                   
+   27  00008040 322E0008               MOVE.W    8(A6),D1              ;; quotient = n/10
+   28  00008044 82FC000A               DIVU      #10,D1
+   29  00008048 3F01                   MOVE.W    D1,-(SP)              ;;push quotient onto stack
+   30  0000804A 4EB900008010           JSR       DISPLAY               ;;display(quotient)
+   31  00008050 4280                   CLR.L     D0
+   32  00008052 302EFFFA               MOVE.W    -6(A6),D0
+   33  00008056 06000030               ADD.B     #'0',D0               ;; print char to screen
+   34  0000805A 4E41                   TRAP      #1
+   35                        
+   36  0000805C 4CDF4007     BB:       MOVEM.L   (SP)+,D0-D2/A6
+   37  00008060 4E5E                   UNLK      A6
+   38                                                        
+   39  00008062 4E75                   RTS       
+   40           00008000               END       START
+
+Lines: 40, Errors: 0, Warnings: 0.

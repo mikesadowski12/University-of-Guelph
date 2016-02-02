@@ -1,0 +1,17 @@
+
+Source file: L2_3.X68
+Assembled on: 14-09-25 at: 09:01:29
+          by: X68K PC-2.2 Copyright (c) University of Teesside 1989,96
+Defaults: ORG $0/FORMAT/OPT A,BRL,CEX,CL,FRL,MC,MD,NOMEX,NOPCO
+
+    1                        *L2_3.x68: Adds four 8-bit integers using byte addition
+    2                        
+    3  00008000                        ORG       $8000
+    4  00008000 203C00000021 PROGRAM:  MOVE.L    #$21,D0
+    5  00008006 06000057               ADD.B     #$57,D0
+    6  0000800A 060000B9               ADD.B     #$B9,D0
+    7  0000800E 0600007D               ADD.B     #$7D,D0
+    8  00008012 4E4E                   TRAP      #14
+    9           00008000               END       PROGRAM
+
+Lines: 9, Errors: 0, Warnings: 0.

@@ -1,0 +1,20 @@
+
+Source file: L4_1.X68
+Assembled on: 14-10-09 at: 10:46:30
+          by: X68K PC-2.2 Copyright (c) University of Teesside 1989,96
+Defaults: ORG $0/FORMAT/OPT A,BRL,CEX,CL,FRL,MC,MD,NOMEX,NOPCO
+
+    1                        *Lab4_1.x68
+    2                        
+    3                         
+    4           00000064     VALUE:    EQU       100
+    5                        
+    6  00008000                        ORG       $8000
+    7  00008000 103C0064     START:    MOVE.B    #100,D0
+    8  00008004 103C0064               MOVE.B    #VALUE,D0
+    9  00008008 303C2710               MOVE.W    #(VALUE*VALUE),D0
+   10  0000800C 203C000F4240           MOVE.L    #(VALUE*VALUE*VALUE),D0
+   11  00008012 4E4E                   TRAP      #14
+   12           00008000               END       START
+
+Lines: 12, Errors: 0, Warnings: 0.

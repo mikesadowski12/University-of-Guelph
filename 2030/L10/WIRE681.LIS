@@ -1,0 +1,24 @@
+
+Source file: WIRE681.X68
+Assembled on: 14-11-20 at: 18:14:11
+          by: X68K PC-2.2 Copyright (c) University of Teesside 1989,96
+Defaults: ORG $0/FORMAT/OPT A,BRL,CEX,CL,FRL,MC,MD,NOMEX,NOPCO
+
+    1           0000C001     DUART:    EQU       $00C001
+    2           0000001A     IPR:      EQU       $1A
+    3           0000001C     OPR_SET:  EQU       $1C
+    4           0000001E     OPR_CLR:  EQU       $1E
+    5                        
+    6  00008000                        ORG       $8000
+    7  00008000 207C0000C001 WIRE681:  MOVEA.L   #DUART,A0
+    8  00008006 1028001A     LOOP:     MOVE.B    IPR(A0),D0
+    9  0000800A 61000004               BSR       OUT681
+   10  0000800E 60F6                   BRA       LOOP
+   11                                
+   12  00008010 1140001E     OUT681:   MOVE.B    D0,OPR_CLR(A0)
+   13  00008014 4600                   NOT.B     D0
+   14  00008016 1140001C               MOVE.B    D0,OPR_SET(A0)
+   15  0000801A 4E75                   RTS       
+   16           00008000               END       WIRE681
+
+Lines: 16, Errors: 0, Warnings: 0.

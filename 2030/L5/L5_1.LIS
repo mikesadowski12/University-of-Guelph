@@ -1,0 +1,16 @@
+
+Source file: L5_1.X68
+Assembled on: 14-10-16 at: 08:41:57
+          by: X68K PC-2.2 Copyright (c) University of Teesside 1989,96
+Defaults: ORG $0/FORMAT/OPT A,BRL,CEX,CL,FRL,MC,MD,NOMEX,NOPCO
+
+    1                        *Lab5_1.x68: Relative addressing
+    2                        
+    3  00004030                        ORG       $4030
+    4  00004030 6700000E     START:    BEQ       HERE
+    5  00004034 4E71                   NOP       
+    6  00004040                        ORG       $4040
+    7  00004040 66EE         HERE:     BNE       START
+    8           00004030               END       START
+
+Lines: 8, Errors: 0, Warnings: 0.

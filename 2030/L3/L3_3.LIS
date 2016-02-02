@@ -1,0 +1,26 @@
+
+Source file: L3_3.X68
+Assembled on: 14-10-02 at: 09:24:42
+          by: X68K PC-2.2 Copyright (c) University of Teesside 1989,96
+Defaults: ORG $0/FORMAT/OPT A,BRL,CEX,CL,FRL,MC,MD,NOMEX,NOPCO
+
+    1                        *L3_3: Sample program 3
+    2                         
+    3  00008000                        ORG       $8000
+    4                        
+    5  00008000 303900009002 START:    MOVE.W    W,D0
+    6  00008006 123900009004           MOVE.B    Y,D1
+    7  0000800C 343900009006           MOVE.W    X,D2
+    8  00008012 C3C0                   MULS      D0,D1                 ;;multiply W*Y result in d1
+    9  00008014 85FC0003               DIVS      #3,D2
+   10  00008018 D242                   ADD.W     D2,D1
+   11                        
+   12  00009000                        ORG       $9000
+   13  00009000 0001         Z:        DC.W      1                     ;;9000
+   14  00009002 0002         W:        DC.W      2                     ;;9001
+   15  00009004 03           Y:        DC.B      3                     ;;9002
+   16  00009006 0003         X:        DC.W      3                     ;;9003
+   17                          
+   18           00008000               END       START
+
+Lines: 18, Errors: 0, Warnings: 0.

@@ -1,0 +1,62 @@
+00008000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.02
+Created On: 11/19/2014 3:18:56 PM
+
+00000000  =0000C001                  1  DUART   EQU     $C001
+00000000  =00000002                  2  SRA     EQU     2
+00000000  =00000006                  3  TBA     EQU     6
+00000000  =0000000D                  4  CR      EQU     $0D
+00000000  =0000000A                  5  LF      EQU     $0A
+00000000                             6  
+00008000                             7          ORG     $8000
+00008000  3E3C 000A                  8  MESSAGE MOVE.W  #10,D7
+00008004  227C 00008014              9  LOOP    MOVEA.L #TEXT,A1
+0000800A  6100 004E                 10          BSR     OUTSTR
+0000800E  5347                      11          SUBQ    #1,D7
+00008010  66F2                      12          BNE     LOOP
+00008012  4E4E                      13          TRAP    #14
+00008014                            14          
+00008014= 0D 0A 41 73 73 65 ...     15  TEXT    DC.B    CR,LF,'Assembly language programming'
+00008033= 20 69 73 20 66 75 ...     16          DC.B    ' is fun',0
+0000803B                            17          
+0000803C  2F08                      18  OUTCHR  MOVE.L  A0,-(A7)
+0000803E  3F07                      19          MOVE.W  D7,-(A7)
+00008040  207C 0000C001             20          MOVEA.L #DUART,A0
+00008046  1E28 0002                 21  OUTCHR2 MOVE.B  SRA(A0),D7
+0000804A  0207 0004                 22          ANDI.B  #4,D7
+0000804E  67F6                      23          BEQ     OUTCHR2
+00008050  1140 0006                 24          MOVE.B  D0,TBA(A0)
+00008054  3E1F                      25          MOVE.W  (A7)+,D7
+00008056  205F                      26          MOVE.L  (A7)+,A0
+00008058  4E75                      27          RTS
+0000805A                            28          
+0000805A  2F00                      29  OUTSTR  MOVE.L  D0,-(A7)
+0000805C  1019                      30  OUTSTR2 MOVE.B  (A1)+,D0
+0000805E  6700 0006                 31          BEQ     EXIT
+00008062  61D8                      32          BSR     OUTCHR
+00008064  60F6                      33          BRA     OUTSTR2
+00008066  201F                      34  EXIT    MOVE.L  (A7)+,D0
+00008068  4E75                      35          RTS
+0000806A                            36          
+0000806A                            37          END     MESSAGE
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+CR                  D
+DUART               C001
+EXIT                8066
+LF                  A
+LOOP                8004
+MESSAGE             8000
+OUTCHR              803C
+OUTCHR2             8046
+OUTSTR              805A
+OUTSTR2             805C
+SRA                 2
+TBA                 6
+TEXT                8014

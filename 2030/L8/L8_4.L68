@@ -1,0 +1,58 @@
+00008000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.02
+Created On: 11/6/2014 11:51:53 AM
+
+00008000                             1          ORG     $8000
+00008000                             2  
+00008000  3F39 00009000              3  START      MOVE.W x,-(sp)
+00008006  3F39 00009002              4             MOVE.W y,-(sp)
+0000800C  4879 00009004              5             pea z
+00008012  4EB9 0000801E              6             jsr squared
+00008018  4FEF 000E                  7             lea 14(sp),sp
+0000801C  4E4E                       8             TRAP #14
+0000801E                             9  
+0000801E  4E50 FFFA                 10  squared    link a0,#-6 ;reserve 6 byte stack frame
+00008022                            11  
+00008022                            12             
+00008022  226F 000E                 13             movea.l 14(sp),a1 ;move &z into a1
+00008026                            14             
+00008026  342F 0014                 15             move.w 20(sp),d2 
+0000802A  C5C2                      16             muls d2,d2 
+0000802C  3102                      17             move.w d2,-(a0) ;u=x*x
+0000802E                            18             
+0000802E  322F 0012                 19             move.w 18(sp),d1 
+00008032  C3C1                      20             muls d1,d1 
+00008034  3101                      21             move.w d1,-(a0) ;v=y*y
+00008036                            22             
+00008036  382F 0014                 23             move.w 20(sp),d4 
+0000803A  C9EF 0012                 24             muls 18(sp),d4 
+0000803E  C9FC 0002                 25             muls #2,d4 
+00008042  3100                      26             move.w d0,-(a0) ;w=2*x*y
+00008044                            27             
+00008044                            28             
+00008044  D86F 0002                 29             add.w 2(sp),d4 ;w+v
+00008048  D86F 0004                 30             add.w 4(sp),d4 ;u+w+v
+0000804C  3284                      31             move.w d4,(a1) ;*z=u+w+v
+0000804E                            32             
+0000804E                            33             
+0000804E  4E58                      34             unlk a0
+00008050  4E75                      35             rts
+00008052                            36  
+00009000                            37             ORG                $9000
+00009000= 0005                      38  x DC.W  5
+00009002= 0006                      39  y DC.W  6
+00009004                            40  z DS.W  1
+00009006                            41             END START
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+SQUARED             801E
+START               8000
+X                   9000
+Y                   9002
+Z                   9004

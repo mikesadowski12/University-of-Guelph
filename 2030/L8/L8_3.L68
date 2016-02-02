@@ -1,0 +1,62 @@
+00008000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.02
+Created On: 11/6/2014 11:27:09 AM
+
+00008000                             1          ORG     $8000
+00008000                             2  
+00008000  3F39 00009000              3  START      MOVE.W x,-(sp)
+00008006  3F39 00009002              4             MOVE.W y,-(sp)
+0000800C  3F39 00009004              5             MOVE.W z,-(sp)
+00008012  4879 00009006              6             pea w
+00008018  4EB9 00008024              7             jsr solve_quad
+0000801E  4FEF 000C                  8             lea 12(sp),sp
+00008022  4E4E                       9             TRAP #14
+00008024                            10  
+00008024                            11  
+00008024                            12  solve_quad ;movem.l D0-D2/A0
+00008024  2F02                      13             move.l d2,-(sp)
+00008026  2F01                      14             move.l d1,-(sp)
+00008028  2F00                      15             move.l d0,-(sp)
+0000802A                            16             
+0000802A  302F 0014                 17             move.w 20(sp),d0 ;move z into d0
+0000802E  322F 0016                 18             move.w 22(sp),d1 ;move y into d1
+00008032  342F 0018                 19             move.w 24(sp),d2 ;move x into d2
+00008036  206F 0010                 20             movea.l 16(sp),a0 ;move &w into a0
+0000803A                            21  
+0000803A  C5C2                      22             muls d2,d2
+0000803C  C5FC 0005                 23             muls #5,d2   ;5*x^2
+00008040                            24  
+00008040  C3EF 0018                 25             muls 24(sp),d1 ;2*x*y
+00008044  C3FC 0002                 26             muls #2,d1
+00008048                            27  
+00008048  C1C0                      28             muls d0,d0
+0000804A                            29             
+0000804A  9441                      30             sub.w d1,d2 ;left - right side
+0000804C  D440                      31             add.w d0,d2
+0000804E  3082                      32             move.w d2,(a0)
+00008050                            33             ;movem.l (sp)+,D0-D2/A0
+00008050  2017                      34             move.l (sp),d0
+00008052  222F 0004                 35             move.l 4(sp),d1
+00008056  242F 0008                 36             move.l 8(sp),d2
+0000805A  4E75                      37             rts
+0000805C                            38  
+00009000                            39             ORG                $9000
+00009000= 0005                      40  x DC.W  5
+00009002= 0006                      41  y DC.W  6
+00009004= 0007                      42  z DC.W  7
+00009006                            43  w DS.W  1
+00009008                            44             END START
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+SOLVE_QUAD          8024
+START               8000
+W                   9006
+X                   9000
+Y                   9002
+Z                   9004

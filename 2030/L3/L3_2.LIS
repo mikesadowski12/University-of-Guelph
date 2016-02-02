@@ -1,0 +1,26 @@
+
+Source file: L3_2.X68
+Assembled on: 14-10-02 at: 08:44:29
+          by: X68K PC-2.2 Copyright (c) University of Teesside 1989,96
+Defaults: ORG $0/FORMAT/OPT A,BRL,CEX,CL,FRL,MC,MD,NOMEX,NOPCO
+
+    1                        *L3_2.x68:  Sample program 2
+    2                        
+    3           00008000     CODE:     EQU       $8000
+    4           00009000     DATA:     EQU       $9000
+    5                        
+    6  00008000                        ORG       CODE
+    7  00008000 303900009000 START:    MOVE.W    $9000,D0
+    8  00008006 C0FC0007               MULU      #7,D0
+    9  0000800A 80FC0003               DIVU      #3,D0
+   10  0000800E D07900009004           ADD.W     $9004,D0
+   11  00008014 33C000009002           MOVE.W    D0,$9002
+   12  0000801A 4E4E                   TRAP      #14
+   13                        
+   14  00009000                        ORG       DATA
+   15  00009000 0010                   DC.W      $10
+   16  00009002 00000002               DS.W      1
+   17  00009004 000A                   DC.W      10
+   18           00008000               END       START
+
+Lines: 18, Errors: 0, Warnings: 0.

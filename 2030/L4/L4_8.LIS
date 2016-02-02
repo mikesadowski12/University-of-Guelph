@@ -1,0 +1,33 @@
+
+Source file: L4_8.X68
+Assembled on: 14-10-09 at: 10:42:45
+          by: X68K PC-2.2 Copyright (c) University of Teesside 1989,96
+Defaults: ORG $0/FORMAT/OPT A,BRL,CEX,CL,FRL,MC,MD,NOMEX,NOPCO
+
+    1                        *L4_6.x68     
+    2                        
+    3  00008000                        ORG       $8000
+    4  00008000 207C00009000 START:    MOVEA.L   #MATRIX,A0
+    5  00008006 343C0008               MOVE.W    #8,D2
+    6  0000800A C4FC0001               MULU      #1,D2
+    7  0000800E 36302804               MOVE.W    4(A0,D2.L),D3
+    8  00008012 C4FC0003               MULU      #3,D2
+    9  00008016 38302806               MOVE.W    6(A0,D2.L),D4
+   10  0000801A D843                   ADD.W     D3,D4
+   11  0000801C 4E4E                   TRAP      #14
+   12                         
+   13                        
+   14                        **** 4 x 4 matrix ****
+   15                        
+   16  00009000                        ORG       $9000
+   17  00009000 000100020003 MATRIX:   DC.W      1,2,3,4
+                0004        
+   18  00009008 000500060007           DC.W      5,6,7,8
+                0008        
+   19  00009010 0009000A000B           DC.W      9,10,11,12
+                000C        
+   20  00009018 000D000E000F           DC.W      13,14,15,16
+                0010        
+   21           00008000               END       START
+
+Lines: 21, Errors: 0, Warnings: 0.

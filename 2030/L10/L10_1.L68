@@ -1,0 +1,60 @@
+00009000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.02
+Created On: 11/19/2014 3:13:51 PM
+
+00009000                             1          ORG     $9000
+00009000  227C 0000A000              2  START   MOVEA.L #STRING,A1
+00009006  13FC 0006 0000C001         3          MOVE.B  #%00000110,$C001
+0000900E  13FC 000F 0000C001         4          MOVE.B  #%00001111,$C001
+00009016  13FC 00BB 0000C003         5          MOVE.B  #%10111011,$C003
+0000901E  13FC 0005 0000C005         6          MOVE.B  #%00000101,$C005
+00009026  4EB9 0000902E              7          JSR     OUTSTR
+0000902C  4E4E                       8          TRAP    #14
+0000902E                             9          
+0000902E  2F00                      10  OUTSTR  MOVE.L  D0,-(SP)
+00009030  1019                      11  OUTSTR2 MOVE.B  (A1)+,D0
+00009032  6700 0008                 12          BEQ     EXIT
+00009036  6100 0008                 13          BSR     OUTCHR
+0000903A  61F4                      14          BSR     OUTSTR2
+0000903C  201F                      15  EXIT    MOVE.L  (SP)+,D0
+0000903E  4E75                      16          RTS
+00009040                            17  
+00009040  2F08                      18  OUTCHR  MOVE.L  A0,-(SP)
+00009042  3F07                      19          MOVE.W  D7,-(SP)
+00009044  207C 0000C001             20          MOVEA.L #DUART,A0
+0000904A  1E28 0002                 21  OUTCHR2 MOVE.B  SRA(A0),D7
+0000904E  0207 0004                 22          ANDI.B  #4,D7
+00009052  67F6                      23          BEQ     OUTCHR2
+00009054  1140 0006                 24          MOVE.B  D0,TBA(A0)
+00009058  3E1F                      25          MOVE.W  (SP)+,D7
+0000905A  205F                      26          MOVE.L  (SP)+,A0
+0000905C  4E75                      27          RTS
+0000905E                            28  
+0000A000                            29          ORG     $A000
+0000A000  =0000C001                 30  DUART   EQU     $C001
+0000A000  =00000002                 31  SRA     EQU     2
+0000A000  =00000006                 32  TBA     EQU     6
+0000A000  =0000000D                 33  CR      EQU     $0D
+0000A000  =0000000A                 34  LF      EQU     $0A
+0000A000= 0D 0A 48 45 4C 4C ...     35  STRING  DC.B    CR,LF,'HELLO WORLD!',0
+0000A00F                            36          END     START
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+CR                  D
+DUART               C001
+EXIT                903C
+LF                  A
+OUTCHR              9040
+OUTCHR2             904A
+OUTSTR              902E
+OUTSTR2             9030
+SRA                 2
+START               9000
+STRING              A000
+TBA                 6

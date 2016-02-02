@@ -1,0 +1,51 @@
+00008000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.02
+Created On: 10/16/2014 10:58:55 AM
+
+00000000                             1  *Lab5_3.x68: Signed and Unsigned Branches      
+00000000                             2       
+00008000                             3           ORG      $8000
+00008000  1239 00009000              4  START    MOVE.B   num1,d1   
+00008006  1439 00009001              5           MOVE.B   num2,d2
+0000800C  1639 00009002              6           MOVE.B   num3,d3
+00008012                             7           
+00008012  B439 00009000              8  if       CMP.B   num1,d2 
+00008018  6E00 0016                  9           BGT      else_if   ;if num2 >= num1, branch to else if     
+0000801C  B639 00009000             10           CMP.B   num1,d3
+00008022  6E00 000C                 11           BGT      else_if   ;if num3 >= num1, branch to else if
+00008026  1039 00009000             12           MOVE.B  num1,d0 ;biggest = num1
+0000802C  6000 0026                 13           BRA    exit
+00008030                            14           
+00008030  B239 00009001             15  else_if  CMP.B   num2,d1
+00008036  6E00 0016                 16           BGT      else   ;if num1 >= num2, branch to else  
+0000803A  B639 00009001             17           CMP.B   num2,d3
+00008040  6E00 000C                 18           BGT      else   ;if num1 >= num2, branch to else
+00008044  1039 00009001             19           MOVE.B  num2,d0 ;biggest = num2
+0000804A  6000 0008                 20           BRA    exit
+0000804E                            21           
+0000804E  1039 00009002             22  else    MOVE.B  num3,d0 ;biggest = num3
+00008054                            23                                         
+00008054  4E4E                      24  exit     trap #14
+00008056                            25             
+00008056                            26           
+00009000                            27              ORG   $9000
+00009000= 2B                        28  num1    DC.B  43  
+00009001= 2A                        29  num2    DC.B  42
+00009002= 29                        30  num3    DC.B  41
+00009003                            31              end START          
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+ELSE                804E
+ELSE_IF             8030
+EXIT                8054
+IF                  8012
+NUM1                9000
+NUM2                9001
+NUM3                9002
+START               8000

@@ -1,0 +1,51 @@
+00008000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.02
+Created On: 10/23/2014 9:26:31 AM
+
+00008000                             1              ORG     $8000
+00008000                             2  
+00008000  43F9 00009000              3  START   LEA word1,a1     ;load word1 into a1
+00008006  45F9 00009001              4             LEA word2,a2    ;load word2 into a2
+0000800C  4242                       5             CLR.W d2
+0000800E  4243                       6             CLR.W d3
+00008010  223C 00000001              7             MOVE.L #index,d1   ;put length of the words into d1
+00008016                             8  
+00008016  670E                       9  loop       BEQ.S same_word    ;once d1=0, the words were the same
+00008018  1419                      10             MOVE.B (a1)+,d2   ;put character into d2 from word1
+0000801A  161A                      11             MOVE.B (a2)+,d3  ;put character into d3 from word2
+0000801C  B602                      12             CMP.B d2,d3
+0000801E  6600 000C                 13             BNE wrong
+00008022  5301                      14             SUBQ.B #1,d1   ;decrement d1 for every letter checked
+00008024  60F0                      15             BRA loop
+00008026                            16  
+00008026  103C 00FF                 17  same_word  MOVE.B #$FF,d0
+0000802A  4E4E                      18             TRAP #14
+0000802C                            19  
+0000802C  103C 0000                 20  wrong       MOVE.B #$00,d0
+00008030  4E4E                      21              TRAP #14
+00008032                            22  
+00008032                            23  
+00009000                            24             ORG                $9000
+00009000                            25  
+00009000= 0D                        26  word1 DC.B '',$0D
+00009001= 0D                        27  word2 DC.B '',$0D
+00009002                            28  sum   DS.W 1
+00009004  =00000001                 29  index EQU (sum-word1)/2
+00009004                            30  
+00009004                            31             END START
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+INDEX               1
+LOOP                8016
+SAME_WORD           8026
+START               8000
+SUM                 9002
+WORD1               9000
+WORD2               9001
+WRONG               802C

@@ -1,0 +1,66 @@
+00008000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.02
+Created On: 10/23/2014 9:27:32 AM
+
+00008000                             1              ORG     $8000
+00008000  41F9 00009000              2  START   LEA matrix,a0                ;load address of matrix into a0
+00008006  227C 00000000              3             MOVEA.L #0,a1                ;i=0
+0000800C                             4  
+0000800C                             5  
+0000800C                             6  
+0000800C                             7  
+0000800C  2449                       8  loop1      MOVEA.L a1,a2
+0000800E  528A                       9             ADDA.L #1,a2                ; j=i+1
+00008010                            10  
+00008010                            11  loop2
+00008010  3009                      12             MOVE.W a1,d0
+00008012  C0FC 0004                 13             MULU.W #4,d0                 ; offset into the matrix[i]
+00008016  3640                      14             MOVE.W d0,a3                
+00008018  D7CA                      15             ADDA.L a2,a3                ;offset into the matrix[i][j]
+0000801A  D7FC 00009000             16             ADDA.L #matrix,a3
+00008020  1213                      17             MOVE.B (a3),d1              ;temp = matrix[i][j]
+00008022                            18  
+00008022                            19  
+00008022  300A                      20             MOVE.W a2,d0
+00008024  C0FC 0004                 21             MULU.W #4,d0
+00008028  3840                      22             MOVE.W d0,a4                ;offset into the matrix[j]
+0000802A  D9C9                      23             ADDA.L a1,a4                ;offset into the matrix[j][i]
+0000802C  D9FC 00009000             24             ADDA.L #matrix,a4
+00008032  1694                      25             MOVE.B (a4),(a3)              ;matrix[i][j] = matrix[j][i]
+00008034                            26  
+00008034                            27  
+00008034  1881                      28             MOVE.B d1,(a4)              ;matrix[j][i] = temp
+00008036                            29  
+00008036                            30  
+00008036  528A                      31             ADDA.L #1,a2                ;increment loop 2
+00008038  B4FC 0004                 32             CMPA #04,a2  ; j <= 3
+0000803C  6BD2                      33             BMI loop2       ;if a2 <=3, keep looping
+0000803E                            34             
+0000803E                            35  
+0000803E  5289                      36             ADDA.L #1,a1      ;increment loop 1
+00008040  B2FC 0003                 37             CMPA #03,a1  ; i <= 2
+00008044  6BC6                      38             BMI loop1        ;if a1 <=2 keep looping
+00008046                            39  
+00008046  4E4E                      40  done       TRAP #14
+00008048                            41  
+00008048                            42  
+00009000                            43             ORG                $9000
+00009000= 01 02 03 04 05 06 ...     44  matrix DC.B 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
+00009010                            45  sum   DS.W 1
+00009012  =00000008                 46  index EQU (sum-matrix)/2
+00009012                            47             END START
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+DONE                8046
+INDEX               8
+LOOP1               800C
+LOOP2               8010
+MATRIX              9000
+START               8000
+SUM                 9010

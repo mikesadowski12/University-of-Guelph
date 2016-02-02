@@ -1,0 +1,45 @@
+00008000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.02
+Created On: 10/30/2014 10:57:40 AM
+
+00008000                             1          ORG     $8000
+00008000                             2  
+00008000  3039 00009000              3  START   MOVE.W num1,d0
+00008006  3239 00009002              4             MOVE.W num2,d1
+0000800C  0801 0000                  5             BTST #0,d1
+00008010  6600 0018                  6             BNE odd_number
+00008014                             7  
+00008014  E348                       8  LOOP       LSL #1,d0
+00008016  E249                       9             LSR #1,d1
+00008018                            10  
+00008018  0C41 0001                 11             CMPI.W #1,d1
+0000801C  6700 0010                 12             BEQ done
+00008020                            13  
+00008020  0801 0000                 14             BTST #0,d1
+00008024  6600 0004                 15             BNE odd_number
+00008028  60EA                      16             BRA LOOP
+0000802A                            17  
+0000802A  D440                      18  odd_number ADD.W d0,d2
+0000802C  60E6                      19             BRA LOOP
+0000802E                            20             
+0000802E  D440                      21  done       ADD.W d0,d2
+00008030  4E4E                      22             TRAP #14
+00008032                            23  
+00009000                            24             ORG                $9000
+00009000= FFFF                      25  num1 DC.W  $ffff
+00009002= FFFF                      26  num2 DC.W  $FFFF
+00009004                            27             END START
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+DONE                802E
+LOOP                8014
+NUM1                9000
+NUM2                9002
+ODD_NUMBER          802A
+START               8000

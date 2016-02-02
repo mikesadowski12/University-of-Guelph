@@ -1,0 +1,17 @@
+
+Source file: L2_1.X68
+Assembled on: 14-09-25 at: 08:53:35
+          by: X68K PC-2.2 Copyright (c) University of Teesside 1989,96
+Defaults: ORG $0/FORMAT/OPT A,BRL,CEX,CL,FRL,MC,MD,NOMEX,NOPCO
+
+    1                        *L2_1.x68: Performs a series of moves (copies) involving data registers
+    2                        
+    3  00008000                        ORG       $8000
+    4  00008000 1200         PROGRAM:  MOVE.B    D0,D1
+    5  00008002 3400                   MOVE.W    D0,D2
+    6  00008004 2600                   MOVE.L    D0,D3
+    7  00008006 3800                   MOVE      D0,D4
+    8  00008008 4E4E                   TRAP      #14
+    9           00008000               END       PROGRAM
+
+Lines: 9, Errors: 0, Warnings: 0.

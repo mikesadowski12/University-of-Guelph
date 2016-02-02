@@ -1,0 +1,21 @@
+
+Source file: HELLO.X68
+Assembled on: 14-09-25 at: 08:44:23
+          by: X68K PC-2.2 Copyright (c) University of Teesside 1989,96
+Defaults: ORG $0/FORMAT/OPT A,BRL,CEX,CL,FRL,MC,MD,NOMEX,NOPCO
+
+    1                        *  hello.x68 displays the message "Hello, world!" on the SunRay console
+    2                        
+    3                        
+    4  00008000                        ORG       $8000
+    5  00008000 43F90000800A PROGRAM:  LEA       MESSAGE,A1            ;;A1 points to message in memory
+    6  00008006 4E42                   TRAP      #2                    ;;Send message to screen
+    7  00008008 4E4E                   TRAP      #14                   ;;Stop program and return to MON68k
+    8                        
+    9  0000800A 48656C6C6F20 MESSAGE:  DC.B      'Hello world!'
+                776F726C6421
+   10  00008016 0D0A00                 DC.B      $0D,$0A,0             ;;Carriage return, line feed, null
+   11                         
+   12           00008000               END       PROGRAM               ;;Code ends here
+
+Lines: 12, Errors: 0, Warnings: 0.

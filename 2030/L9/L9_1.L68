@@ -1,0 +1,56 @@
+00008000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.02
+Created On: 11/13/2014 11:08:58 AM
+
+00008000                             1          ORG     $8000
+00008000                             2  
+00008000  3F3C 04D2                  3  START      move.w #1234,-(sp)
+00008004  4EB9 00008010              4             jsr display
+0000800A  4FEF 0002                  5             lea  2(sp),sp
+0000800E  4E4E                       6             trap #14
+00008010                             7  
+00008010  4E56 FFFC                  8  display    link a6,#-4
+00008014  48E7 E002                  9             movem.l D0-D2/A6,-(sp)
+00008018  4281                      10             clr.l d1
+0000801A  4282                      11             clr.l d2
+0000801C  342E 0008                 12             move.w 8(a6),d2
+00008020                            13  
+00008020  0C6E 0000 0008            14             cmpi #0,8(a6) ;if(n==0)
+00008026  6600 000A                 15             bne  AA
+0000802A  342E 0008                 16             move.w 8(a6),d2 ;return n
+0000802E  6000 002C                 17             BRA BB
+00008032                            18  
+00008032                            19  
+00008032  322E 0008                 20  AA         move   8(a6),d1 ; remainder = n % 10
+00008036  82FC 000A                 21             DIVU  #10,d1
+0000803A  4841                      22             SWAP d1
+0000803C  3F01                      23             move.w d1,-(sp) ;push remainder onto stack
+0000803E                            24  
+0000803E  4281                      25             clr.l d1
+00008040                            26             
+00008040  322E 0008                 27             move.w 8(a6),d1  ; quotient = n/10
+00008044  82FC 000A                 28             DIVU  #10,d1
+00008048  3F01                      29             move.w d1,-(sp) ;push quotient onto stack
+0000804A  4EB9 00008010             30             jsr display ;display(quotient)
+00008050  4280                      31             clr.l d0
+00008052  302E FFFA                 32             move.w -6(a6),d0
+00008056  0600 0030                 33             ADD.B #'0',d0          ; print char to screen
+0000805A  4E41                      34             trap #1
+0000805C                            35  
+0000805C  4CDF 4007                 36  BB         movem.l (sp)+,D0-D2/A6
+00008060  4E5E                      37             unlk   a6
+00008062                            38                                  
+00008062  4E75                      39             rts
+00008064                            40             END START
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+AA                  8032
+BB                  805C
+DISPLAY             8010
+START               8000

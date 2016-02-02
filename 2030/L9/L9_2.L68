@@ -1,0 +1,67 @@
+00009000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.02
+Created On: 11/13/2014 10:56:24 AM
+
+00009000                             1          ORG     $9000     
+00009000  363C 04D2                  2  START      move.w #1234,d3
+00009004  4E45                       3             TRAP #5
+00009006  4E4E                       4             trap #14
+00009008                             5      
+00008024                             6          org    $8024
+00008024  4EF9 00008000              7          jmp     mytrap
+0000802A                             8          
+00008000                             9           ORG        $8000
+00008000  3F03                      10  mytrap      move.w d3,-(sp)
+00008002  4EB9 0000800E             11             jsr display
+00008008  4FEF 0002                 12             lea  2(sp),sp
+0000800C  4E73                      13             rte
+0000800E                            14             
+0000800E                            15             
+0000800E                            16             
+0000800E                            17             
+0000800E  4E56 FFFC                 18  display    link a6,#-4
+00008012  4281                      19             clr.l d1
+00008014  4282                      20             clr.l d2
+00008016  342E 0008                 21             move.w 8(a6),d2
+0000801A                            22  
+0000801A  0C6E 0000 0008            23             cmpi #0,8(a6) ;if(n==0)
+00008020  6600 000A                 24             bne  AA
+00008024  342E 0008                 25             move.w 8(a6),d2 ;return n
+00008028  6000 002C                 26             BRA BB
+0000802C                            27  
+0000802C                            28  
+0000802C  322E 0008                 29  AA         move   8(a6),d1 ; remainder = n % 10
+00008030  82FC 000A                 30             DIVU  #10,d1
+00008034  4841                      31             SWAP d1
+00008036  3F01                      32             move.w d1,-(sp) ;push remainder onto stack
+00008038                            33  
+00008038  4281                      34             clr.l d1
+0000803A                            35             
+0000803A  322E 0008                 36             move.w 8(a6),d1  ; quotient = n/10
+0000803E  82FC 000A                 37             DIVU  #10,d1
+00008042  3F01                      38             move.w d1,-(sp) ;push quotient onto stack
+00008044  4EB9 0000800E             39             jsr display ;display(quotient)
+0000804A  4280                      40             clr.l d0
+0000804C  302E FFFA                 41             move.w -6(a6),d0
+00008050  0600 0030                 42             ADD.B #'0',d0          ; print char to screen
+00008054  4E41                      43             trap #1
+00008056                            44  
+00008056  2217                      45  BB         move.l (sp),d1
+00008058  4CDF 0107                 46              movem.l (sp)+,D0-D2/A0
+0000805C  4E5E                      47             unlk   a6
+0000805E                            48                                  
+0000805E  4E75                      49             rts
+00008060                            50             END START
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+AA                  802C
+BB                  8056
+DISPLAY             800E
+MYTRAP              8000
+START               9000

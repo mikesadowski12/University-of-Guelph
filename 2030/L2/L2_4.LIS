@@ -1,0 +1,18 @@
+
+Source file: L2_4.X68
+Assembled on: 14-09-25 at: 09:23:22
+          by: X68K PC-2.2 Copyright (c) University of Teesside 1989,96
+Defaults: ORG $0/FORMAT/OPT A,BRL,CEX,CL,FRL,MC,MD,NOMEX,NOPCO
+
+    1                        *L2_4.x68: Adds and subtracts 8-bit numbers
+    2                        
+    3  00008000                        ORG       $8000
+    4  00008000 103C0077     PROGRAM:  MOVE.B    #$77,D0
+    5  00008004 5600                   ADD.B     #3,D0
+    6  00008006 06000009               ADD.B     #9,D0
+    7  0000800A 5300                   SUB.B     #1,D0
+    8  0000800C 5900                   SUB.B     #4,D0
+    9  0000800E 4E4E                   TRAP      #14
+   10           00008000               END       PROGRAM
+
+Lines: 10, Errors: 0, Warnings: 0.

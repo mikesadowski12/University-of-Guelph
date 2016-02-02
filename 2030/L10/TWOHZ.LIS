@@ -1,0 +1,24 @@
+
+Source file: TWOHZ.X68
+Assembled on: 14-11-20 at: 17:57:53
+          by: X68K PC-2.2 Copyright (c) University of Teesside 1989,96
+Defaults: ORG $0/FORMAT/OPT A,BRL,CEX,CL,FRL,MC,MD,NOMEX,NOPCO
+
+    1           0000C001     DUART:    EQU       $00C001
+    2           00000008     ACR:      EQU       4*2
+    3           0000000C     CTUR:     EQU       6*2
+    4           0000000E     CTLR:     EQU       7*2
+    5           0000001A     OPCR:     EQU       13*2
+    6           00003840     COUNT:    EQU       14400
+    7                        
+    8  00008000                        ORG       $8000
+    9  00008000 207C0000C001 TWOHZ:    MOVEA.L   #DUART,A0
+   10  00008006 303C3840               MOVE.W    #COUNT,D0
+   11  0000800A 0188000C               MOVEP.W   D0,CTUR(A0)
+   12  0000800E 117C00700008           MOVE.B    #$70,ACR(A0)
+   13  00008014 117C0004001A           MOVE.B    #$04,OPCR(A0)
+   14  0000801A 60FE         I:        BRA       I
+   15                                
+   16           00008000               END       TWOHZ
+
+Lines: 16, Errors: 0, Warnings: 0.

@@ -1,0 +1,34 @@
+
+Source file: L10_5.X68
+Assembled on: 14-11-21 at: 11:04:10
+          by: X68K PC-2.2 Copyright (c) University of Teesside 1989,96
+Defaults: ORG $0/FORMAT/OPT A,BRL,CEX,CL,FRL,MC,MD,NOMEX,NOPCO
+
+    1           0000C001     DUART:    EQU       $00C001
+    2           0000000A     ISR:      EQU       $A
+    3           0000000C     CTUR:     EQU       6*2
+    4           0000001E     STOP:     EQU       $1E
+    5           0000001C     OPR_SET:  EQU       $1C
+    6           0000001E     OPR_CLR:  EQU       $1E
+    7           0000DAC0     COUNT:    EQU       56000                 ;;14400
+    8                        
+    9  00008000                        ORG       $8000
+   10  00008000 207C0000C001 EIGHTHZ:  MOVEA.L   #DUART,A0
+   11  00008006 30390000DAC0           MOVE.W    COUNT,D0
+   12  0000800C 0188000C               MOVEP.W   D0,CTUR(A0)
+   13  00008010 123C0011               MOVE.B    #$11,D1
+   14                        
+   15  00008014 1028000A     LOOP:     MOVE.B    ISR(A0),D0
+   16  00008018 02000008               AND.B     #8,D0
+   17  0000801C 67F6                   BEQ       LOOP
+   18  0000801E 4A28001E               TST.B     STOP(A0)
+   19  00008022 117C00FF001C           MOVE.B    #%11111111,OPR_SET(A0)
+   20  00008028 1028000A     LOOP2:    MOVE.B    ISR(A0),D0
+   21  0000802C 02000008               AND.B     #8,D0
+   22  00008030 67F6                   BEQ       LOOP2
+   23  00008032 4A28001E               TST.B     STOP(A0)
+   24  00008036 117C00FF001E           MOVE.B    #%11111111,OPR_CLR(A0)
+   25  0000803C 60D6                   BRA       LOOP
+   26           00008000               END       EIGHTHZ
+
+Lines: 26, Errors: 0, Warnings: 0.

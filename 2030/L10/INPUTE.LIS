@@ -1,0 +1,19 @@
+
+Source file: INPUTE.X68
+Assembled on: 14-11-20 at: 17:18:32
+          by: X68K PC-2.2 Copyright (c) University of Teesside 1989,96
+Defaults: ORG $0/FORMAT/OPT A,BRL,CEX,CL,FRL,MC,MD,NOMEX,NOPCO
+
+    1           0000C001     DUART:    EQU       $C001
+    2           00000002     SRA:      EQU       2
+    3           00000006     RBA:      EQU       6
+    4                        
+    5  00008000                        ORG       $8000
+    6  00008000 41F90000C001 START:    LEA       DUART,A0
+    7  00008006 1E280002     LOOP:     MOVE.B    SRA(A0),D7
+    8  0000800A 02070001               ANDI.B    #1,D7
+    9  0000800E 67F6                   BEQ       LOOP
+   10                        *        MOVE.B  RBA(A0),D0
+   11           00008000               END       START
+
+Lines: 11, Errors: 0, Warnings: 0.

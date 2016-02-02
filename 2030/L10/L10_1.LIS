@@ -1,0 +1,47 @@
+
+Source file: L10_1.X68
+Assembled on: 14-11-21 at: 15:06:46
+          by: X68K PC-2.2 Copyright (c) University of Teesside 1989,96
+Defaults: ORG $0/FORMAT/OPT A,BRL,CEX,CL,FRL,MC,MD,NOMEX,NOPCO
+
+    1           0000C001     DUART:    EQU       $C001
+    2           00000002     SRA:      EQU       2
+    3           00000006     TBA:      EQU       6
+    4           0000000D     CR:       EQU       $0D
+    5           0000000A     LF:       EQU       $0A
+    6                        
+    7  00008000                        ORG       $8000
+    8  00008000 227C0000800C MESSAGE:  MOVEA.L   #TEXT,A1
+    9  00008006 6100004A               BSR       OUTSTR
+   10  0000800A 4E4E                   TRAP      #14
+   11                                
+   12  0000800C 0D0A61737365 TEXT:     DC.B      CR,LF,'assembly language programming is fun',0
+                6D626C79206C
+                616E67756167
+                652070726F67
+                72616D6D696E
+                672069732066
+                756E00      
+   13                                
+   14  00008034 2F08         OUTCHR:   MOVE.L    A0,-(A7)
+   15  00008036 3F07                   MOVE.W    D7,-(A7)
+   16  00008038 207C0000C001           MOVEA.L   #DUART,A0
+   17  0000803E 1E280002     OUTCHR2:  MOVE.B    SRA(A0),D7
+   18  00008042 02070004               ANDI.B    #4,D7
+   19  00008046 67F6                   BEQ       OUTCHR2
+   20  00008048 11400006               MOVE.B    D0,TBA(A0)
+   21  0000804C 3E1F                   MOVE.W    (A7)+,D7
+   22  0000804E 205F                   MOVE.L    (A7)+,A0
+   23  00008050 4E75                   RTS       
+   24                                
+   25  00008052 2F00         OUTSTR:   MOVE.L    D0,-(A7)
+   26  00008054 1019         OUTSTR2:  MOVE.B    (A1)+,D0
+   27  00008056 67000006               BEQ       EXIT
+   28  0000805A 61D8                   BSR       OUTCHR
+   29  0000805C 60F6                   BRA       OUTSTR2
+   30  0000805E 201F         EXIT:     MOVE.L    (A7)+,D0
+   31  00008060 4E75                   RTS       
+   32                                
+   33           00008000               END       MESSAGE
+
+Lines: 33, Errors: 0, Warnings: 0.

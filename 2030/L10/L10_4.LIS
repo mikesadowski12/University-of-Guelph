@@ -1,0 +1,36 @@
+
+Source file: L10_4.X68
+Assembled on: 14-11-20 at: 19:01:34
+          by: X68K PC-2.2 Copyright (c) University of Teesside 1989,96
+Defaults: ORG $0/FORMAT/OPT A,BRL,CEX,CL,FRL,MC,MD,NOMEX,NOPCO
+
+    1           0000C001     DUART:    EQU       $C001
+    2           00000002     SRA:      EQU       2
+    3           00000006     RBA:      EQU       6
+    4           0000001C     OPR_SET:  EQU       $1C
+    5           0000001E     OPR_CLR:  EQU       $1E
+    6                        
+    7  00008000                        ORG       $8000
+    8  00008000 41F90000C001 MESSAGE:  LEA       DUART,A0
+    9  00008006 227C00008036           MOVEA.L   #TEXT,A1
+   10  0000800C 61000004               BSR       INSTR
+   11  00008010 4E4E                   TRAP      #14
+   12                                
+   13  00008012 740A         INSTR:    MOVEQ     #10,D2
+   14  00008014 1E280002     INSTR2:   MOVE.B    SRA(A0),D7
+   15  00008018 02070001               ANDI.B    #1,D7
+   16  0000801C 67F6                   BEQ       INSTR2
+   17  0000801E 10280006               MOVE.B    RBA(A0),D0
+   18  00008022 1140001C               MOVE.B    D0,OPR_SET(A0)
+   19  00008026 4600                   NOT.B     D0
+   20  00008028 1140001E               MOVE.B    D0,OPR_CLR(A0)
+   21  0000802C 4600                   NOT.B     D0
+   22  0000802E 0C000030               CMPI.B    #'0',D0
+   23  00008032 66E0                   BNE       INSTR2
+   24                        *        MOVE.B  #%11111111,OPR_CLR(A0)
+   25  00008034 4E75                   RTS       
+   26                        
+   27  00008036 0000000B     TEXT:     DS.B      11
+   28           00008000               END       MESSAGE
+
+Lines: 28, Errors: 0, Warnings: 0.

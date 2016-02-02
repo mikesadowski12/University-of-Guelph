@@ -1,0 +1,20 @@
+
+Source file: L5_2.X68
+Assembled on: 14-10-16 at: 08:42:13
+          by: X68K PC-2.2 Copyright (c) University of Teesside 1989,96
+Defaults: ORG $0/FORMAT/OPT A,BRL,CEX,CL,FRL,MC,MD,NOMEX,NOPCO
+
+    1                        *Lab5_2.x68: Signed and Unsigned Branches
+    2                          
+    3  00008000                        ORG       $8000
+    4  00008000 103C00F0     START:    MOVE.B    #%11110000,D0
+    5  00008004 123C0001               MOVE.B    #%00000001,D1
+    6  00008008 B200                   CMP.B     D0,D1
+    7  0000800A 6E000004               BGT       LABEL1
+    8  0000800E 4E71                   NOP       
+    9  00008010 62000004     LABEL1:   BHI       LABEL2
+   10  00008014 4E71                   NOP       
+   11  00008016 4E4E         LABEL2:   TRAP      #14
+   12           00008000               END       START
+
+Lines: 12, Errors: 0, Warnings: 0.

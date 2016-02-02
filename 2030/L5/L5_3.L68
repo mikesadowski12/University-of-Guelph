@@ -1,0 +1,32 @@
+00008000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.02
+Created On: 10/16/2014 10:56:25 AM
+
+00000000                             1  *Lab5_3.x68: Signed and Unsigned Branches      
+00000000                             2       
+00008000                             3           ORG      $8000
+00008000  103C 0007                  4  START    MOVE.B   #7,d0   
+00008004  1239 00009001              5           MOVE.B   CHARCODE,d1
+0000800A                             6           
+0000800A  0C39 0027 00009000         7           CMPI.B   #39,HEXVALUE
+00008012  6F00 0008                  8           BLE      exit ;if #39 > HEXVALUE       
+00008016  D039 00009001              9           ADD.B    CHARCODE,d0 ;add 0x07 to CHARCODE                
+0000801C  4E4E                      10  exit     trap #14
+0000801E                            11             
+0000801E                            12            
+00009000                            13              ORG   $9000
+00009000= 28                        14  HEXVALUE    DC.B  40  
+00009001= 2B                        15  CHARCODE    DC.B  43
+00009002                            16              end START          
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+CHARCODE            9001
+EXIT                801C
+HEXVALUE            9000
+START               8000
