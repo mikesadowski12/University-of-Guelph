@@ -1,4 +1,4 @@
-C A PROGRAM TO PLAY TIC-TAC-TOE
+! A PROGRAM TO PLAY TIC-TAC-TOE
       PROGRAM TICTACTOE
       
       CHARACTER * 1 TICTAC(3,3), WINNER
@@ -6,6 +6,7 @@ C A PROGRAM TO PLAY TIC-TAC-TOE
       LOGICAL CHKPLAY
       INTEGER MOVE, TURN
       CHARACTER(LEN=100) :: FMT
+      FMT = "(2X,A1,1X,'|',1X,A1,1X,'|',1X,A1,1X)"
 
       WRITE(*,*) "PLAY TIC-TAC-TOE. ENTER 1-9 TO PLAY"
       WRITE(*,*) " "
@@ -49,8 +50,7 @@ C A PROGRAM TO PLAY TIC-TAC-TOE
 		!draw the board
 		DO I=1,3 
 	       
-       		!this string formats the output for WRITE 
-		FMT = "(2X,A1,1X,'|',1X,A1,1X,'|',1X,A1,1X)"
+       		!FMT is a string formats the output for WRITE (initialized at top of program) 
 		WRITE(*,FMT) (TICTAC(I,J), J=1,3)	
 		WRITE(*,*) "---+---+---"
  	END DO !end iteration loop
@@ -77,8 +77,8 @@ C A PROGRAM TO PLAY TIC-TAC-TOE
  	END DO !end game loop   
 	END
             
-C SUBROUTINE TO CHECK TO SEE IF THE GAME IS OVER      
-C =========================================
+! SUBROUTINE TO CHECK TO SEE IF THE GAME IS OVER      
+! =========================================
       SUBROUTINE CHKOVR(TICTAC,OVER,WINNER)
       CHARACTER * 1 TICTAC(3,3), WINNER
       LOGICAL OVER
@@ -90,11 +90,11 @@ C =========================================
       LOGICAL DSAME
       INTEGER IR, IC
 
-C ASSUME GAME IS OVER AT START
+! ASSUME GAME IS OVER AT START
       OVER = .TRUE.
 
-C CHECK FOR A WINNER
-C CHECK ROWS FOR A WINNER
+! CHECK FOR A WINNER
+! CHECK ROWS FOR A WINNER
       DO IR = 1, 3
       	IF (SAME(TICTAC(IR,1),TICTAC(IR,2),TICTAC(IR,3))) THEN
       		WINNER = TICTAC(IR,1)
@@ -102,7 +102,7 @@ C CHECK ROWS FOR A WINNER
       	END IF
       END DO
 
-C NO WINNER BY ROWS, CHECK COLUMNS FOR A WINNER
+! NO WINNER BY ROWS, CHECK COLUMNS FOR A WINNER
       DO IC = 1, 3
       	IF (SAME(TICTAC(1,IC),TICTAC(2,IC),TICTAC(3,IC))) THEN
       		WINNER = TICTAC(1,IC)
@@ -110,16 +110,16 @@ C NO WINNER BY ROWS, CHECK COLUMNS FOR A WINNER
       	END IF
       END DO
 
-C NO WINNER BY ROWS OR COLUMNS, CHECK DIAGONALS
-      DSAME = SAME(TICTAC(1,1),TICTAC(2,2),TICTAC(3,3)) 
-     +   .OR. SAME(TICTAC(1,3),TICTAC(2,2),TICTAC(3,1)) 
+! NO WINNER BY ROWS OR COLUMNS, CHECK DIAGONALS
+      DSAME = SAME(TICTAC(1,1),TICTAC(2,2),TICTAC(3,3)) & 
+        .OR. SAME(TICTAC(1,3),TICTAC(2,2),TICTAC(3,1)) 
       IF (DSAME) THEN
       WINNER = TICTAC(2,2)
       RETURN
       END IF
 
-C NO WINNER AT ALL. SEE IF GAME IS A DRAW
-C CHECK EACH ROW FOR AN EMPTY SPACE
+! NO WINNER AT ALL. SEE IF GAME IS A DRAW
+! CHECK EACH ROW FOR AN EMPTY SPACE
       DO IR = 1,3
       	DO IC = 1,3
       		IF (TICTAC(IR,IC) == BLANK) THEN
@@ -129,26 +129,26 @@ C CHECK EACH ROW FOR AN EMPTY SPACE
 	END DO  
        END DO
 
-C NO BLANK FOUND, GAME IS A DRAW
+! NO BLANK FOUND, GAME IS A DRAW
       WINNER = DRAW
       RETURN    
       END
       
-C SUBROUTINE TO PLAY FOR THE COMPUTER  
-C =========================================
+! SUBROUTINE TO PLAY FOR THE COMPUTER  
+! =========================================
       SUBROUTINE COMPMOVE(TICTAC)
       CHARACTER * 1 TICTAC(3,3)
       INTEGER PATHS(3,8), PATHSUM(8)
-      DATA PATHS/1,2,3,4,5,6,7,8,9,
-     +           1,4,7,2,5,8,3,6,9,
-     +           1,5,9,3,5,7/
+      DATA PATHS/1,2,3,4,5,6,7,8,9, &
+                1,4,7,2,5,8,3,6,9, &
+                1,5,9,3,5,7/
       INTEGER BOARD(9,2), K, X, Y, RANDPOS
       DATA BOARD/1,1,1,2,2,2,3,3,3,1,2,3,1,2,3,1,2,3/
 
       
-C     YOUR CODE GOES HERE 
+!     YOUR CODE GOES HERE 
 
-C     CALCULATE THE PATHSUMS
+!     CALCULATE THE PATHSUMS
       DO I = 1,8
       	PATHSUM(I) = 0
       	DO J = 1,3
@@ -161,8 +161,8 @@ C     CALCULATE THE PATHSUMS
 	END DO
        END DO
      
-C     OFFENSIVE CODE TO DEAL WITH SCENARIOS WHERE THE
-C     COMPUTER HAS TWO IN A PATH
+!     OFFENSIVE CODE TO DEAL WITH SCENARIOS WHERE THE
+!     COMPUTER HAS TWO IN A PATH
       DO I = 1,8
       	IF (PATHSUM(I) == 8) THEN
       		DO J = 1,3
@@ -176,8 +176,8 @@ C     COMPUTER HAS TWO IN A PATH
       	END IF
        END DO
   
-C     DEFENSIVE CODE TO DEAL WITH SCENARIOS WHERE THE
-C     OPPONENT HAS TWO IN A PATH
+!     DEFENSIVE CODE TO DEAL WITH SCENARIOS WHERE THE
+!     OPPONENT HAS TWO IN A PATH
       DO I = 1,8
       	IF (PATHSUM(I) == 2) THEN
       		DO J = 1,3
@@ -208,9 +208,9 @@ C     OPPONENT HAS TWO IN A PATH
 	RETURN
       	END
 
-C FUNCTION TO CHECK TO SEE IF THREE ELEMENTS IN A ROW, COLUMN OR DIAGONAL
-C ARE THE SAME           
-C =========================================
+! FUNCTION TO CHECK TO SEE IF THREE ELEMENTS IN A ROW, COLUMN OR DIAGONAL
+! ARE THE SAME           
+! =========================================
       LOGICAL FUNCTION SAME(T1,T2,T3)
       CHARACTER T1,T2,T3
       
@@ -223,8 +223,8 @@ C =========================================
       END IF
       END
   
-C SUBROUTINE TO SET UP THE TIC-TAC-TOE BOARD  
-C =========================================  
+! SUBROUTINE TO SET UP THE TIC-TAC-TOE BOARD  
+! =========================================  
       SUBROUTINE BOARDSETUP(TICTAC)
       CHARACTER * 1 TICTAC(3,3)
 
@@ -236,8 +236,8 @@ C =========================================
       RETURN
       END
 
-C SUBROUTINE TO CHECK HUMAN PLAY  
-C ========================================= 
+! SUBROUTINE TO CHECK HUMAN PLAY  
+! ========================================= 
       LOGICAL FUNCTION CHKPLAY(TICTAC,MOVE) 
       CHARACTER * 1 TICTAC(3,3)
       INTEGER MOVE
