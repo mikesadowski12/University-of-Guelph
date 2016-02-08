@@ -6,7 +6,7 @@
       LOGICAL CHKPLAY
       INTEGER MOVE, TURN
       CHARACTER(LEN=100) :: FMT
-      FMT = "(2X,A1,1X,'|',1X,A1,1X,'|',1X,A1,1X)"
+      FMT = "(2X,A1,1X,'|',1X,A1,1X,'|',1X,A1,1X)" !formats WRITE statement to print the board
 
       WRITE(*,*) "PLAY TIC-TAC-TOE. ENTER 1-9 TO PLAY"
       WRITE(*,*) " "
@@ -20,27 +20,29 @@
       CALL BOARDSETUP(TICTAC)
 
 	DO !start game loop
-	DO !start user input loop, loop until a number between 1-9 is entered, and box is empty
-                TURN = 0 !set turn to be user's turn
+		DO !start user input loop, loop until a number between 1-9 is entered and box is empty
+        	TURN = 0 !set turn to be user's turn
         	WRITE(*,*) "Your move? "
         	READ(*,*) MOVE
+        	
+        	!Check the number the user inputted to be valid, and the box corresponding to it empty
         	IF (MOVE < 1 .OR. MOVE > 9) THEN
-                	WRITE(*,*) "Invalid input."
+            	WRITE(*,*) "Invalid input."
         	ELSE IF (.NOT. CHKPLAY(TICTAC,MOVE)) THEN
-                	WRITE(*,*) "Invalid move, box already occupied."
+            	WRITE(*,*) "Invalid move, box already occupied."
         	ELSE
-                	IF (MOVE == 1) TICTAC(1,1) = "X"
-                	IF (MOVE == 2) TICTAC(1,2) = "X"
-                	IF (MOVE == 3) TICTAC(1,3) = "X"
-                	IF (MOVE == 4) TICTAC(2,1) = "X"
-                	IF (MOVE == 5) TICTAC(2,2) = "X"
-                	IF (MOVE == 6) TICTAC(2,3) = "X"
-                	IF (MOVE == 7) TICTAC(3,1) = "X"
-                	IF (MOVE == 8) TICTAC(3,2) = "X"
-               		IF (MOVE == 9) TICTAC(3,3) = "X"
-                	EXIT !exit user input loop when input is between 1-9 and box is empty
+            	IF (MOVE == 1) TICTAC(1,1) = "X"
+                IF (MOVE == 2) TICTAC(1,2) = "X"
+            	IF (MOVE == 3) TICTAC(1,3) = "X"
+            	IF (MOVE == 4) TICTAC(2,1) = "X"
+            	IF (MOVE == 5) TICTAC(2,2) = "X"
+            	IF (MOVE == 6) TICTAC(2,3) = "X"
+               	IF (MOVE == 7) TICTAC(3,1) = "X"
+             	IF (MOVE == 8) TICTAC(3,2) = "X"
+          		IF (MOVE == 9) TICTAC(3,3) = "X"
+               	EXIT !exit user input loop when input is between 1-9 and box is empty
         	END IF
-	END DO !end user input loop
+		END DO !end user input loop
 
 ! Print game board after each move
 	DO !start auto loop, draws board after each turn and computer moves
@@ -50,7 +52,7 @@
 		!draw the board
 		DO I=1,3 
 	       
-       		!FMT is a string formats the output for WRITE (initialized at top of program) 
+        !FMT is a string formats the output for WRITE (initialized at top of program) 
 		WRITE(*,FMT) (TICTAC(I,J), J=1,3)	
 		WRITE(*,*) "---+---+---"
  	END DO !end iteration loop
@@ -58,11 +60,13 @@
 
 ! Check if game over 
 	CALL CHKOVR(TICTAC,OVER,WINNER)
+	
+	!if the game is over, print all the end credits for the session
 	IF (OVER) THEN
-	       	IF (WINNER == "D") THEN
-		WRITE(*,*) "The game is a draw. "
+	    IF (WINNER == "D") THEN
+			WRITE(*,*) "The game is a draw. "
 		ELSE
-		WRITE(*,*) "The winner is: ", WINNER
+			WRITE(*,*) "The winner is: ", WINNER
 		END IF
 		STOP !if the game has ended, this stops the program
 	END IF
@@ -245,7 +249,6 @@
 
 	! depending on the value of move, a check is made to see if the square is empty
 	! if it's empty it will return true, in all other circumstances it returns false
-
 	IF (MOVE == 1 .AND. TICTAC(1,1) == " ") THEN
 		CHKPLAY = .TRUE.
 	ELSE IF (MOVE == 2 .AND. TICTAC(1,2) == " ") THEN
