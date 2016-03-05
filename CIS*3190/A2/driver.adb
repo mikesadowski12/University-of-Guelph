@@ -16,15 +16,15 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 
 with ada.Text_IO; use Ada.Text_IO;
-with ada.Integer_Text_IO; use Ada.Integer_Text_IO;
-with ada.Float_Text_IO; use ada.Float_Text_IO;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+--with ada.Integer_Text_IO; use Ada.Integer_Text_IO;
+--with ada.Float_Text_IO; use ada.Float_Text_IO;
+--with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with calculator; use calculator;
 
 procedure driver is
 
-        package SU renames Ada.Strings.Unbounded;
-        package T_IO renames Ada.Text_IO;
+        --package SU renames Ada.Strings.Unbounded;
+        --package T_IO renames Ada.Text_IO;
 
         operator : character; -- the operator used on the 2 operands
         operand1, operand2 : String (1 .. 100); -- the operands
@@ -67,7 +67,7 @@ procedure driver is
                         return 1;
                 end if;
 
-                return 1;
+                return param;
         end balanceList;	
 
 --Function to calculate the result of operand1 and operand2 using the operator
@@ -75,7 +75,7 @@ procedure driver is
 -- Description: Calculate the result of operand1 and operand2 using the operator
 -- Paramters: None
 -- Return: None 
-        function calculateResult (operand1 : Node_Ptr; operand2 : Node_Ptr; o1size : Integer) return Node_Ptr is
+        function calculateResult (operand1 : Node_Ptr; operand2 : Node_Ptr) return Node_Ptr is
         Head: Node_Ptr;
         begin
                 Head := null;
@@ -98,48 +98,46 @@ procedure driver is
         end calculateResult;
 
 begin
-        new_line;
-        new_line;
-        --Get all required information from the user for the calculation
-        put_line("> Enter first operand: ");
-        get_line(operand1, o1size);
+	flag := 1;
 
-        put_line("> Enter operation: + , - , * or !");
-        get(operator);
+	loop
+		new_line;
+                new_line;
+		put_line("> Press CNTRL+C anytime to quit: ");
+		new_line;
 
-        put_line("> Enter second operand: ");
-        get_line(operand2, o2size);
-        get_line(operand2, o2size);
+        	--Get all required information from the user for the calculation
+        	put_line("> Enter first operand: ");
+        	get_line(operand1, o1size);
 
-        --Build the 2 Lists, each node contains 1 digit of the number
-        operand1List := createList(operand1, o1size);
-        operand2List := createList(operand2, o2size);
+        	put_line("> Enter operation: + , - , * or !");
+        	get(operator);
 
-	if operator /= '*' then
-                --Pad 0's to the smaller list to make lists equal in node count
-                flag := balanceList(1);
-        end if;
+        	put_line("> Enter second operand: ");
+        	get_line(operand2, o2size);
+        	get_line(operand2, o2size);
 
-	new_line;
-	new_line;
-	put("OP1: ");
-	operand1List := printList(operand1List);
-        new_line;
-	put("OP2: ");
-        operand2List := printList(operand2List);
-	new_line;
+        	--Build the 2 Lists, each node contains 1 digit of the number
+        	operand1List := createList(operand1, o1size);
+        	operand2List := createList(operand2, o2size);
 
-        --Build the result list
-        resultList := calculateResult(operand1List, operand2List, o1size);
+		if operator /= '*' then
+                	--Pad 0's to the smaller list to make lists equal in node count
+                	flag := balanceList(1);
+        	end if;
 
-        --Print the result list
-        new_line;
-        if resultList /= null then
-                put_line("The result is: ");
-                resultList := printList(resultList);
-        end if;
-        new_line;
-        new_line;
+        	--Build the result list
+        	resultList := calculateResult(operand1List, operand2List);
+
+        	--Print the result list
+        	new_line;
+        	if resultList /= null and flag = 1 then
+                	put_line("> The result is: ");
+                	resultList := printList(resultList);
+       		end if;
+        	new_line;
+        	new_line;
+	end loop;
 end driver;
 
 

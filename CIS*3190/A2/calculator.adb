@@ -17,8 +17,8 @@
 
 with ada.Text_IO; use Ada.Text_IO;
 with ada.Integer_Text_IO; use Ada.Integer_Text_IO;
-with ada.Float_Text_IO; use ada.Float_Text_IO;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+--with ada.Float_Text_IO; use ada.Float_Text_IO;
+--with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package body calculator is
 
@@ -191,12 +191,12 @@ package body calculator is
                 Scan_Ptr2 := operand2;
                 temp := Scan_Ptr2;
 
-		put("Scan1: ");
-                Scan_Ptr1 := printList(Scan_Ptr1);
-                new_line;
-                put("Scan2: ");
-                Scan_Ptr2 := printList(Scan_Ptr2);
-                new_line;
+		--put("Scan1: ");
+                --Scan_Ptr1 := printList(Scan_Ptr1);
+                --new_line;
+                --put("Scan2: ");
+                --Scan_Ptr2 := printList(Scan_Ptr2);
+                --new_line;
 
                 loop
                         -- If the list is entirely empty, bail out now.
@@ -309,9 +309,9 @@ package body calculator is
                         HeadResult := addition(HeadResult, resultArray(J));
                 end loop;
 		
-		put("Returned: ");
-		HeadResult := printList(HeadResult);
-		new_line;
+		--put("Returned: ");
+		--HeadResult := printList(HeadResult);
+		--new_line;
 
                 return HeadResult;
         end multiplication;
@@ -398,7 +398,7 @@ package body calculator is
 -- Return: Returns the list with no changes
         function printList (Head : Node_Ptr) return Node_Ptr is
         Scan_Ptr: Node_Ptr;
-        negativeFlag : Integer := 0;
+        --negativeFlag : Integer := 0;
 
         begin
                 Scan_Ptr := Head;
@@ -418,20 +418,27 @@ package body calculator is
                         end if;
                end loop;
 
-                --If first number was negative, all numbers in list were negative
+		Scan_Ptr := Head;
+
+		--If first number was negative, all numbers in list were negative
                 --Want to avoid printing all numbers in the list as negative
-                --if Scan_Ptr.Data < 0 then
-                        --Head.Data := Head.Data * (-1);
-                        --Put("-");
-                --end if;
+                if Scan_Ptr.Data < 0 then
+			--negativeFlag := 1;
+			loop
+                        	exit when Scan_Ptr = null;
+				Scan_Ptr.Data := Scan_Ptr.Data * (-1);
+
+                        	Scan_Ptr := Scan_Ptr.Next;
+			end loop;
+			Put("-");
+		end if;
+
+		Scan_Ptr := Head;
 
                 loop
                 -- If the list is entirely empty, bail out now.
                         exit when Scan_Ptr = null;
 
-                        if negativeFlag = 1 then
-                                Scan_Ptr.Data := Scan_Ptr.Data * (-1);
-                        end if;
 
                 -- Print, go to next.
                         Put(Scan_Ptr.Data, Width => 0);
@@ -480,7 +487,7 @@ package body calculator is
         function balance(operand : Node_Ptr; howMany : Integer) return Node_Ptr is
         Head: Node_Ptr;
         Scan_Ptr1: Node_Ptr;                  -- Scan the list.
-        prev : Node_Ptr;
+        --prev : Node_Ptr;
 
         begin
                 Scan_Ptr1 := operand;
@@ -490,7 +497,7 @@ package body calculator is
                         exit when Scan_Ptr1 = null;
 
                         Scan_Ptr1 := Scan_Ptr1.Next;
-                        prev := Scan_Ptr1;
+                        --prev := Scan_Ptr1;
 
                         -- Once at the end of the list, add 'howMany' zeros to the end
                         if Scan_Ptr1 = null then
