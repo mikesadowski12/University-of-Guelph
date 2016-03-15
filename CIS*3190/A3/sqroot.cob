@@ -17,40 +17,41 @@
 * Final result is placed in the LS-resultBabylonian variable, that is "returned" to the calling function
 * -------------------------------------------------------------------------------------------------------------------
 
-IDENTIFICATION DIVISION.
-PROGRAM-ID. SQROOT.
+identification division.
+program-id. sqroot.
 
-DATA DIVISION.
-  WORKING-STORAGE SECTION.
-        01      resultApproximation     PIC 9(11)V9(10)  VALUE ZEROS.
-        01      IterCount               PIC 99          VALUE ZEROS.
-        01      result                  PIC 9(11)V9(6)  VALUE ZEROS.
-        01      num                     PIC 9(11)V9(10)  VALUE ZEROS.
+data division.
+  working-storage section.
+        01      resultApproximation     pic 9(11)V9(10)  value zeros.
+        01      IterCount               pic 99           value zeros.
+        01      result                  pic 9(11)V9(6)   value zeros.
+        01      num                     pic 9(11)V9(10)  value zeros.
 
-   LINKAGE SECTION.
-   	01 	LS-number 		PIC 9(11)V9(6)  VALUE ZEROS.
-   	01 	LS-resultBabylonian	PIC 9(11)V9(10)  VALUE ZEROS.
+  linkage section. 
+   	01 	LS-number 		pic 9(11)V9(6)   value zeros.
+   	01 	LS-resultBabylonian	pic 9(11)V9(10)  value zeros.
 
-
-PROCEDURE DIVISION USING LS-number, LS-resultBabylonian.
+procedure division using LS-number, LS-resultBabylonian.
 *	Reset the counter
-	MOVE 0 TO IterCount
+	move 0 to IterCount
 
 *	get an initial approximation (num/2)
-	DIVIDE LS-number BY 2 GIVING resultApproximation
+	divide LS-number by 2 giving resultApproximation
 
 *	Calculate the square root using the babylonian method
-        PERFORM UNTIL IterCount = 33
-*		 divide number by approximation
-                DIVIDE LS-number BY resultApproximation GIVING result
+	perform until IterCount = 33
+
+*		divide number by approximation
+		divide LS-number by resultApproximation giving result
 
 *		add the numbers together and divide by 2 to average the numbers
 *		use result as the next approximation		
-                ADD resultApproximation TO result GIVING result
-                DIVIDE result BY 2 GIVING resultApproximation
-                ADD 1 TO IterCount
-        END-PERFORM
+		add resultApproximation to result giving result
+		divide result by 2 giving resultApproximation
+		
+		add 1 to IterCount
+	end-perform
 
 *	return the result
-	MOVE resultApproximation TO LS-resultBabylonian
-EXIT PROGRAM.
+	move resultApproximation to LS-resultBabylonian
+exit program.

@@ -17,75 +17,75 @@
 * After the function returns the result it is printed to the user
 * -------------------------------------------------------------------------------------------------------------------
 
-IDENTIFICATION DIVISION.
-PROGRAM-ID. SQRT.
+identification division.
+program-id. SQRT.
 
-DATA DIVISION.
-	WORKING-STORAGE SECTION.
-		01	inNumber		PIC S9(11)V9(6)	VALUE ZEROS.
-		01      positiveInNumber	PIC 9(11)V9(6)  VALUE ZEROS.
-		01 	resultBabylonian	PIC 9(11)V9(10)  VALUE ZEROS.
-		01      result			PIC 9(11)V9(6)  VALUE ZEROS.			
-	        01	counter			PIC 99		VALUE ZEROS.
-		01	negativeFlag		PIC 9(11)V9(6)  VALUE ZEROS.
+data division.
+	working-storage section.
+		01	inNumber		pic S9(11)V9(6)	value zeros.
+		01      positiveInNumber	pic 9(11)V9(6)  value zeros.
+		01 	resultBabylonian	pic 9(11)V9(10) value zeros.
+		01      result			pic 9(11)V9(6)  value zeros.			
+	        01	counter			pic 99		value zeros.
+		01	negativeFlag		pic 9(11)V9(6)  value zeros.
 
 procedure division.
 
 *	infinite loop because I never increment counter
 *	user needs to enter CNTRL-C to exit the program
-	PERFORM UNTIL counter = 50
+        perform until counter = 50
 
 *		always reset the negativeflag to update for the new number
-		MOVE 0 TO negativeFlag
+		move 0 to negativeFlag
 
 *		get the user's input
-		PERFORM getNumber
-
+		perform getNumber
+  
 *		check if the number they input was negative, set the negativeflag accordingly
-		IF inNumber >= 0 THEN
+		if inNumber >= 0 then
+
 *			if it was positive, move the number data to an unsigned variable 
-			MOVE inNumber TO positiveInNumber
+			move inNumber to positiveInNumber
 			
-*			SQROOT the number
-			CALL 'SQROOT' USING positiveInNumber, resultBabylonian
-	
+*			Square Root the number
+			call 'sqroot' using positiveInNumber, resultBabylonian
+			
 *			round the result to the 6 decimal places
-			COMPUTE result ROUNDED = resultBabylonian
-		ELSE
+			compute result rounded = resultBabylonian
+		else
 *			number was negative
-			MOVE 1 TO negativeFlag
-		END-IF
+			move 1 to negativeFlag
+		end-if
 
 *		display resulting number
-		PERFORM displayResult
-	END-PERFORM
-	STOP RUN.
+		perform displayResult
+	end-perform
+	stop run.
 
 * Name: getNumber
 * Description: Display the welcome board and the user input section
 * Return: the inputted number is saved in the variable "inNumber"
 getNumber.
-	DISPLAY "".
-        DISPLAY "".
-        DISPLAY "           SQUARE ROOT APPROXIMATIONS".
-        DISPLAY "------------------------------------------------".
-	DISPLAY "> Enter number (CNTRL-C to EXIT): ", ACCEPT inNumber.
+	display "".
+	display "".
+	display "           SQUARE ROOT APPROXIMATIONS".
+	display "------------------------------------------------".
+	display "> Enter number (CNTRL-C to EXIT): ", ACCEPT inNumber.
 
 * Name: displayResult
 * Description: Display the resulting number. If it was negative, INVALID INPUT is displayed instead of a value
 * Return: none
 displayResult.
-	DISPLAY "".
-	DISPLAY "------------------------------------------------".
-	DISPLAY "       NUMBER                      SQUARE ROOT".
-	DISPLAY "-------------------            ------------------".
+	display "".
+	display "------------------------------------------------".
+	display "       NUMBER                      SQUARE ROOT".
+	display "-------------------            ------------------".
 	
 *	don't print the value if the number inputted was negative
-	IF negativeFlag = 0 THEN
-		DISPLAY positiveInNumber, "            ", result
-	ELSE
-		DISPLAY inNumber, "               INVALID INPUT"
-	END-IF.
-	DISPLAY "".
-        DISPLAY "".	
-
+	if negativeFlag = 0 then
+		display positiveInNumber, "            ", result
+	else
+		display inNumber, "               INVALID INPUT"
+	end-if
+	display "".
+	display "".
