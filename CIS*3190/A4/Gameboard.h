@@ -6,8 +6,9 @@
 */
 
 /* 
- * This file contains the GameBoard information
- */ 
+ * This file contains the GameBoard information struct
+ * It holds the board and locations of all pawns, and the count of the player's/computer's pawns
+*/ 
 
 #include <stdio.h>
 #include <ctype.h>
@@ -32,11 +33,12 @@ typedef struct Gameboard
 Gameboard createBoard(Gameboard board);
 void printBoard(Gameboard board);
 
-int isStringAnInteger(char *string);
-char getYesNo(void);
-
 int *playerMove(int *move);
 int checkPlayerMove(Gameboard board, int *move, char pawn, char opposingPawn);
 Gameboard updateBoard(Gameboard board, int *move, char pawn, char opposingPawn);
 char checkWinner(Gameboard board);
+int checkDraw(Gameboard board);
 void printUsage(void);
+
+int isStringAnInteger(char *string);
+char getYesNo(void);

@@ -1,6 +1,5 @@
-all:
-	gcc -Wall driver.c Gameboard.c computer.c -o a4
-	clear
-
+all: 
+	gcc -Wall driver.c Gameboard.c Computer.c -o a4
+	
 clean:
 	rm a4

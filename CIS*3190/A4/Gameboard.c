@@ -70,28 +70,7 @@ void printBoard(Gameboard board)
 	printf("\n");
 }
 
-/* Name: isStringAnInteger()
- * Description: Determines if string contains an integer or not
- * Parameters: string: the string to be checked
- * Return: NOTINTEGER=0 if it failed, ISINTEGER=1 if passed
-*/ 
-int isStringAnInteger(char *string)
-{
-	int i = 0;
-		
-	for (i = 0; i < strlen(string); i++) 
-	{	
-		if ( !isdigit(string[i]) )
-		{
-			if ( string[i] != '\n' ) /*checking new line since it is contained in the string*/
-			{
-				return NOTINTEGER; /* if it was not a number and not a new line, return it is incorrect*/
-			}
-		}	
-	}
-	
-	return ISINTEGER;
-}
+
 
 /* Name: playerMove()
  * Description: Allows a player to enter a possible move.
@@ -150,7 +129,7 @@ int checkPlayerMove(Gameboard board, int *move, char pawn, char opposingPawn)
 		direction = -1; /* O moves up */
 	}
 	
-	/* Check if the move values are within the correct range */
+	/* Check if the move values are within the correct range 1-9 */
 	if ( (move[0] >= 1 && move[0] <= 9) && ( move[1] >= 1 && move[1] <= 9) )
 	{
 		/* Check the gameboard to see if the player selected their own pawn */
@@ -169,6 +148,7 @@ int checkPlayerMove(Gameboard board, int *move, char pawn, char opposingPawn)
 			/* if the (destination - origin) is 2 or 4, move diagonally 1 needs to be valid */
 			if ( move[1] - move[0] == (2 * direction) || move[1] - move[0] == (4 * direction) )
 			{
+				printf("moving diagonally\n");
 				/* Check the gameboard to see if the player selected an enemy pawn */
 				if ( board.array[move[1] - 1] == opposingPawn )
 				{			
@@ -243,7 +223,7 @@ void printUsage(void)
 				
 		do
 		{
-			printf("\> Continue? (Y-N): ");
+			printf("> Continue? (Y-N): ");
 			choice = getYesNo();	
 		} while (choice == 'n');
 	}
@@ -252,10 +232,10 @@ void printUsage(void)
 	printf("\nGame has started!\n");
 }
 
-/* Name: getYesNo
- * Description: gets user to input yes or no
+/* Name: checkWinner
+ * Description: Check if there is a winner in the game (no pawns left, or pawn reached other side)
  * Parameters: none
- * Return: y for yes, n for no
+ * Return: the character that won ('X' or 'O"), or '0' for no winner
 */ 
 char checkWinner(Gameboard board)
 {
@@ -288,6 +268,39 @@ char checkWinner(Gameboard board)
 	
 	/* if no winner is found, return */
 	return '0';
+}
+
+/* Name: checkDraw()
+ * Description: Determines if there is a draw (no player can make a move)
+ * Parameters: board: the current game being played
+ * Return: 
+*/ 
+int checkDraw(Gameboard board)
+{
+	return 0;
+}
+
+/* Name: isStringAnInteger()
+ * Description: Determines if string contains an integer or not
+ * Parameters: string: the string to be checked
+ * Return: NOTINTEGER=0 if it failed, ISINTEGER=1 if passed
+*/ 
+int isStringAnInteger(char *string)
+{
+	int i = 0;
+		
+	for (i = 0; i < strlen(string); i++) 
+	{	
+		if ( !isdigit(string[i]) )
+		{
+			if ( string[i] != '\n' ) /*checking new line since it is contained in the string*/
+			{
+				return NOTINTEGER; /* if it was not a number and not a new line, return it is incorrect*/
+			}
+		}	
+	}
+	
+	return ISINTEGER;
 }
 
 /* Name: getYesNo
