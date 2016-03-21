@@ -14,6 +14,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define BOARDSIZE 9
 #define INVALIDMOVE 0
@@ -35,8 +36,11 @@ void printBoard(Gameboard board);
 
 int *playerMove(int *move);
 int checkPlayerMove(Gameboard board, int *move, char pawn, char opposingPawn);
+//int checkPlayerMoveX(Gameboard board, int *move, char pawn, char opposingPawn);
+
 Gameboard updateBoard(Gameboard board, int *move, char pawn, char opposingPawn);
 char checkWinner(Gameboard board);
+int checkAvailableMoves(Gameboard board, char pawn, char enemy);
 int checkDraw(Gameboard board);
 void printUsage(void);
 

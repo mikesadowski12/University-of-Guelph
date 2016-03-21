@@ -20,7 +20,7 @@
 Computer createComputer(Computer computer)
 {
 	int i = 0;
-	
+		
 	for (i = 0; i < MAXMOVES; i++)
 	{
 		computer.origin[i] = 0;
@@ -28,8 +28,70 @@ Computer createComputer(Computer computer)
 		
 		computer.deletedOrigin[i] = 0;
 		computer.deletedDestination[i] = 0;	
+		
+		computer.moveCount = 0;
 	} 
 
+	return computer;
+}
+
+/* Name: 
+ * Description: 
+ * Parameters: 
+ * Return: 
+*/ 
+int computerMove(Gameboard board, Computer computer, int **move)
+{
+	int i = 0;
+		
+	for (i = 0; i < computer.moveCount; i++)
+	{
+		if ( checkPlayerMove(board, (int[2]){computer.origin[i], computer.destination[i]}, 'X', 'O') )
+		{
+			*(move[0]) = computer.origin[i];
+			*(move[0]+1) = computer.destination[i];
+			
+			return 1;
+		}
+	}
+	
+	return 0;
+}
+
+/* Name: 
+ * Description: 
+ * Parameters: 
+ * Return: 
+*/ 
+Computer findComputerMoves(Gameboard board, Computer computer) 
+{
+	int i = 0;
+	int j = 0;
+	int movement = 0;
+
+	for (i=1; i <= BOARDSIZE; i++)
+	{	
+		/* Pick the pawn to move */
+		if ( board.array[i-1] == 'X' )
+		{								
+			/* see if that pawn is able to move in any of the 3 directions (3=forward, 2=diagonal left, 4=diagonal right) */
+			for (j = 2; j <= 4; j++)
+			{				
+				movement = checkComputerPossibleMove(board, computer, i, j);
+				
+				/* there exists a way to move */
+				if ( movement != 0 )
+				{	
+					/* If it's not already in the list, add it */
+					if ( !checkAllowedMoves(computer, i, i+movement) )
+					{
+						computer = updateAllowedMoves(computer, i, i+movement);
+					}
+				}			
+			}						
+		}
+	} 
+		
 	return computer;
 }
 
@@ -39,73 +101,23 @@ Computer createComputer(Computer computer)
  * Parameters: 
  * Return: 
 */ 
-int *computerMove(Gameboard board, Computer computer, int *move) 
+int checkComputerPossibleMove(Gameboard board, Computer computer, int origin, int move)
 {
-	int i = 1;
-	int movement = 0;
-	
-	for (i=0; i <= BOARDSIZE; i++)
-	{
-		/* Pick the pawn to move */
-		if ( board.array[i] == 'X' )
-		{		
-			/* see if that pawn is able to move */
-			movement = checkComputerPossibleMove(board, computer, i);
-			printf("\nchar %d is x", i+1);
-			printf("\nhe can move to %d", movement+1);
-			
-			printBoard(board);
-						
-			/* there exists a way to move */
-			if ( movement != 0 )
-			{	
-				/* return the move the computer will make as an array */
-				move[0] = i;
-				move[1] = i+movement;
-				return move;
-			}
-		}	
-	}
-		
-	/* if no moves can be made by the computer, return null because he lost */	
-	return NULL;	
-} 
-
-
-/* Name: 
- * Description: 
- * Parameters: 
- * Return: 
-*/ 
-int checkComputerPossibleMove(Gameboard board, Computer computer, int origin)
-{
-	int i = 0;
-		
-	/* Check a possible move forward 1 space, and that it's an allowed move */	
-	if ( checkPlayerMove(board, (int[2]){origin, origin+3}, 'X', 'O') && !checkDeletedMoves(computer, origin, origin+3) )
-	{
-		return 3; /* return 3 for forward 1 space */
-	}
-	
+	/* Check a possible move forward 1 space, and that it's an allowed move */
 	/* Check a possible move diagonally, down to the left, and that it's an allowed move */	
-	if ( checkPlayerMove(board, (int[2]){origin, origin+2}, 'X', 'O') && !checkDeletedMoves(computer, origin, origin+2) )
+	/* Check a possible move diagonally, down to the right, and that it's an allowed move */	
+	if ( checkPlayerMove(board, (int[2]){origin, origin+move}, 'X', 'O') )
 	{
-		return 2; /* return 2 for diagonally to the left */
+		return move; 
 	}
 	
-	/* Check a possible move diagonally, down to the right, and that it's an allowed move */
-	if ( checkPlayerMove(board, (int[2]){origin, origin+4}, 'X', 'O') && !checkDeletedMoves(computer, origin, origin+4) )
-	{
-		return 4; /* return 4 for diagonally to the right */
-	}
-		
 	return INVALIDMOVE;
 }
 
 Computer forgetMove(Computer computer, int origin, int destination)
 {
 	int i = 0;
-		
+			
 	/* Make sure the move exists in the list */
 	if ( checkAllowedMoves(computer, origin, destination) )
 	{
@@ -113,14 +125,14 @@ Computer forgetMove(Computer computer, int origin, int destination)
 		for (i = 0; i < MAXMOVES; i++)
 		{
 			if ( computer.origin[i] == origin && computer.destination[i] == destination )
-			{				
-				/* add it to the deleted move */
-				computer = updateDeletedMoves(computer, origin, destination);
-				
+			{	
 				/* remove it from the allowed list */
 				computer.origin[i] = 0;
 				computer.destination[i] = 0;
-				break;
+				computer.moveCount--;
+								
+				/* return the updated computer */
+				return computer;
 			}
 		}
 	}
@@ -173,6 +185,8 @@ Computer updateAllowedMoves(Computer computer, int origin, int destination)
 			computer.origin[i] = origin;
 			computer.destination[i] = destination;
 			
+			computer.moveCount++;
+			
 			return computer;
 		}		
 	}
@@ -204,7 +218,7 @@ void printAllowed(Computer computer)
 {
 	int i = 0;
 	
-	printf("\n\nAllowed list is: \n");
+	printf("\n\nAllowed list has %d:\n", computer.moveCount);
 	
 	for (i = 0; i < MAXMOVES; i++)
 	{

@@ -19,22 +19,29 @@
 
 #include "Gameboard.h"
 
-#define MAXMOVES 20
+#define MAXMOVES 50
 #define MOVEFOUND 1
 #define MOVENOTFOUND 0
+#define FORWARD 3
+#define DIAGONALLEFT 2
+#define DIAGONALRIGHT 4
+
 
 typedef struct Computer
 {
 	int origin[MAXMOVES]; /* Holds the pawn location for possible move */
 	int destination[MAXMOVES]; /* Holds the pawn destination for possible move */
+
+	int moveCount;
 	
 	int deletedOrigin[MAXMOVES]; /* Holds the pawn location for deleted move */
 	int deletedDestination[MAXMOVES]; /* Holds the pawn destinatin for deleted move */
 } Computer;
 
 Computer createComputer(Computer computer);
-int *computerMove(Gameboard board, Computer computer, int *move); 
-int checkComputerPossibleMove(Gameboard board, Computer computer, int origin);
+Computer findComputerMoves(Gameboard board, Computer computer); 
+int checkComputerPossibleMove(Gameboard board, Computer computer, int origin, int move);
+int computerMove(Gameboard board, Computer computer, int **move);
 
 Computer forgetMove(Computer computer, int origin, int destination);
 int checkAllowedMoves(Computer computer, int origin, int destination);

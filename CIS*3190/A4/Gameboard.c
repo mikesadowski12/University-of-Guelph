@@ -145,17 +145,52 @@ int checkPlayerMove(Gameboard board, int *move, char pawn, char opposingPawn)
 				}
 			}
 			
-			/* if the (destination - origin) is 2 or 4, move diagonally 1 needs to be valid */
-			if ( move[1] - move[0] == (2 * direction) || move[1] - move[0] == (4 * direction) )
-			{
-				printf("moving diagonally\n");
-				/* Check the gameboard to see if the player selected an enemy pawn */
-				if ( board.array[move[1] - 1] == opposingPawn )
-				{			
-					return VALIDMOVE; /* player can take enemy pawn */
+			if ( board.array[move[1] - 1] == opposingPawn )
+			{			
+				/* if moving down the board, check positions of pawn and how much they can move by */
+				if ( direction > 0 )
+				{
+					/* move diagonally right */
+					if ( move[0] == 1 || move[0] == 2 || move[0] == 4 || move[0] == 5 )
+					{
+						if ( move[1] - move[0] == (4 * direction) )
+						{
+							return VALIDMOVE;
+						}
+					}
+					
+					/* check move diagonally left */
+					if ( move[0] == 2 || move[0] == 3 || move[0] == 5 || move[0] == 6 )
+					{
+						if ( move[1] - move[0] == (2 * direction) )
+						{
+							return VALIDMOVE;
+						}
+					}
 				}
-			}
-				 
+
+				/* if moving up the board, check positions of pawn and how much they can move by */
+				if ( direction < 0 )
+				{
+					/* move diagonally right */
+					if ( move[0] == 4 || move[0] == 5 || move[0] == 7 || move[0] == 8 )
+					{
+						if ( move[1] - move[0] == (2 * direction) )
+						{
+							return VALIDMOVE;
+						}
+					}
+					
+					/* check move diagonally left */
+					if ( move[0] == 5 || move[0] == 6 || move[0] == 8 || move[0] == 9 )
+					{
+						if ( move[1] - move[0] == (4 * direction) )
+						{
+							return VALIDMOVE;
+						}
+					}
+				}
+			}		 
 		}	
 	} 
 	
@@ -240,7 +275,7 @@ void printUsage(void)
 char checkWinner(Gameboard board)
 {
 	int i = 0;
-	
+		
 	for (i = 0; i < BOARDSIZE; i++)
 	{
 		/* Check top row for player's pawn */
@@ -266,19 +301,49 @@ char checkWinner(Gameboard board)
 		 return 'O';
 	}
 	
-	/* if no winner is found, return */
+	/* Check if both player's are able to move */
+	
+	
+	
+	/* if no winner is found, return zero*/
 	return '0';
 }
 
-/* Name: checkDraw()
- * Description: Determines if there is a draw (no player can make a move)
- * Parameters: board: the current game being played
- * Return: 
-*/ 
-int checkDraw(Gameboard board)
+int checkAvailableMoves(Gameboard board, char pawn, char enemy)
 {
+	int i = 0;
+	int j = 0; 
+	
+	for (i=1; i <= BOARDSIZE; i++)
+	{	
+		/* Pick the pawns for available moves */
+		if ( board.array[i-1] == pawn )
+		{						
+			/* see if that pawn is able to move in any of the 3 directions (3=forward, 2=diagonal left, 4=diagonal right) */
+			for (j = 2; j <= 4; j++)
+			{	
+				if ( pawn == 'O' )
+				{
+					if ( checkPlayerMove(board, (int[2]){i, i-j}, pawn, enemy) )
+					{
+						return 1;
+					}
+				}
+				
+				if ( pawn == 'X' )
+				{
+					if ( checkPlayerMove(board, (int[2]){i, i+j}, pawn, enemy) )
+					{
+						return 1;
+					}
+				}
+			}
+		}
+	}	
+	
 	return 0;
 }
+
 
 /* Name: isStringAnInteger()
  * Description: Determines if string contains an integer or not
