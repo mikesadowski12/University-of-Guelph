@@ -126,17 +126,40 @@ Computer forgetMove(Computer computer, int origin, int destination)
 		{
 			if ( computer.origin[i] == origin && computer.destination[i] == destination )
 			{	
-				/* remove it from the allowed list */
-				computer.origin[i] = 0;
-				computer.destination[i] = 0;
-				computer.moveCount--;
-								
-				/* return the updated computer */
-				return computer;
+				break;
 			}
 		}
+
+		//2 3 4 5 6 
+		//2 4 5 6
+
+		printf("\ndeleting move %d,%d", computer.origin[i], computer.destination[i]);
+		printf("i= %d", i);
+		printf("movecount= %d", computer.moveCount);
+
+		for (i = i; i < computer.moveCount; i++ )
+		{ 
+                	if ( i+1 < computer.moveCount )
+                	{
+				printf("\nswitching %d,%d for %d,%d",computer.origin[i], computer.destination[i], computer.origin[i+1],computer.destination[i+1]);
+                		computer.origin[i] = computer.origin[i+1];
+                        	computer.destination[i] = computer.destination[i+1];
+                	}
+                	else
+                	{
+				printf("\nswitching %d,%d to 0,0",computer.origin[i], computer.destination[i]);
+                		computer.origin[i] = 0;
+                        	computer.destination[i] = 0;
+                		break;
+			}
+
+               		/* remove it from the allowed list */
+                	computer.moveCount--;
+                                                               
+                	/* return the updated computer */
+                	return computer;
+		}
 	}
-	
 	/* return the updated computer */
 	return computer;
 }
