@@ -22,9 +22,7 @@ int main(void)
 	
 	srand(time(NULL));
 	computer = createComputer(computer);
-	
-	//printAllowed(computer);
-	
+		
 	while(1)
 	{
 		board = createBoard(board);
@@ -34,8 +32,8 @@ int main(void)
 		{		
 		    while (!checkPlayerMove(board, playerMove(movePlayer), 'O', 'X'))
 		    {	
-				printf("\n\nInvalid move!\n");
-				printBoard(board);	
+				printf("\n\nInvalid move! Try again.. \n");
+				printBoard(board);
 			}
 			
 			/* if the player made their move and it was valid, update the board */
@@ -49,10 +47,16 @@ int main(void)
 			{
 				playerScore++;
 				computer = forgetMove(computer, prevMoveComputer[0], prevMoveComputer[1]);
-				printAllowed(computer);
 				break;
-			}			
-			if ( !checkAvailableMoves(board, 'X', 'O') ) { winner = 'O'; playerScore++; break;}
+			}
+						
+			if ( !checkAvailableMoves(board, 'X', 'O') ) 
+			{ 
+				winner = 'O';
+				computer = forgetMove(computer, prevMoveComputer[0], prevMoveComputer[1]); 
+				playerScore++; 
+				break;
+			}
 					
 			/* Computer Moves */			
 			if ( !computerMove(board, computer, &moveComputer) )
@@ -76,8 +80,6 @@ int main(void)
 			board = updateBoard(board, moveComputer, 'X', 'O');	
 			printBoard(board);
 			
-			printAllowed(computer);
-			
 			winner = checkWinner(board);		
 			if ( winner != '0') {computerScore++; break;}
 			if ( !checkAvailableMoves(board, 'O', 'X') ) { winner = 'X'; computerScore++; break;}								
@@ -90,6 +92,8 @@ int main(void)
 		printf("**    Score - You: %d  Me: %d     **\n", playerScore, computerScore);
 		printf("**********************************\n");
 		printBoard(board);	
+		printAllowed(computer);
+		
 		
 		printf("\n\nNew game!\n");	
 	}

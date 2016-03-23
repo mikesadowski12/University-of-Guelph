@@ -276,7 +276,7 @@ char checkWinner(Gameboard board)
 {
 	int i = 0;
 		
-	for (i = 0; i < BOARDSIZE; i++)
+	for (i = 0; i < BOARDSIZE+1; i++)
 	{
 		/* Check top row for player's pawn */
 		if ( i == 1 || i == 2 || i == 3 )
