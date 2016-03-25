@@ -235,31 +235,51 @@ void printUsage(void)
 	system("clear");
 	
 	printf("\n	Welcome to Hexapawn!\n");
-		
-	printf("\n> Instructions? (Y-N): ");		
-	choice =  getYesNo();
+	
+	choice =  getYesNo("\n> Instructions? (Y-N): ");
 	
 	if ( choice == 'y' )
 	{
+		system("clear");
+		printf("\nTHIS PROGRAM PLAYS THE GAME OF HEXAPAWN.");
+		printf("\nHEXAPAWN IS PLAYED WITH CHESS PAWNS ON A 3 BY 3 BOARD.");
+		printf("\nTHE PAWNS ARE MOVED AS IN CHESS - ONE SPACE FORWARD TO");
+		printf("\nAN EMPTY SPACE OR ONE SPACE FORWARD AND DIAGONALLY TO ");
+		printf("\nCAPTURE AN OPPOSING MAN. ON THE BOARD, YOUR PAWNS");
+		printf("\nARE 'O', COMPUTER's PAWNS ARE 'X', AND EMPTY");
+		printf("\nSQUARES ARE '.'. TO ENTER A MOVE, TYPE THE NUMBER OF");
+		printf("\nTHE SQUARE YOU ARE MOVING FROM, FOLLOWED BY THE NUMBER");
+		printf("\nOF THE SQUARE YOU WILL MOVE TO.");
+		printf("\n\nTHE COMPUTER STARTS A SERIES OF GAMES KNOWING ONLY WHEN");
+		printf("\nTHE GAME IS WON (A DRAW IS IMPOSSIBLE) AND HOW TO MOVE. ");
+		printf("\nIT HAS NO STRATEGY AT FIRST AND JUST MOVES RANDOMLY.");
+		printf("\nHOWEVER, IT LEARNS FROM EACH GAME. THUS WINNING BECOMES");
+		printf("\nMORE AND MORE DIFFICULT. ALSO, TO HELP OFFSET YOUR");
+		printf("\nINITIAL ADVANTAGE, YOU WILL NOT BE TOLD HOW TO WIN THE");
+		printf("\nGAME BUT MUST LEARN THIS BY PLAYING.");
+
+		do
+		{
+			choice = getYesNo("\n\n> Continue? (Y-N): ");	
+		} while (choice == 'n');
+
+		system("clear");
 		printf("\nThe numbering of the board is as follows:\n");
-	
 		printf("		1 2 3\n");
 		printf("		4 5 6\n");
 		printf("		7 8 9\n");
-		
+
 		printf("\nInput will loop until a valid move is entered\n");
-		printf("You are 'O'\n");
-		printf("Computer is 'X'\n");
-		printf("Empty spaces are '.'\n");
 		
 		printf("\nExample: move your right most pawn forward is as follows:\n");
 		printf("> Enter pawn location: 9\n");
 		printf("> Enter new pawn location: 6\n\n");
+		
+		printf("Press CTRL-C to exit\n\n");
 				
 		do
 		{
-			printf("> Continue? (Y-N): ");
-			choice = getYesNo();	
+			choice = getYesNo("> Start game? (Y-N): ");	
 		} while (choice == 'n');
 	}
 	
@@ -373,7 +393,7 @@ int isStringAnInteger(char *string)
  * Parameters: none
  * Return: y for yes, n for no
 */ 
-char getYesNo(void)
+char getYesNo(char *message)
 {
 	char userInput[256] = {""};
 	int errorFlag = 1; /* assume input is wrong */
@@ -383,6 +403,7 @@ char getYesNo(void)
 	/* loop until user enters a a proper response */
 	do
 	{
+		printf("%s", message);
 		fgets(userInput, sizeof(userInput), stdin);
 	
 		if ( strcmp(userInput, "y\n") == 0 || strcmp(userInput, "Y\n") == 0 || strcmp(userInput, "yes\n") == 0 

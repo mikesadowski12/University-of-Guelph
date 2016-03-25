@@ -45,4 +45,4 @@ int checkDraw(Gameboard board);
 void printUsage(void);
 
 int isStringAnInteger(char *string);
-char getYesNo(void);
+char getYesNo(char *message);

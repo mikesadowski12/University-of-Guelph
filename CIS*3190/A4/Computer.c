@@ -128,7 +128,6 @@ Computer forgetMove(Computer computer, int origin, int destination)
 			{	
 				for (i = i; i < computer.moveCount; i++)
 				{
-					printf("\ni = %d", i);
 					computer.origin[i] = computer.origin[i+1];
 					computer.destination[i] = computer.destination[i+1];
 				}

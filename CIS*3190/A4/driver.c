@@ -32,12 +32,12 @@ int main(void)
 		{		
 		    while (!checkPlayerMove(board, playerMove(movePlayer), 'O', 'X'))
 		    {	
-				printf("\n\nInvalid move! Try again.. \n");
+				printf("\n\nILLEGAL CO-ORDINATES.\n");
 				printBoard(board);
 			}
 			
 			/* if the player made their move and it was valid, update the board */
-			printf("\nYou move %d,%d\n", movePlayer[0], movePlayer[1]);
+			printf("\nYOUR MOVE: %d TO %d\n", movePlayer[0], movePlayer[1]);
 			board = updateBoard(board, movePlayer, 'O', 'X');		
 			printBoard(board);
 			
@@ -45,6 +45,7 @@ int main(void)
 			winner = checkWinner(board);		
 			if ( winner != '0') 
 			{
+				printf("YOU WIN.");
 				playerScore++;
 				computer = forgetMove(computer, prevMoveComputer[0], prevMoveComputer[1]);
 				break;
@@ -52,6 +53,7 @@ int main(void)
 						
 			if ( !checkAvailableMoves(board, 'X', 'O') ) 
 			{ 
+				printf("I CAN'T MOVE, SO YOU WIN.");
 				winner = 'O';
 				computer = forgetMove(computer, prevMoveComputer[0], prevMoveComputer[1]); 
 				playerScore++; 
@@ -65,7 +67,7 @@ int main(void)
 				
 				if ( !computerMove(board, computer, &moveComputer) )
 				{
-					printf("I resign, you win\n");
+					printf("I RESIGN, YOU WIN.");
 					computer = forgetMove(computer, prevMoveComputer[0], prevMoveComputer[1]);
 					break;
 				}
@@ -76,25 +78,31 @@ int main(void)
 			prevMoveComputer[1] = moveComputer[1];
 			
 			/* Computer makes his move, updates his allowed move list as needed */	
-			printf("\nI move %d,%d\n", moveComputer[0], moveComputer[1]);
+			printf("\nI MOVE FROM %d TO %d\n", moveComputer[0], moveComputer[1]);
 			board = updateBoard(board, moveComputer, 'X', 'O');	
 			printBoard(board);
 			
 			winner = checkWinner(board);		
-			if ( winner != '0') {computerScore++; break;}
-			if ( !checkAvailableMoves(board, 'O', 'X') ) { winner = 'X'; computerScore++; break;}								
+			if ( winner != '0') 
+			{
+				printf("I WIN.");
+				computerScore++; 
+				break;
+			}
+			
+			if ( !checkAvailableMoves(board, 'O', 'X') ) 
+			{ 
+				printf("YOU CAN'T MOVE, SO I WIN.");
+				winner = 'X'; 
+				computerScore++; 
+				break;
+			}								
 		}
 		
 		/*print the final board, and who the winner is */
-		system("clear");
-		printf("\n\n**********************************\n");
-		printf("**         Winner is:  %c        **\n", winner);
-		printf("**    Score - You: %d  Me: %d     **\n", playerScore, computerScore);
-		printf("**********************************\n");
-		printBoard(board);	
-		printAllowed(computer);
-		
-		
+		printf("\nI HAVE WON %d AND YOU %d OUT OF %d GAMES", computerScore, playerScore, playerScore+computerScore);
+		//printBoard(board);	
+				
 		printf("\n\nNew game!\n");	
 	}
 	
