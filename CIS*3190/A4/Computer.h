@@ -7,8 +7,8 @@
 
 /* 
  * This file contains the GameBoard information struct
- * It holds the locations of learned moves/deleted moves for the computer players
- * 4 different arrays, 2 for the learned moves and 2 for the deleted moves
+ * It holds the locations of learned moves/ for the computer player
+ * 2 arrays to hold all of the moves for the computer, as well as a count for the total moves
  * Each group of arrays correspond to eachother (eg origin[0], destination[0] is one move)
 */ 
 
@@ -33,9 +33,6 @@ typedef struct Computer
 	int destination[MAXMOVES]; /* Holds the pawn destination for possible move */
 
 	int moveCount;
-	
-	int deletedOrigin[MAXMOVES]; /* Holds the pawn location for deleted move */
-	int deletedDestination[MAXMOVES]; /* Holds the pawn destinatin for deleted move */
 } Computer;
 
 Computer createComputer(Computer computer);
@@ -45,9 +42,6 @@ int computerMove(Gameboard board, Computer computer, int **move);
 
 Computer forgetMove(Computer computer, int origin, int destination);
 int checkAllowedMoves(Computer computer, int origin, int destination);
-int checkDeletedMoves(Computer computer, int origin, int destination);
 Computer updateAllowedMoves(Computer computer, int origin, int destination);
-Computer updateDeletedMoves(Computer computer, int origin, int destination);
 
 void printAllowed(Computer computer);
-void printDeleted(Computer computer);

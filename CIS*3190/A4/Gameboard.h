@@ -36,7 +36,6 @@ void printBoard(Gameboard board);
 
 int *playerMove(int *move);
 int checkPlayerMove(Gameboard board, int *move, char pawn, char opposingPawn);
-//int checkPlayerMoveX(Gameboard board, int *move, char pawn, char opposingPawn);
 
 Gameboard updateBoard(Gameboard board, int *move, char pawn, char opposingPawn);
 char checkWinner(Gameboard board);

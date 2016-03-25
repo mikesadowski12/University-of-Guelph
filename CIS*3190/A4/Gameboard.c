@@ -13,7 +13,7 @@
 #include "Gameboard.h"
 
 /* Name: createBoard()
- * Description: creates a new gameboard
+ * Description: creates a new gameboard object
  * Parameters: board: a GameBoard
  * Return: the newly created gameboard
 */ 
@@ -25,6 +25,7 @@ Gameboard createBoard(Gameboard board)
 	board.playerCount = 3;
 	board.compCount = 3;
 	
+	/* first 3 pawns are X, next are 3 empty spaces, last 3 are O */
 	for (i = 0; i < BOARDSIZE; i++)
 	{
 		if ( i < 3 )
@@ -73,9 +74,9 @@ void printBoard(Gameboard board)
 
 
 /* Name: playerMove()
- * Description: Allows a player to enter a possible move.
+ * Description: Allows a player to enter 2 integers
  * Parameters: move: empty array of characters to store the move
- * Return: the move in a character array[3] (comma seperating the 2 numbers)
+ * Return: the move in a character array[2] (1 elements per integer)
 */ 
 int *playerMove(int *move) 
 {	
@@ -218,6 +219,7 @@ Gameboard updateBoard(Gameboard board, int *move, char pawn, char opposingPawn)
 		}	
 	}
 	
+	/* update the board with the move */
 	board.array[move[0] - 1] = '.';
 	board.array[move[1] - 1] = pawn;
 	
@@ -226,8 +228,8 @@ Gameboard updateBoard(Gameboard board, int *move, char pawn, char opposingPawn)
 
 /* Name: printUsage()
  * Description: prints usage statements and instructions if user chooses to do so
- * Parameters: board: current game, move: the move the player is trying to make
- * Return: the updated gameboard
+ * Parameters: none
+ * Return: none
 */ 
 void printUsage(void)
 {	
@@ -287,9 +289,9 @@ void printUsage(void)
 	printf("\nGame has started!\n");
 }
 
-/* Name: checkWinner
+/* Name: checkWinner()
  * Description: Check if there is a winner in the game (no pawns left, or pawn reached other side)
- * Parameters: none
+ * Parameters: board: the current gameboard 
  * Return: the character that won ('X' or 'O"), or '0' for no winner
 */ 
 char checkWinner(Gameboard board)
@@ -321,19 +323,21 @@ char checkWinner(Gameboard board)
 		 return 'O';
 	}
 	
-	/* Check if both player's are able to move */
-	
-	
-	
 	/* if no winner is found, return zero*/
 	return '0';
 }
 
+/* Name: checkAvailableMoves()
+ * Description: Check if there is a winner in the game where the enemy cannot make another move
+ * Parameters: board: the current gameboard , pawn: player's pawn, enemy: enemy pawn
+ * Return: the character that won ('X' or 'O"), or '0' for no winner
+*/ 
 int checkAvailableMoves(Gameboard board, char pawn, char enemy)
 {
 	int i = 0;
 	int j = 0; 
 	
+	/* cycle the entire game board */
 	for (i=1; i <= BOARDSIZE; i++)
 	{	
 		/* Pick the pawns for available moves */
@@ -342,14 +346,17 @@ int checkAvailableMoves(Gameboard board, char pawn, char enemy)
 			/* see if that pawn is able to move in any of the 3 directions (3=forward, 2=diagonal left, 4=diagonal right) */
 			for (j = 2; j <= 4; j++)
 			{	
+				/* based on direction, either add or subtract the desitination since O's move up and X's down */
 				if ( pawn == 'O' )
 				{
+					/* if a move is valid, return true */
 					if ( checkPlayerMove(board, (int[2]){i, i-j}, pawn, enemy) )
 					{
 						return 1;
 					}
 				}
 				
+				/* if a move is valid, return true */
 				if ( pawn == 'X' )
 				{
 					if ( checkPlayerMove(board, (int[2]){i, i+j}, pawn, enemy) )
@@ -361,6 +368,7 @@ int checkAvailableMoves(Gameboard board, char pawn, char enemy)
 		}
 	}	
 	
+	/* if no moves are valid, return false */
 	return 0;
 }
 
@@ -390,7 +398,7 @@ int isStringAnInteger(char *string)
 
 /* Name: getYesNo
  * Description: gets user to input yes or no
- * Parameters: none
+ * Parameters: message: a message to print
  * Return: y for yes, n for no
 */ 
 char getYesNo(char *message)

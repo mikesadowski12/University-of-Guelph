@@ -6,28 +6,25 @@
 */
 
 /* 
- * This file contains the functions that allow the computer player to move.
- * 
+ * This file contains the functions that allow the computer player to move and learn moves.
 */
 
 #include "Computer.h"
 
-/* Name: 
- * Description: 
- * Parameters: 
- * Return: 
+/* Name: createComputer()
+ * Description: Initializes a computer objects to be empty (no moves)
+ * Parameters: computer object to initialize
+ * Return: initialized computer object
 */ 
 Computer createComputer(Computer computer)
 {
 	int i = 0;
 		
+	/* set all moves to be 0,0 and set count to be 0*/	
 	for (i = 0; i < MAXMOVES; i++)
 	{
 		computer.origin[i] = 0;
 		computer.destination[i] = 0;
-		
-		computer.deletedOrigin[i] = 0;
-		computer.deletedDestination[i] = 0;	
 		
 		computer.moveCount = 0;
 	} 
@@ -35,33 +32,38 @@ Computer createComputer(Computer computer)
 	return computer;
 }
 
-/* Name: 
- * Description: 
- * Parameters: 
- * Return: 
+/* Name: computerMove()
+ * Description: Cycle through the computer's learned move list, and return the first valid move he is able to complete
+ * Parameters: board: the current game board, computer: the current computer object, move: the pointer that stores both integers for the move
+ * Return: 1 if the computer is able to move, 0 if he can't. the move coordinates are stored in a pointer
 */ 
 int computerMove(Gameboard board, Computer computer, int **move)
 {
 	int i = 0;
 		
+	/* loop through the learned moves array*/	
 	for (i = 0; i < computer.moveCount; i++)
 	{
+		/* check each move in the array */
 		if ( checkPlayerMove(board, (int[2]){computer.origin[i], computer.destination[i]}, 'X', 'O') )
 		{
+			/* store the first valid move */
 			*(move[0]) = computer.origin[i];
 			*(move[0]+1) = computer.destination[i];
 			
+			/*return he is able to move, and the first available move*/
 			return 1;
 		}
 	}
 	
+	/* return he can't move*/
 	return 0;
 }
 
-/* Name: 
- * Description: 
- * Parameters: 
- * Return: 
+/* Name: findComputerMoves()
+ * Description: Updates the computer's allowed move array with new moves
+ * Parameters: board: the current game board, computer: the current computer object
+ * Return: the updated computer object
 */ 
 Computer findComputerMoves(Gameboard board, Computer computer) 
 {
@@ -96,10 +98,10 @@ Computer findComputerMoves(Gameboard board, Computer computer)
 }
 
 
-/* Name: 
- * Description: 
- * Parameters: 
- * Return: 
+/* Name: checkComputerPossibleMove()
+ * Description: See if the computer is able to complete a possible move or not
+ * Parameters: board: the current game board, computer: the current computer object, origin: the pawn to move, move: the destination of the move
+ * Return: 0 if the move was not possible, the value of the move (2,3, or 4) if it was possible
 */ 
 int checkComputerPossibleMove(Gameboard board, Computer computer, int origin, int move)
 {
@@ -108,24 +110,32 @@ int checkComputerPossibleMove(Gameboard board, Computer computer, int origin, in
 	/* Check a possible move diagonally, down to the right, and that it's an allowed move */	
 	if ( checkPlayerMove(board, (int[2]){origin, origin+move}, 'X', 'O') )
 	{
+		/* return 2 3 or 4 if the computer can move in that direction */
 		return move; 
 	}
 	
 	return INVALIDMOVE;
 }
 
+/* Name: forgetMove()
+ * Description: Remove a move from the allowed moves array
+ * Parameters:computer: the current computer object, origin: the pawn to move, destination: the destination of the move
+ * Return: the newly updated computer object
+*/ 
 Computer forgetMove(Computer computer, int origin, int destination)
 {
 	int i = 0;
 			
-	/* Make sure the move exists in the list */
+	/* Make sure the move exists in the list before searching */
 	if ( checkAllowedMoves(computer, origin, destination) )
 	{
-		/* find the move in the allowed list */
+		/* cycle through the allowed list */
 		for (i = 0; i < MAXMOVES; i++)
 		{
+			/* find the move's position in the list */
 			if ( computer.origin[i] == origin && computer.destination[i] == destination )
 			{	
+				/* shift all proceeding elements left 1 position to erase the move */
 				for (i = i; i < computer.moveCount; i++)
 				{
 					computer.origin[i] = computer.origin[i+1];
@@ -143,6 +153,11 @@ Computer forgetMove(Computer computer, int origin, int destination)
 	return computer;
 }
 
+/* Name: checkAllowedMoves()
+ * Description: Check if a move exists in the allowed list by searching it's origin/destination
+ * Parameters:computer: the current computer object, origin: the pawn to move, destination: the destination of the move
+ * Return: 0 if the move does not exist, 1 if it does
+*/
 int checkAllowedMoves(Computer computer, int origin, int destination)
 {
 	int i = 0;
@@ -159,31 +174,21 @@ int checkAllowedMoves(Computer computer, int origin, int destination)
 	return MOVENOTFOUND;
 }
 
-int checkDeletedMoves(Computer computer, int origin, int destination)
-{
-	int i = 0;
-	
-	for (i = 0; i <= MAXMOVES; i++)
-	{
-		/* check if the move is in the not allowed list */
-		if ( computer.deletedOrigin[i] == origin && computer.deletedDestination[i] == destination )
-		{
-			return MOVEFOUND;
-		}
-	}
-		
-	return MOVENOTFOUND;
-}
-
+/* Name: updateAllowedMoves()
+ * Description: Insert a move to the computer's allowed list move
+ * Parameters:computer: the current computer object, origin: the pawn to move, destination: the destination of the move
+ * Return: the updated computer object
+*/
 Computer updateAllowedMoves(Computer computer, int origin, int destination)
 {
 	int i = 0;
 	
 	for (i = 0; i <= MAXMOVES; i++)
 	{
-		/* check the next available spot in the deleted list */
+		/* check the next available spot in the allowed list */
 		if ( computer.origin[i] == 0 && computer.destination[i] == 0 )
 		{
+			/* set that spot to be the new move and increment the total count of moves */
 			computer.origin[i] = origin;
 			computer.destination[i] = destination;
 			
@@ -196,26 +201,11 @@ Computer updateAllowedMoves(Computer computer, int origin, int destination)
 	return computer;
 }
 
-Computer updateDeletedMoves(Computer computer, int origin, int destination)
-{
-	int i = 0;
-	
-	for (i = 0; i <= MAXMOVES; i++)
-	{
-		/* check the next available spot in the deleted list */
-		if ( computer.deletedOrigin[i] == 0 && computer.deletedDestination[i] == 0 )
-		{
-			computer.deletedOrigin[i] = origin;
-			computer.deletedDestination[i] = destination;
-						
-			return computer;
-		}		
-	}
-		
-			
-	return computer;
-}
-
+/* Name: printAllowed()
+ * Description: print his allowed move list for debugging
+ * Parameters:computer: the current computer object
+ * Return: none
+*/
 void printAllowed(Computer computer)
 {
 	int i = 0;
@@ -228,16 +218,5 @@ void printAllowed(Computer computer)
 	}
 }
 
-void printDeleted(Computer computer)
-{
-	int i = 0;
-	
-	printf("\n\nDeleted list is: \n");
-	
-	for (i = 0; i < MAXMOVES; i++)
-	{
-		printf("%d,%d - ", computer.deletedOrigin[i], computer.deletedDestination[i]);
-	}	
-}
 
 

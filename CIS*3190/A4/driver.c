@@ -5,6 +5,11 @@
 #ASSIGNEMNT: CIS3190 A4
 */
 
+/* 
+ * This file contains the main game loop for HEXAPAWN
+ * It uses the Computer struct, the Gameboard struct, and all of their functions to play.
+*/ 
+
 #include "./Computer.h"
 
 int main(void) 
@@ -25,11 +30,13 @@ int main(void)
 		
 	while(1)
 	{
+		/* initialize the new game */
 		board = createBoard(board);
 		printBoard(board);
 		
 		while(1)
 		{		
+			/* loop until the player enters a valid move */
 		    while (!checkPlayerMove(board, playerMove(movePlayer), 'O', 'X'))
 		    {	
 				printf("\n\nILLEGAL CO-ORDINATES.\n");
@@ -47,14 +54,18 @@ int main(void)
 			{
 				printf("YOU WIN.");
 				playerScore++;
+				
+				/* since player won, computer forgets his last move */
 				computer = forgetMove(computer, prevMoveComputer[0], prevMoveComputer[1]);
 				break;
-			}
-						
+			}	
+			/* check if computer pawns are able to move */			
 			if ( !checkAvailableMoves(board, 'X', 'O') ) 
 			{ 
 				printf("I CAN'T MOVE, SO YOU WIN.");
 				winner = 'O';
+				
+				/* since player won, computer forgets his last move */
 				computer = forgetMove(computer, prevMoveComputer[0], prevMoveComputer[1]); 
 				playerScore++; 
 				break;
@@ -63,11 +74,15 @@ int main(void)
 			/* Computer Moves */			
 			if ( !computerMove(board, computer, &moveComputer) )
 			{
+				/*if he could not complete a move from his current list, update the list with new moves */
 				computer = findComputerMoves(board, computer);
 				
+				/* if he still cannot move, he resigns and forgets his last move*/
 				if ( !computerMove(board, computer, &moveComputer) )
 				{
 					printf("I RESIGN, YOU WIN.");
+					
+					/* since player won, computer forgets his last move */
 					computer = forgetMove(computer, prevMoveComputer[0], prevMoveComputer[1]);
 					break;
 				}
@@ -77,11 +92,12 @@ int main(void)
 			prevMoveComputer[0] = moveComputer[0];
 			prevMoveComputer[1] = moveComputer[1];
 			
-			/* Computer makes his move, updates his allowed move list as needed */	
+			/* Computer makes his move, his allowed move list was updated if needed */	
 			printf("\nI MOVE FROM %d TO %d\n", moveComputer[0], moveComputer[1]);
 			board = updateBoard(board, moveComputer, 'X', 'O');	
 			printBoard(board);
 			
+			/* check if computer won before letting the player go */
 			winner = checkWinner(board);		
 			if ( winner != '0') 
 			{
@@ -89,7 +105,7 @@ int main(void)
 				computerScore++; 
 				break;
 			}
-			
+			/* check if the player's pawns are able to move */
 			if ( !checkAvailableMoves(board, 'O', 'X') ) 
 			{ 
 				printf("YOU CAN'T MOVE, SO I WIN.");
@@ -99,10 +115,10 @@ int main(void)
 			}								
 		}
 		
-		/*print the final board, and who the winner is */
-		printf("\nI HAVE WON %d AND YOU %d OUT OF %d GAMES", computerScore, playerScore, playerScore+computerScore);
-		//printBoard(board);	
-				
+		/* print who the winner is */
+		printf("\nI HAVE WON %d AND YOU %d OUT OF %d GAMES", computerScore, playerScore, playerScore+computerScore);	
+			
+		/* begin a new game */		
 		printf("\n\nNew game!\n");	
 	}
 	
