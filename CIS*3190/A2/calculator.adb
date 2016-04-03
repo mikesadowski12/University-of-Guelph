@@ -529,6 +529,7 @@ package body calculator is
         return Head;
         end balance;
 
+
 -- Name: countList()
 -- Description: Counts the nodes in the list to tell which one is longer than the other for padding zeros
 -- Paramters: Head = the list
