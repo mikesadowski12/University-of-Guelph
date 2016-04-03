@@ -9,6 +9,7 @@ package assignment1;
  *
  * @author michaelsadowski
  */
+ 
 public class OtherActivity {
     
     private String title;
