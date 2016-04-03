@@ -1,3 +1,4 @@
+
 CREATE TABLE Vendor (Vno char(2), Vname char(255), City char(255), Vbalance decimal(6,2));
 CREATE TABLE Customer (Account char(2), Cname char(255), Province char(255), Cbalance decimal(6,2), Crlimit int);
 CREATE TABLE Transaction (Tno char(2), Vno char(2), Account char(2), T_Date date, Amount decimal(6,2));
