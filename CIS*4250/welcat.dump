@@ -1,0 +1,1081 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.4.5
+-- Dumped by pg_dump version 9.5.4
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+--
+-- Name: pet_accessability; Type: TYPE; Schema: public; Owner: welcat
+--
+
+CREATE TYPE pet_accessability AS ENUM (
+    'read',
+    'write'
+);
+
+
+ALTER TYPE pet_accessability OWNER TO welcat;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: accessability; Type: TABLE; Schema: public; Owner: welcat
+--
+
+CREATE TABLE accessability (
+    userid bigint,
+    petid bigint,
+    access pet_accessability
+);
+
+
+ALTER TABLE accessability OWNER TO welcat;
+
+--
+-- Name: account; Type: TABLE; Schema: public; Owner: welcat
+--
+
+CREATE TABLE account (
+    userid bigint NOT NULL,
+    addressid bigint NOT NULL,
+    usertype smallint DEFAULT 1 NOT NULL,
+    email character varying(255) NOT NULL,
+    firstname character varying(255) NOT NULL,
+    lastname character varying(255) NOT NULL,
+    phonenumber character varying(255),
+    password text NOT NULL,
+    dateregistered timestamp without time zone DEFAULT timezone('est'::text, now()) NOT NULL
+);
+
+
+ALTER TABLE account OWNER TO welcat;
+
+--
+-- Name: account_userid_seq; Type: SEQUENCE; Schema: public; Owner: welcat
+--
+
+CREATE SEQUENCE account_userid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE account_userid_seq OWNER TO welcat;
+
+--
+-- Name: account_userid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: welcat
+--
+
+ALTER SEQUENCE account_userid_seq OWNED BY account.userid;
+
+
+--
+-- Name: address; Type: TABLE; Schema: public; Owner: welcat
+--
+
+CREATE TABLE address (
+    addressid bigint NOT NULL,
+    locationid integer NOT NULL,
+    city character varying(255),
+    street text NOT NULL,
+    unit character varying(25),
+    postalcode character varying(20) NOT NULL
+);
+
+
+ALTER TABLE address OWNER TO welcat;
+
+--
+-- Name: address_addressid_seq; Type: SEQUENCE; Schema: public; Owner: welcat
+--
+
+CREATE SEQUENCE address_addressid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE address_addressid_seq OWNER TO welcat;
+
+--
+-- Name: address_addressid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: welcat
+--
+
+ALTER SEQUENCE address_addressid_seq OWNED BY address.addressid;
+
+
+--
+-- Name: address_locationid_seq; Type: SEQUENCE; Schema: public; Owner: welcat
+--
+
+CREATE SEQUENCE address_locationid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE address_locationid_seq OWNER TO welcat;
+
+--
+-- Name: address_locationid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: welcat
+--
+
+ALTER SEQUENCE address_locationid_seq OWNED BY address.locationid;
+
+
+--
+-- Name: animal; Type: TABLE; Schema: public; Owner: welcat
+--
+
+CREATE TABLE animal (
+    animaltypeid smallint NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE animal OWNER TO welcat;
+
+--
+-- Name: animal_animaltypeid_seq; Type: SEQUENCE; Schema: public; Owner: welcat
+--
+
+CREATE SEQUENCE animal_animaltypeid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE animal_animaltypeid_seq OWNER TO welcat;
+
+--
+-- Name: animal_animaltypeid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: welcat
+--
+
+ALTER SEQUENCE animal_animaltypeid_seq OWNED BY animal.animaltypeid;
+
+
+--
+-- Name: breed; Type: TABLE; Schema: public; Owner: welcat
+--
+
+CREATE TABLE breed (
+    animaltypeid smallint NOT NULL,
+    breedid smallint NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE breed OWNER TO welcat;
+
+--
+-- Name: breed_animaltypeid_seq; Type: SEQUENCE; Schema: public; Owner: welcat
+--
+
+CREATE SEQUENCE breed_animaltypeid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE breed_animaltypeid_seq OWNER TO welcat;
+
+--
+-- Name: breed_animaltypeid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: welcat
+--
+
+ALTER SEQUENCE breed_animaltypeid_seq OWNED BY breed.animaltypeid;
+
+
+--
+-- Name: breed_breedid_seq; Type: SEQUENCE; Schema: public; Owner: welcat
+--
+
+CREATE SEQUENCE breed_breedid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE breed_breedid_seq OWNER TO welcat;
+
+--
+-- Name: breed_breedid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: welcat
+--
+
+ALTER SEQUENCE breed_breedid_seq OWNED BY breed.breedid;
+
+
+--
+-- Name: country; Type: TABLE; Schema: public; Owner: welcat
+--
+
+CREATE TABLE country (
+    countryid smallint NOT NULL,
+    countryname character varying(255) NOT NULL
+);
+
+
+ALTER TABLE country OWNER TO welcat;
+
+--
+-- Name: country_countryid_seq; Type: SEQUENCE; Schema: public; Owner: welcat
+--
+
+CREATE SEQUENCE country_countryid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE country_countryid_seq OWNER TO welcat;
+
+--
+-- Name: country_countryid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: welcat
+--
+
+ALTER SEQUENCE country_countryid_seq OWNED BY country.countryid;
+
+
+--
+-- Name: gender; Type: TABLE; Schema: public; Owner: welcat
+--
+
+CREATE TABLE gender (
+    genderid smallint NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE gender OWNER TO welcat;
+
+--
+-- Name: location; Type: TABLE; Schema: public; Owner: welcat
+--
+
+CREATE TABLE location (
+    countryid smallint NOT NULL,
+    locationid integer NOT NULL,
+    locationname character varying(255) NOT NULL
+);
+
+
+ALTER TABLE location OWNER TO welcat;
+
+--
+-- Name: location_countryid_seq; Type: SEQUENCE; Schema: public; Owner: welcat
+--
+
+CREATE SEQUENCE location_countryid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE location_countryid_seq OWNER TO welcat;
+
+--
+-- Name: location_countryid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: welcat
+--
+
+ALTER SEQUENCE location_countryid_seq OWNED BY location.countryid;
+
+
+--
+-- Name: location_locationid_seq; Type: SEQUENCE; Schema: public; Owner: welcat
+--
+
+CREATE SEQUENCE location_locationid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE location_locationid_seq OWNER TO welcat;
+
+--
+-- Name: location_locationid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: welcat
+--
+
+ALTER SEQUENCE location_locationid_seq OWNED BY location.locationid;
+
+
+--
+-- Name: pet; Type: TABLE; Schema: public; Owner: welcat
+--
+
+CREATE TABLE pet (
+    ownerid bigint NOT NULL,
+    petid bigint NOT NULL,
+    name character varying(255) NOT NULL,
+    breedid smallint NOT NULL,
+    gender smallint NOT NULL,
+    microchip boolean DEFAULT false NOT NULL,
+    fitcat boolean DEFAULT false NOT NULL,
+    dateofbirth date,
+    weight real,
+    height real,
+    length real,
+    dateofdeath date,
+    reasonfordeath text,
+    lastupdated timestamp without time zone,
+    dateadded timestamp without time zone DEFAULT timezone('est'::text, now())
+);
+
+
+ALTER TABLE pet OWNER TO welcat;
+
+--
+-- Name: pet_ownerid_seq; Type: SEQUENCE; Schema: public; Owner: welcat
+--
+
+CREATE SEQUENCE pet_ownerid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE pet_ownerid_seq OWNER TO welcat;
+
+--
+-- Name: pet_ownerid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: welcat
+--
+
+ALTER SEQUENCE pet_ownerid_seq OWNED BY pet.ownerid;
+
+
+--
+-- Name: pet_petid_seq; Type: SEQUENCE; Schema: public; Owner: welcat
+--
+
+CREATE SEQUENCE pet_petid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE pet_petid_seq OWNER TO welcat;
+
+--
+-- Name: pet_petid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: welcat
+--
+
+ALTER SEQUENCE pet_petid_seq OWNED BY pet.petid;
+
+
+--
+-- Name: usertype; Type: TABLE; Schema: public; Owner: welcat
+--
+
+CREATE TABLE usertype (
+    usertypeid smallint NOT NULL,
+    referencename character varying(255) NOT NULL
+);
+
+
+ALTER TABLE usertype OWNER TO welcat;
+
+--
+-- Name: usertype_usertypeid_seq; Type: SEQUENCE; Schema: public; Owner: welcat
+--
+
+CREATE SEQUENCE usertype_usertypeid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE usertype_usertypeid_seq OWNER TO welcat;
+
+--
+-- Name: usertype_usertypeid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: welcat
+--
+
+ALTER SEQUENCE usertype_usertypeid_seq OWNED BY usertype.usertypeid;
+
+
+--
+-- Name: userid; Type: DEFAULT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY account ALTER COLUMN userid SET DEFAULT nextval('account_userid_seq'::regclass);
+
+
+--
+-- Name: addressid; Type: DEFAULT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY address ALTER COLUMN addressid SET DEFAULT nextval('address_addressid_seq'::regclass);
+
+
+--
+-- Name: locationid; Type: DEFAULT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY address ALTER COLUMN locationid SET DEFAULT nextval('address_locationid_seq'::regclass);
+
+
+--
+-- Name: animaltypeid; Type: DEFAULT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY animal ALTER COLUMN animaltypeid SET DEFAULT nextval('animal_animaltypeid_seq'::regclass);
+
+
+--
+-- Name: animaltypeid; Type: DEFAULT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY breed ALTER COLUMN animaltypeid SET DEFAULT nextval('breed_animaltypeid_seq'::regclass);
+
+
+--
+-- Name: breedid; Type: DEFAULT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY breed ALTER COLUMN breedid SET DEFAULT nextval('breed_breedid_seq'::regclass);
+
+
+--
+-- Name: countryid; Type: DEFAULT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY country ALTER COLUMN countryid SET DEFAULT nextval('country_countryid_seq'::regclass);
+
+
+--
+-- Name: countryid; Type: DEFAULT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY location ALTER COLUMN countryid SET DEFAULT nextval('location_countryid_seq'::regclass);
+
+
+--
+-- Name: locationid; Type: DEFAULT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY location ALTER COLUMN locationid SET DEFAULT nextval('location_locationid_seq'::regclass);
+
+
+--
+-- Name: ownerid; Type: DEFAULT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY pet ALTER COLUMN ownerid SET DEFAULT nextval('pet_ownerid_seq'::regclass);
+
+
+--
+-- Name: petid; Type: DEFAULT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY pet ALTER COLUMN petid SET DEFAULT nextval('pet_petid_seq'::regclass);
+
+
+--
+-- Name: usertypeid; Type: DEFAULT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY usertype ALTER COLUMN usertypeid SET DEFAULT nextval('usertype_usertypeid_seq'::regclass);
+
+
+--
+-- Data for Name: accessability; Type: TABLE DATA; Schema: public; Owner: welcat
+--
+
+COPY accessability (userid, petid, access) FROM stdin;
+\.
+
+
+--
+-- Data for Name: account; Type: TABLE DATA; Schema: public; Owner: welcat
+--
+
+COPY account (userid, addressid, usertype, email, firstname, lastname, phonenumber, password, dateregistered) FROM stdin;
+\.
+
+
+--
+-- Name: account_userid_seq; Type: SEQUENCE SET; Schema: public; Owner: welcat
+--
+
+SELECT pg_catalog.setval('account_userid_seq', 1, false);
+
+
+--
+-- Data for Name: address; Type: TABLE DATA; Schema: public; Owner: welcat
+--
+
+COPY address (addressid, locationid, city, street, unit, postalcode) FROM stdin;
+\.
+
+
+--
+-- Name: address_addressid_seq; Type: SEQUENCE SET; Schema: public; Owner: welcat
+--
+
+SELECT pg_catalog.setval('address_addressid_seq', 1, false);
+
+
+--
+-- Name: address_locationid_seq; Type: SEQUENCE SET; Schema: public; Owner: welcat
+--
+
+SELECT pg_catalog.setval('address_locationid_seq', 1, false);
+
+
+--
+-- Data for Name: animal; Type: TABLE DATA; Schema: public; Owner: welcat
+--
+
+COPY animal (animaltypeid, name) FROM stdin;
+1	Cat
+2	Dog
+3	Bird
+4	Reptile
+5	Rabbit
+6	Snake
+7	Lizard
+8	Turtle
+9	Guinea Pig
+10	Hamster
+\.
+
+
+--
+-- Name: animal_animaltypeid_seq; Type: SEQUENCE SET; Schema: public; Owner: welcat
+--
+
+SELECT pg_catalog.setval('animal_animaltypeid_seq', 1, false);
+
+
+--
+-- Data for Name: breed; Type: TABLE DATA; Schema: public; Owner: welcat
+--
+
+COPY breed (animaltypeid, breedid, name) FROM stdin;
+1	1	Persian
+1	2	Maine Coon
+1	3	Exotic
+1	4	Siamese
+1	5	Abyssinian
+1	6	Birman
+1	7	American Shorthair
+1	8	Oriental
+1	9	Sphynx
+2	10	German Shepherd
+2	11	Labrador Retriever
+2	12	Golden Retriever
+2	13	Beagle
+2	14	Bulldog
+2	15	Yorkshire Terrier
+2	16	Boxer
+2	17	Poodle
+2	18	Rottweiler
+2	19	Dachshund
+3	20	Cockatiels
+3	21	African Grey Parrot
+3	22	Budgerigar
+3	23	Cockatoo
+3	24	Conure
+3	25	Macaw
+3	26	Poicephalus
+3	27	Amazon Parrot
+3	28	Quaker Parrot
+3	29	Pionus Parrot
+\.
+
+
+--
+-- Name: breed_animaltypeid_seq; Type: SEQUENCE SET; Schema: public; Owner: welcat
+--
+
+SELECT pg_catalog.setval('breed_animaltypeid_seq', 1, false);
+
+
+--
+-- Name: breed_breedid_seq; Type: SEQUENCE SET; Schema: public; Owner: welcat
+--
+
+SELECT pg_catalog.setval('breed_breedid_seq', 1, false);
+
+
+--
+-- Data for Name: country; Type: TABLE DATA; Schema: public; Owner: welcat
+--
+
+COPY country (countryid, countryname) FROM stdin;
+1	Canada
+2	United States
+\.
+
+
+--
+-- Name: country_countryid_seq; Type: SEQUENCE SET; Schema: public; Owner: welcat
+--
+
+SELECT pg_catalog.setval('country_countryid_seq', 2, true);
+
+
+--
+-- Data for Name: gender; Type: TABLE DATA; Schema: public; Owner: welcat
+--
+
+COPY gender (genderid, name) FROM stdin;
+1	Male
+2	Female
+3	Agender
+4	Cisgender
+5	Transgender
+\.
+
+
+--
+-- Data for Name: location; Type: TABLE DATA; Schema: public; Owner: welcat
+--
+
+COPY location (countryid, locationid, locationname) FROM stdin;
+1	1	Quebec
+1	2	Prince Edward Island
+1	3	Nova Scotia
+1	4	New Brunswick
+1	5	Manitoba
+1	6	Nunavut
+1	7	Yukon
+1	8	Northwest Territories
+1	9	Newfoundland and Labrador
+1	10	Alberta
+1	11	British Columbia
+1	12	Saskatchewan
+1	13	Ontario
+2	14	Alabama
+2	15	Alaska
+2	16	Arizona
+2	17	Arkansas
+2	18	California
+2	19	Colorado
+2	20	Connecticut
+2	21	Delaware
+2	22	Florida
+2	23	Georgia
+2	24	Hawaii
+2	25	Idaho
+2	26	Illinois
+2	27	Indiana
+2	28	Iowa
+2	29	Kansas
+2	30	Kentucky
+2	31	Louisiana
+2	32	Maine
+2	33	Maryland
+2	34	Massachusetts
+2	35	Michigan
+2	36	Minnesota
+2	37	Mississippi
+2	38	Missouri
+2	39	Montana
+2	40	Nebraska
+2	41	Nevada
+2	42	New Hampshire
+2	43	New Jersey
+2	44	New Mexico
+2	45	New York
+2	46	North Carolina
+2	47	North Dakota
+2	48	Ohio
+2	49	Oklahoma
+2	50	Oregon
+2	51	Pennsylvania
+2	52	Rhode Island
+2	53	South Carolina
+2	54	South Dakota
+2	55	Tennessee
+2	56	Texas
+2	57	Utah
+2	58	Vermont
+2	59	Virginia
+2	60	Washington
+2	61	West Virginia
+2	62	Wisconsin
+2	63	Wyoming
+\.
+
+
+--
+-- Name: location_countryid_seq; Type: SEQUENCE SET; Schema: public; Owner: welcat
+--
+
+SELECT pg_catalog.setval('location_countryid_seq', 1, false);
+
+
+--
+-- Name: location_locationid_seq; Type: SEQUENCE SET; Schema: public; Owner: welcat
+--
+
+SELECT pg_catalog.setval('location_locationid_seq', 63, true);
+
+
+--
+-- Data for Name: pet; Type: TABLE DATA; Schema: public; Owner: welcat
+--
+
+COPY pet (ownerid, petid, name, breedid, gender, microchip, fitcat, dateofbirth, weight, height, length, dateofdeath, reasonfordeath, lastupdated, dateadded) FROM stdin;
+\.
+
+
+--
+-- Name: pet_ownerid_seq; Type: SEQUENCE SET; Schema: public; Owner: welcat
+--
+
+SELECT pg_catalog.setval('pet_ownerid_seq', 1, false);
+
+
+--
+-- Name: pet_petid_seq; Type: SEQUENCE SET; Schema: public; Owner: welcat
+--
+
+SELECT pg_catalog.setval('pet_petid_seq', 1, false);
+
+
+--
+-- Data for Name: usertype; Type: TABLE DATA; Schema: public; Owner: welcat
+--
+
+COPY usertype (usertypeid, referencename) FROM stdin;
+1	general
+\.
+
+
+--
+-- Name: usertype_usertypeid_seq; Type: SEQUENCE SET; Schema: public; Owner: welcat
+--
+
+SELECT pg_catalog.setval('usertype_usertypeid_seq', 1, true);
+
+
+--
+-- Name: account_email_key; Type: CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY account
+    ADD CONSTRAINT account_email_key UNIQUE (email);
+
+
+--
+-- Name: account_pkey; Type: CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY account
+    ADD CONSTRAINT account_pkey PRIMARY KEY (userid);
+
+
+--
+-- Name: address_pkey; Type: CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY address
+    ADD CONSTRAINT address_pkey PRIMARY KEY (addressid);
+
+
+--
+-- Name: animal_name_key; Type: CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY animal
+    ADD CONSTRAINT animal_name_key UNIQUE (name);
+
+
+--
+-- Name: animal_pkey; Type: CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY animal
+    ADD CONSTRAINT animal_pkey PRIMARY KEY (animaltypeid);
+
+
+--
+-- Name: breed_name_key; Type: CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY breed
+    ADD CONSTRAINT breed_name_key UNIQUE (name);
+
+
+--
+-- Name: breed_pkey; Type: CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY breed
+    ADD CONSTRAINT breed_pkey PRIMARY KEY (breedid);
+
+
+--
+-- Name: country_countryname_key; Type: CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY country
+    ADD CONSTRAINT country_countryname_key UNIQUE (countryname);
+
+
+--
+-- Name: country_pkey; Type: CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY country
+    ADD CONSTRAINT country_pkey PRIMARY KEY (countryid);
+
+
+--
+-- Name: gender_name_key; Type: CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY gender
+    ADD CONSTRAINT gender_name_key UNIQUE (name);
+
+
+--
+-- Name: gender_pkey; Type: CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY gender
+    ADD CONSTRAINT gender_pkey PRIMARY KEY (genderid);
+
+
+--
+-- Name: location_locationname_key; Type: CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY location
+    ADD CONSTRAINT location_locationname_key UNIQUE (locationname);
+
+
+--
+-- Name: location_pkey; Type: CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY location
+    ADD CONSTRAINT location_pkey PRIMARY KEY (locationid);
+
+
+--
+-- Name: pet_pkey; Type: CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY pet
+    ADD CONSTRAINT pet_pkey PRIMARY KEY (petid);
+
+
+--
+-- Name: uniquecountryname; Type: CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY country
+    ADD CONSTRAINT uniquecountryname UNIQUE (countryname);
+
+
+--
+-- Name: uniquelocationname; Type: CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY location
+    ADD CONSTRAINT uniquelocationname UNIQUE (locationname);
+
+
+--
+-- Name: usertype_pkey; Type: CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY usertype
+    ADD CONSTRAINT usertype_pkey PRIMARY KEY (usertypeid);
+
+
+--
+-- Name: usertype_referencename_key; Type: CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY usertype
+    ADD CONSTRAINT usertype_referencename_key UNIQUE (referencename);
+
+
+--
+-- Name: accessability_petid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY accessability
+    ADD CONSTRAINT accessability_petid_fkey FOREIGN KEY (petid) REFERENCES pet(petid);
+
+
+--
+-- Name: accessability_userid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY accessability
+    ADD CONSTRAINT accessability_userid_fkey FOREIGN KEY (userid) REFERENCES account(userid);
+
+
+--
+-- Name: account_addressid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY account
+    ADD CONSTRAINT account_addressid_fkey FOREIGN KEY (addressid) REFERENCES address(addressid);
+
+
+--
+-- Name: account_usertype_fkey; Type: FK CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY account
+    ADD CONSTRAINT account_usertype_fkey FOREIGN KEY (usertype) REFERENCES usertype(usertypeid);
+
+
+--
+-- Name: address_locationid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY address
+    ADD CONSTRAINT address_locationid_fkey FOREIGN KEY (locationid) REFERENCES location(locationid);
+
+
+--
+-- Name: breed_animaltypeid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY breed
+    ADD CONSTRAINT breed_animaltypeid_fkey FOREIGN KEY (animaltypeid) REFERENCES animal(animaltypeid);
+
+
+--
+-- Name: location_countryid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY location
+    ADD CONSTRAINT location_countryid_fkey FOREIGN KEY (countryid) REFERENCES country(countryid);
+
+
+--
+-- Name: pet_breedid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY pet
+    ADD CONSTRAINT pet_breedid_fkey FOREIGN KEY (breedid) REFERENCES breed(breedid);
+
+
+--
+-- Name: pet_gender_fkey; Type: FK CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY pet
+    ADD CONSTRAINT pet_gender_fkey FOREIGN KEY (gender) REFERENCES gender(genderid);
+
+
+--
+-- Name: pet_ownerid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: welcat
+--
+
+ALTER TABLE ONLY pet
+    ADD CONSTRAINT pet_ownerid_fkey FOREIGN KEY (ownerid) REFERENCES account(userid);
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: welcat
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM welcat;
+GRANT ALL ON SCHEMA public TO welcat;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- Name: animal; Type: ACL; Schema: public; Owner: welcat
+--
+
+REVOKE ALL ON TABLE animal FROM PUBLIC;
+REVOKE ALL ON TABLE animal FROM welcat;
+GRANT ALL ON TABLE animal TO welcat;
+GRANT SELECT ON TABLE animal TO welcatreaders;
+
+
+--
+-- Name: breed; Type: ACL; Schema: public; Owner: welcat
+--
+
+REVOKE ALL ON TABLE breed FROM PUBLIC;
+REVOKE ALL ON TABLE breed FROM welcat;
+GRANT ALL ON TABLE breed TO welcat;
+GRANT SELECT ON TABLE breed TO welcatreaders;
+
+
+--
+-- Name: gender; Type: ACL; Schema: public; Owner: welcat
+--
+
+REVOKE ALL ON TABLE gender FROM PUBLIC;
+REVOKE ALL ON TABLE gender FROM welcat;
+GRANT ALL ON TABLE gender TO welcat;
+GRANT SELECT ON TABLE gender TO welcatreaders;
+
+
+--
+-- Name: location; Type: ACL; Schema: public; Owner: welcat
+--
+
+REVOKE ALL ON TABLE location FROM PUBLIC;
+REVOKE ALL ON TABLE location FROM welcat;
+GRANT ALL ON TABLE location TO welcat;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
