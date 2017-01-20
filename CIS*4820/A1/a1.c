@@ -119,16 +119,20 @@ void collisionResponse() {
       setViewPosition(x,y,z);
    }
 
-   /* Allow viewpoint to climb a single block, if it is current on a block (can't do it if falling) */
+   /* Allow viewpoint to climb a single block */
    if ((world[(int)(x * -1)][(int)(y * -1)][(int)(z * -1)] != 0
-         && (world[(int)(x * -1)][(int)((y * -1) + 1)][(int)(z * -1)] == 0)
-         && (world[(int)(x * -1)][(int)((y * -1) - 1)][(int)(z * -1)] != 0))) {
+         && (world[(int)(x * -1)][(int)((y * -1) + 1)][(int)(z * -1)] == 0))) {
       setViewPosition(x,((int)y-1),z);
    }
    /* If the next position is a block, do not allow the ViewPoint to update to that position */
    else if (world[(int)x * -1][(int)y * -1][(int)z * -1] != 0) {
       getOldViewPosition(&x, &y, &z);
       setViewPosition(x, y, z);
+   }
+
+   /* if it is current on a block, do not climb anything (can't do it if falling) */
+   if(world[(int)(x * -1)][(int)((y * -1) - 1)][(int)(z * -1)] != 0) {
+      applyGravity();
    }
 
    /* If the viewpoint position is a block, put the viewpoint back to its last position */
