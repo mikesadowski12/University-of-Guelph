@@ -119,9 +119,10 @@ void collisionResponse() {
       setViewPosition(x,y,z);
    }
 
-   /* Allow viewpoint to climb a single block */
-   if ((world[(int)(x * -1)][(int)(y * -1)][(int)(z * -1)] != 0)
-         && (world[(int)(x * -1)][(int)((y * -1) + 1)][(int)(z * -1)] == 0)) {
+   /* Allow viewpoint to climb a single block, if it is current on a block (can't do it if falling) */
+   if ((world[(int)(x * -1)][(int)(y * -1)][(int)(z * -1)] != 0
+         && (world[(int)(x * -1)][(int)((y * -1) + 1)][(int)(z * -1)] == 0)
+         && (world[(int)(x * -1)][(int)((y * -1) - 1)][(int)(z * -1)] != 0))) {
       setViewPosition(x,((int)y-1),z);
    }
    /* If the next position is a block, do not allow the ViewPoint to update to that position */
@@ -373,7 +374,7 @@ void animateInternalWalls()
 
             /* Slide the wall into the chosen pillars  (erase it)*/
             remove_surrounding_walls(i,j);
-            remove_surrounding_walls(j,i);
+            //remove_surrounding_walls(j,i);
             
             /* randomly select a direction */
             probability = rand() % 4;
