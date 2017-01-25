@@ -345,7 +345,7 @@ int offset;
       drawPillars();
       drawTestBlocks();
 
-      setViewPosition(-3, -25, -1);
+      setViewPosition(-3, -25, -2);
    }
 
 	/* starts the graphics processing loop */
