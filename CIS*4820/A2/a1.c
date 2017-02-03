@@ -30,6 +30,9 @@
 
 #include "graphics.h"
 
+#define PI 3.14159265
+#define ANGLEVALUE (PI / 180)
+
 	/* mouse function called by GLUT when a button is pressed or released */
 void mouse(int, int, int, int);
 void drawFloor();
@@ -51,6 +54,8 @@ void test_wall2();
 
 void fire_projectile(int mouseX, int mouseY);
 void draw_projectile(int x_VP, int y_VP, int z_VP, int y_VO);
+void animate_projectile();
+int projectile_collision_detection();
 
 	/* initialize graphics library */
 extern void graphicsInit(int *, char **);
@@ -113,6 +118,7 @@ extern void tree(float, float, float, float, float, float, int);
 
    /* the coordinates of the projectile's starting position */
 float x_VP, y_VP, z_VP, x_VO, y_VO, z_VO;
+int projectile_flag;
 
 /********* end of extern variable declarations **************/
 
@@ -259,10 +265,10 @@ clock_t global_timer;
 
    } else {
 
-      /* check the last time it was updated, to the current time, */
+      /* check the last time it was updated to the current time, */
       if ((clock() - global_timer) / (CLOCKS_PER_SEC) >= 1) {
 
-         /* Control the rate up update() using real time */
+         /* Control the rate of update() using real time */
          global_timer = clock();
 
          /* if not in fly mode, gravity will be applied to the viewpoint */
@@ -273,8 +279,12 @@ clock_t global_timer;
 
          /* give a 50% chance to switch a wall */   
          probability = rand() % 2;
-         if(probability == 1){
-            animateInternalWalls();
+         //if(probability == 1){
+            //animateInternalWalls();
+         //}
+
+         if(projectile_flag) {
+            animate_projectile();
          }
       }
    }
@@ -290,7 +300,8 @@ clock_t global_timer;
 void mouse(int button, int state, int x, int y) {
 
    if (button == GLUT_LEFT_BUTTON)
-      fire_projectile(x,y);
+      if(!projectile_flag) 
+         fire_projectile(x,y);
 
       /*printf("left button - ");
    else if (button == GLUT_MIDDLE_BUTTON)
@@ -310,6 +321,34 @@ void mouse(int button, int state, int x, int y) {
 
 
 /* 
+ * Name: animate_projectile()
+ * Description: Animates the projectile by firing it from the position of the viewpoint
+ * Parameters: none
+ * Return: none
+*/
+void animate_projectile() {
+   /* calculate the trajectory of projectile by calculating a triangle on the xyz coords */
+   /* send the projectile along the hypotenuse (aka a striaght line from the angle of the viewpoint) */
+   y_VP += tan((((int)x_VO + 180)) * ANGLEVALUE);
+   x_VP += sin((((int)y_VO + 180)) * ANGLEVALUE);
+   z_VP -= cos((((int)y_VO + 180)) * ANGLEVALUE);
+
+   /* reset the position of the projectile */
+   setMobPosition(1, x_VP*-1, y_VP*-1, z_VP*-1, y_VO);
+
+   if(projectile_collision_detection()) {
+      /* remove projectile from map */
+      hideMob(1);
+      projectile_flag--;
+
+      /* remove the cube that was hit */
+      world[(int)(x_VP * -1)][(int)(y_VP * -1)][(int)(z_VP * -1)] = 0;
+   }
+}
+
+
+
+/* 
  * Name: fire_projectile()
  * Description: Animates the internal walls by selecting a random pillar, erasing its wall, and re drawing a new one
  * Parameters: none
@@ -317,15 +356,38 @@ void mouse(int button, int state, int x, int y) {
 */
 void fire_projectile(int mouseX, int mouseY) {
 
+   projectile_flag++;
+
    /* get the position and angle of the viewpoint */
    getViewPosition(&x_VP, &y_VP, &z_VP);
    getViewOrientation(&x_VO, &y_VO, &z_VO);
 
    /* spawn the projectile on the map */
-   draw_projectile((int)x_VP, (int)y_VP, (int)z_VP, (int)y_VO);
+   draw_projectile((int)x_VP, (int)y_VP, (int)z_VP, (int)y_VO+180);
 }
 
 
+
+/* 
+ * Name: projectile_collision_detection()
+ * Description: determine if the projectile has hit a wall
+ * Parameters: none
+ * Return: 1 = collision detected, 0 = no collision detected
+*/
+int projectile_collision_detection() {
+   /* check if it hit a cube */
+   if(world[(int)(x_VP * -1)][(int)(y_VP * -1)][(int)(z_VP * -1)] != 0){
+      return 1;
+   }
+
+   /* check if it hit the boundary of the world */
+   if ((((int)(x_VP * -1) < 0) || (int)(x_VP * -1) >= WORLDX) || ((int)(y_VP * -1) < 0 || (int)(y_VP * -1) >= WORLDY) 
+         || (((int)(z_VP * -1) < 0) || (int)(z_VP * -1) >= WORLDZ)) {
+      return 1;
+   }
+
+   return 0;
+}
 
 /* 
  * Name: draw_projectile()
