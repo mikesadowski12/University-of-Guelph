@@ -48,6 +48,10 @@ void remove_wall(int x1, int z1);
 void test_wall1();
 void test_wall2();
 
+
+void fire_projectile(int mouseX, int mouseY);
+void draw_projectile(int x_VP, int y_VP, int z_VP, int y_VO);
+
 	/* initialize graphics library */
 extern void graphicsInit(int *, char **);
 
@@ -106,6 +110,9 @@ extern float corners[4][3];
 	/* determine which cubes are visible e.g. in view frustum */
 extern void ExtractFrustum();
 extern void tree(float, float, float, float, float, float, int);
+
+   /* the coordinates of the projectile's starting position */
+float x_VP, y_VP, z_VP, x_VO, y_VO, z_VO;
 
 /********* end of extern variable declarations **************/
 
@@ -283,18 +290,51 @@ clock_t global_timer;
 void mouse(int button, int state, int x, int y) {
 
    if (button == GLUT_LEFT_BUTTON)
-      printf("left button - ");
+      fire_projectile(x,y);
+
+      /*printf("left button - ");
    else if (button == GLUT_MIDDLE_BUTTON)
       printf("middle button - ");
    else
       printf("right button - ");
 
    if (state == GLUT_UP)
-      printf("up - ");
+      printf("up - \n");
    else
-      printf("down - ");
+      printf("down - \n");
+   */
 
-   printf("%d %d\n", x, y);
+   //printf("%d %d\n", x, y);
+}
+
+
+
+/* 
+ * Name: fire_projectile()
+ * Description: Animates the internal walls by selecting a random pillar, erasing its wall, and re drawing a new one
+ * Parameters: none
+ * Return: none
+*/
+void fire_projectile(int mouseX, int mouseY) {
+
+   /* get the position and angle of the viewpoint */
+   getViewPosition(&x_VP, &y_VP, &z_VP);
+   getViewOrientation(&x_VO, &y_VO, &z_VO);
+
+   /* spawn the projectile on the map */
+   draw_projectile((int)x_VP, (int)y_VP, (int)z_VP, (int)y_VO);
+}
+
+
+
+/* 
+ * Name: draw_projectile()
+ * Description: Draws the projectile (wasn't sure what to shape to make it, so made it easily changeable)
+ * Parameters: none
+ * Return: none
+*/
+void draw_projectile(int x_VP, int y_VP, int z_VP, int y_VO) {
+   createMob(1, x_VP*-1, y_VP*-1, z_VP*-1, y_VO);
 }
 
 
