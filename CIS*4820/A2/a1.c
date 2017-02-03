@@ -10,7 +10,8 @@
          1. https://www.tutorialspoint.com/c_standard_library/c_function_clock.htm
          2. http://stackoverflow.com/questions/17167949/how-to-use-timer-in-c
 
-
+      Math Stuff:
+         1. https://www.tutorialspoint.com/c_standard_library/c_function_sin.htm
 */
 
 
@@ -60,6 +61,8 @@ int projectile_collision_detection();
 void draw_map();
 void draw_map_small();
 void draw_map_large();
+void draw_player_position(float size);
+void draw_projectile_position(float size);
 
 	/* initialize graphics library */
 extern void graphicsInit(int *, char **);
@@ -207,13 +210,12 @@ void draw_map() {
    } else if(displayMap == 2){
       draw_map_large();
    }
-
 }
 
 void draw_map_small() {
 float x, y, z;
 float ratio = 1024.0/(float) screenWidth;
-float mapSize = 200.0/ratio;
+float size = 200.0/ratio;
 
 //int screenWidth = 1024;
 //int screenHeight = 768;
@@ -223,12 +225,88 @@ float mapSize = 200.0/ratio;
    GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
    set2Dcolour(green);
 
-   draw2Dline(screenWidth-1, screenHeight, mapSize, screenHeight-1, 2);
-   //draw2Dline(mapSize, screenHeight, mapSize, screenHeight-mapSize, 2);
-   //draw2Dline(mapSize, screenHeight-mapSize, 1, screenHeight-mapSize, 2);
-   //draw2Dline(1, screenHeight-mapSize, 1, screenHeight-1, 2);
+   //Draw the upper line
+   draw2Dline(screenWidth-1, screenHeight-1, screenWidth-size, screenHeight-1, 2);
+   
+   //Draw the left line
+   draw2Dline(screenWidth-size, screenHeight-size, screenWidth-size, screenHeight-1, 2);
+
+   //Draw the right line
+   draw2Dline(screenWidth-1, screenHeight, screenWidth-1, screenHeight-size, 2);
+   
+   //Draw the bottom line
+   draw2Dline(screenWidth-1, screenHeight-size, screenWidth-size, screenHeight-size, 2);
+   
+   draw_player_position(size);
+
+   /* only draw the projectile if there is one (once it hits something, it should disappear) */
+   if(projectile_flag) {
+      draw_projectile_position(size);   
+   }
+}
+
+
+void draw_player_position(float size) {
+float x, y, z;
+
+   getViewPosition(&x, &y, &z);
+
+   if(displayMap == 1) {
+
+      /* Since the mini map is basically the exact same */
+      /* Scale down the coords 100x to fit within the box */
+      x = x * (-size/100.0);
+      z = z * (-size/100.0);
+
+      /* Place the square at the top of the screen */
+      z = screenHeight - z;
+
+      /*Place the square to the far right of the screen */
+      x = screenWidth - x;
+
+   } else if(displayMap == 2){
+      draw_map_large();
+   }
+
+   
+   /* draw a dot where the player is positioned */
+   draw2Dbox(x-1, z-1, x+1, z+1);
 
 }
+
+
+
+void draw_projectile_position(float size) {
+float x, y, z;
+
+   x = x_VP;
+   y = y_VP;
+   z = z_VP;
+
+   if(displayMap == 1) {
+
+      /* Since the mini map is basically the exact same */
+      /* Scale down the coords 100x to fit within the box */
+      x = x * (-size/100.0);
+      z = z * (-size/100.0);
+
+      /* Place the square at the top of the screen */
+      z = screenHeight - z;
+
+      /*Place the square to the far right of the screen */
+      x = screenWidth - x;
+
+   } else if(displayMap == 2){
+      draw_map_large();
+   }
+
+   
+   /* draw a dot where the player is positioned */
+   draw2Dbox(x-1, z-1, x+1, z+1);
+
+}
+
+
 
 void draw_map_large() {
 
