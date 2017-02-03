@@ -5,6 +5,16 @@
 #ASSIGNEMNT: 1
 */
 
+/* Sources:
+      Timer Stuff:
+         1. https://www.tutorialspoint.com/c_standard_library/c_function_clock.htm
+         2. http://stackoverflow.com/questions/17167949/how-to-use-timer-in-c
+
+
+*/
+
+
+
 /* Derived from scene.c in the The OpenGL Programming Guide */
 /* Keyboard and mouse rotation taken from Swiftless Tutorials #23 Part 2 */
 /* http://www.swiftless.com/tutorials/opengl/camera2.html */
@@ -16,6 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 
 #include "graphics.h"
 
@@ -183,6 +194,7 @@ void draw2D() {
 void update() {
 int i, j, k, probability;
 float *la;
+clock_t global_timer;
 
    probability = 0;
    srand(time(NULL));
@@ -239,16 +251,24 @@ float *la;
     /* end testworld animation */
 
    } else {
-      /* if not in fly mode, gravity will be applied to the viewpoint */
-      //if(!flycontrol) applyGravity();
-      
-      /* Apply gravity at all times */
-      applyGravity();
 
-      /* give a 50% chance to switch a wall */   
-      probability = rand() % 2;
-      if(probability == 1){
-         animateInternalWalls();
+      /* check the last time it was updated, to the current time, */
+      if ((clock() - global_timer) / (CLOCKS_PER_SEC) >= 1) {
+
+         /* Control the rate up update() using real time */
+         global_timer = clock();
+
+         /* if not in fly mode, gravity will be applied to the viewpoint */
+         if(!flycontrol) applyGravity();
+      
+         /* Apply gravity at all times */
+         //applyGravity();
+
+         /* give a 50% chance to switch a wall */   
+         probability = rand() % 2;
+         if(probability == 1){
+            animateInternalWalls();
+         }
       }
    }
 }
