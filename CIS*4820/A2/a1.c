@@ -57,6 +57,10 @@ void draw_projectile(int x_VP, int y_VP, int z_VP, int y_VO);
 void animate_projectile();
 int projectile_collision_detection();
 
+void draw_map();
+void draw_map_small();
+void draw_map_large();
+
 	/* initialize graphics library */
 extern void graphicsInit(int *, char **);
 
@@ -192,13 +196,43 @@ void draw2D() {
    } else {
 
 	/* your code goes here */
-
+      draw_map();
    }
 
 }
 
+void draw_map() {
+   if(displayMap == 1) {
+      draw_map_small();
+   } else if(displayMap == 2){
+      draw_map_large();
+   }
 
+}
 
+void draw_map_small() {
+float x, y, z;
+float ratio = 1024.0/(float) screenWidth;
+float mapSize = 200.0/ratio;
+
+//int screenWidth = 1024;
+//int screenHeight = 768;
+
+   getViewPosition(&x,&y,&z);
+
+   GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
+   set2Dcolour(green);
+
+   draw2Dline(screenWidth-1, screenHeight, mapSize, screenHeight-1, 2);
+   //draw2Dline(mapSize, screenHeight, mapSize, screenHeight-mapSize, 2);
+   //draw2Dline(mapSize, screenHeight-mapSize, 1, screenHeight-mapSize, 2);
+   //draw2Dline(1, screenHeight-mapSize, 1, screenHeight-1, 2);
+
+}
+
+void draw_map_large() {
+
+}
 	/*** update() ***/
 	/* background process, it is called when there are no other events */
 	/* -used to control animations and perform calculations while the  */
