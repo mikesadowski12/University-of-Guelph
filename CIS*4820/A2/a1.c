@@ -6,12 +6,14 @@
 */
 
 /* Sources:
-      Timer Stuff:
+      Timer stuff:
          1. https://www.tutorialspoint.com/c_standard_library/c_function_clock.htm
          2. http://stackoverflow.com/questions/17167949/how-to-use-timer-in-c
 
-      Math Stuff:
+      Math stuff for projectile:
          1. https://www.tutorialspoint.com/c_standard_library/c_function_sin.htm
+         2. http://www.splung.com/content/sid/2/page/projectiles
+         3. http://stackoverflow.com/questions/26091520/how-do-i-make-a-function-that-fires-a-bullet-from-the-gun-in-a-straight-line-to
 */
 
 
@@ -32,7 +34,7 @@
 #include "graphics.h"
 
 #define PI 3.14159265
-#define ANGLEVALUE (PI / 180)
+#define TORADIANS (PI / 180)
 
 	/* mouse function called by GLUT when a button is pressed or released */
 void mouse(int, int, int, int);
@@ -61,8 +63,9 @@ int projectile_collision_detection();
 void draw_map();
 void draw_map_small();
 void draw_map_large();
-void draw_player_position(float size);
-void draw_projectile_position(float size);
+void draw_entity_position(float x, float y, float z, float size, GLfloat colour[]);
+void locate_walls(float size, GLfloat colour[]);
+
 
 	/* initialize graphics library */
 extern void graphicsInit(int *, char **);
@@ -204,23 +207,54 @@ void draw2D() {
 
 }
 
+
+
+/* 
+ * Name: draw_map()
+ * Description: Draws the map and all of the entities in the world
+ * Parameters: size = size of map, colour = colour of square to print
+ * Return: none
+*/
 void draw_map() {
+GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
+GLfloat red[] = {1.0, 0.0, 0.0, 1.0};
+GLfloat blue[] = {0.0, 0.0, 1.0, 1.0};
+float ratio = 1024.0/(float) screenWidth;
+float size = 200.0/ratio;
+float x, y, z;
+
+   getViewPosition(&x,&y,&z);
+
+   /* Draw map borders */
    if(displayMap == 1) {
       draw_map_small();
    } else if(displayMap == 2){
       draw_map_large();
    }
+
+   /* draw all entities in the world*/
+   draw_entity_position(x, y, z, size, green);
+   locate_walls(size, blue);
+
+   /* only draw the projectile if there is one (once it hits something, it should disappear) */
+   if(projectile_flag) {
+      draw_entity_position(x_VP, y_VP, z_VP, size, red);   
+   }
 }
 
+
+
+/* 
+ * Name: draw_map_small()
+ * Description: Draws the border lines for the small map
+ * Parameters: none
+ * Return: none
+*/
 void draw_map_small() {
-float x, y, z;
 float ratio = 1024.0/(float) screenWidth;
 float size = 200.0/ratio;
-
 //int screenWidth = 1024;
 //int screenHeight = 768;
-
-   getViewPosition(&x,&y,&z);
 
    GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
    set2Dcolour(green);
@@ -236,81 +270,106 @@ float size = 200.0/ratio;
    
    //Draw the bottom line
    draw2Dline(screenWidth-1, screenHeight-size, screenWidth-size, screenHeight-size, 2);
-   
-   draw_player_position(size);
-
-   /* only draw the projectile if there is one (once it hits something, it should disappear) */
-   if(projectile_flag) {
-      draw_projectile_position(size);   
-   }
-}
-
-
-void draw_player_position(float size) {
-float x, y, z;
-
-   getViewPosition(&x, &y, &z);
-
-   if(displayMap == 1) {
-
-      /* Since the mini map is basically the exact same */
-      /* Scale down the coords 100x to fit within the box */
-      x = x * (-size/100.0);
-      z = z * (-size/100.0);
-
-      /* Place the square at the top of the screen */
-      z = screenHeight - z;
-
-      /*Place the square to the far right of the screen */
-      x = screenWidth - x;
-
-   } else if(displayMap == 2){
-      draw_map_large();
-   }
-
-   
-   /* draw a dot where the player is positioned */
-   draw2Dbox(x-1, z-1, x+1, z+1);
-
 }
 
 
 
-void draw_projectile_position(float size) {
-float x, y, z;
-
-   x = x_VP;
-   y = y_VP;
-   z = z_VP;
-
-   if(displayMap == 1) {
-
-      /* Since the mini map is basically the exact same */
-      /* Scale down the coords 100x to fit within the box */
-      x = x * (-size/100.0);
-      z = z * (-size/100.0);
-
-      /* Place the square at the top of the screen */
-      z = screenHeight - z;
-
-      /*Place the square to the far right of the screen */
-      x = screenWidth - x;
-
-   } else if(displayMap == 2){
-      draw_map_large();
-   }
-
-   
-   /* draw a dot where the player is positioned */
-   draw2Dbox(x-1, z-1, x+1, z+1);
-
-}
-
-
-
+/* 
+ * Name: draw_map_large()
+ * Description: Draws the border lines for the large map
+ * Parameters: none
+ * Return: none
+*/
 void draw_map_large() {
+float ratio = 1024.0/(float) screenWidth;
+float size;
+float wCenter, hCenter;
+//int screenWidth = 1024;
+//int screenHeight = 768;
+
+   /* Get the centre of the width/height */
+   wCenter = (float) screenWidth/2.0;
+   hCenter = (float) screenHeight/2.0;
+
+   /* Scale the map to be 2.5x the size of the mini-map */
+   size = 500.0/(2. * ratio);
+
+   GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
+   set2Dcolour(green);
+
+   //Draw the upper line (offsets were just calculated by looking at bounds of world once player was mapped)
+   draw2Dline(wCenter - size+45, screenHeight - size+75, screenWidth - size-60, screenHeight - size+75, 2);
+
+   //Draw the left line (offsets were just calculated by looking at bounds of world once player was mapped)
+   draw2Dline(wCenter - size+45, screenHeight - size+75, wCenter - size + 45, screenHeight - size-330, 2);
+
+   //Draw the right line (offsets were just calculated by looking at bounds of world once player was mapped)
+   draw2Dline(screenWidth - size-60, screenHeight - size+75, screenWidth-size-60, screenHeight-size-330, 2);
+   
+   //Draw the bottom line (offsets were just calculated by looking at bounds of world once player was mapped)
+   draw2Dline(wCenter - size + 45, screenHeight - size-330, screenWidth-size-60, screenHeight-size-330, 2);
+}
+
+
+
+/* 
+ * Name: locate_walls()
+ * Description: Locates the position of any wall in the world, and draws it on the map
+ * Parameters: size = size of map, colour = colour of square to print
+ * Return: none
+*/
+void locate_walls(float size, GLfloat colour[]) {
+int i, k;
+
+   /* search the ground floor of the entire world, map if an objec was found on the map */
+   for(i=0; i<WORLDX; i++)
+         for(k=0; k<WORLDZ; k++)
+            if(world[i][25][k] != 0) {
+               draw_entity_position((float) i * -1, (float) 25 * -1, (float) k * -1, size, colour);
+            }               
+}
+
+
+
+/* 
+ * Name: draw_entity_position()
+ * Description: Draws an entity on the map, scaled according to the size of map (small/large)
+ * Parameters: x = x coord, y = y coord, z = z coord, size = size of map, colour = colour of square to print
+ * Return: none
+*/
+void draw_entity_position(float x, float y, float z, float size, GLfloat colour[]) {
+
+   set2Dcolour(colour);
+
+   if(displayMap == 1) {
+
+      /* Since the mini map is basically the exact same */
+      /* Scale down the coords 100x to fit within the box */
+      x = x * (-size/100.0);
+      z = z * (-size/100.0);
+
+      /* Place the square at the top of the screen */
+      z = screenHeight - z;
+
+      /*Place the square to the far right of the screen */
+      x = screenWidth - x;
+
+   } else if(displayMap == 2){
+      
+      x *= (-2 * size)/100;
+      z *= (-2 * size)/100;
+    
+      x += ((float) screenWidth/2) - size;
+      z += ((float) screenHeight/2) - size;
+   }
+
+   /* draw a dot where the entity is positioned */
+   draw2Dbox(x-2, z-2, x+2, z+2);
 
 }
+
+
+
 	/*** update() ***/
 	/* background process, it is called when there are no other events */
 	/* -used to control animations and perform calculations while the  */
@@ -441,18 +500,18 @@ void mouse(int button, int state, int x, int y) {
 void animate_projectile() {
    /* calculate the trajectory of projectile by calculating a triangle on the xyz coords */
    /* send the projectile along the hypotenuse (aka a striaght line from the angle of the viewpoint) */
-   y_VP += tan((((int)x_VO + 180)) * ANGLEVALUE);
-   x_VP += sin((((int)y_VO + 180)) * ANGLEVALUE);
-   z_VP -= cos((((int)y_VO + 180)) * ANGLEVALUE);
+   y_VP += tan((((int)x_VO + 180)) * TORADIANS);
+   x_VP += sin((((int)y_VO + 180)) * TORADIANS);
+   z_VP -= cos((((int)y_VO + 180)) * TORADIANS);
 
    /* reset the position of the projectile */
-   setMobPosition(1, x_VP*-1, y_VP*-1, z_VP*-1, y_VO);
+   setMobPosition(1, x_VP * -1, y_VP * -1, z_VP * -1, y_VO);
 
    if(projectile_collision_detection()) {
       /* remove projectile from map */
-      hideMob(1);
       projectile_flag--;
-
+      hideMob(1);
+      
       /* remove the cube that was hit */
       world[(int)(x_VP * -1)][(int)(y_VP * -1)][(int)(z_VP * -1)] = 0;
    }
@@ -493,13 +552,16 @@ int projectile_collision_detection() {
    }
 
    /* check if it hit the boundary of the world */
-   if ((((int)(x_VP * -1) < 0) || (int)(x_VP * -1) >= WORLDX) || ((int)(y_VP * -1) < 0 || (int)(y_VP * -1) >= WORLDY) 
-         || (((int)(z_VP * -1) < 0) || (int)(z_VP * -1) >= WORLDZ)) {
+   /* without the -1's, i was getting a bus error 10 for some reason? */
+   if ((((int)(x_VP * -1) < 0) || (int)(x_VP * -1) >= WORLDX-1) || ((int)(y_VP * -1) < 0 || (int)(y_VP * -1) >= WORLDY-1) 
+         || (((int)(z_VP * -1) < 0) || (int)(z_VP * -1) >= WORLDZ-1)) {
       return 1;
    }
 
    return 0;
 }
+
+
 
 /* 
  * Name: draw_projectile()
