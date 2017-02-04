@@ -219,8 +219,8 @@ void draw_map() {
 GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
 GLfloat red[] = {1.0, 0.0, 0.0, 1.0};
 GLfloat blue[] = {0.0, 0.0, 1.0, 1.0};
-float ratio = 1024.0/(float) screenWidth;
-float size = 200.0/ratio;
+float ratio = 1024/(float) screenWidth;
+float size = 200/ratio;
 float x, y, z;
 
    getViewPosition(&x,&y,&z);
@@ -251,8 +251,8 @@ float x, y, z;
  * Return: none
 */
 void draw_map_small() {
-float ratio = 1024.0/(float) screenWidth;
-float size = 200.0/ratio;
+float ratio = 1024/(float) screenWidth;
+float size = 200/ratio;
 //int screenWidth = 1024;
 //int screenHeight = 768;
 
@@ -288,11 +288,11 @@ float wCenter, hCenter;
 //int screenHeight = 768;
 
    /* Get the centre of the width/height */
-   wCenter = (float) screenWidth/2.0;
-   hCenter = (float) screenHeight/2.0;
+   wCenter = (float) screenWidth/2;
+   hCenter = (float) screenHeight/2;
 
    /* Scale the map to be 2.5x the size of the mini-map */
-   size = 500.0/(2. * ratio);
+   size = 500/(2 * ratio);
 
    GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
    set2Dcolour(green);
