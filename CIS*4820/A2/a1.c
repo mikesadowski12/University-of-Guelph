@@ -38,6 +38,10 @@
 
 	/* mouse function called by GLUT when a button is pressed or released */
 void mouse(int, int, int, int);
+
+/************ MY FUNCTIONS *******************/
+
+/****** A1 *****/
 void drawFloor();
 void drawBorder();
 void drawPillars();
@@ -54,9 +58,9 @@ void remove_wall(int x1, int z1);
 void test_wall1();
 void test_wall2();
 
-
+/****** A2 *****/
 void fire_projectile(int mouseX, int mouseY);
-void draw_projectile(int x_VP, int y_VP, int z_VP, int y_VO);
+void draw_projectile();
 void animate_projectile();
 int projectile_collision_detection();
 
@@ -66,6 +70,11 @@ void draw_map_large();
 void draw_entity_position(float x, float y, float z, float size, GLfloat colour[]);
 void locate_walls(float size, GLfloat colour[]);
 
+/****** A3 *****/
+
+/****** A4 *****/
+
+/*******************************************/
 
 	/* initialize graphics library */
 extern void graphicsInit(int *, char **);
@@ -204,7 +213,6 @@ void draw2D() {
 	/* your code goes here */
       draw_map();
    }
-
 }
 
 
@@ -565,12 +573,12 @@ int projectile_collision_detection() {
 
 /* 
  * Name: draw_projectile()
- * Description: Draws the projectile (wasn't sure what to shape to make it, so made it easily changeable)
+ * Description: Draws the projectile 
  * Parameters: none
  * Return: none
 */
-void draw_projectile(int x_VP, int y_VP, int z_VP, int y_VO) {
-   createMob(1, x_VP*-1, y_VP*-1, z_VP*-1, y_VO);
+void draw_projectile() {
+   createMob(1, x_VP * -1, y_VP * -1, z_VP * -1, y_VO);
 }
 
 
