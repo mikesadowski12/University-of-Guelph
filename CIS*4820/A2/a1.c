@@ -264,8 +264,8 @@ float size = 200/ratio;
 //int screenWidth = 1024;
 //int screenHeight = 768;
 
-   GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
-   set2Dcolour(green);
+   GLfloat black[] = {0.0, 0.0, 0.0, 1.0};
+   set2Dcolour(black);
 
    //Draw the upper line
    draw2Dline(screenWidth-1, screenHeight-1, screenWidth-size, screenHeight-1, 2);
@@ -299,23 +299,28 @@ float wCenter, hCenter;
    wCenter = (float) screenWidth/2;
    hCenter = (float) screenHeight/2;
 
-   /* Scale the map to be 2.5x the size of the mini-map */
-   size = 500/(2 * ratio);
+   /* Scale the map to be 2x the size of the mini-map */
+   /* minimap = size of 200 */
+   size = 400/(2 * ratio);
 
-   GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
-   set2Dcolour(green);
+   GLfloat black[] = {0.0, .0, 0.0, 1.0};
+   set2Dcolour(black);
 
-   //Draw the upper line (offsets were just calculated by looking at bounds of world once player was mapped)
-   draw2Dline(wCenter - size+45, screenHeight - size+75, screenWidth - size-60, screenHeight - size+75, 2);
+   //Draw the upper line
+   //draw2Dline(wCenter - size+45, screenHeight - size+75, screenWidth - size-60, screenHeight - size+75, 2);
+   draw2Dline(wCenter - size, hCenter + size, wCenter + size, hCenter + size, 2);
 
    //Draw the left line (offsets were just calculated by looking at bounds of world once player was mapped)
-   draw2Dline(wCenter - size+45, screenHeight - size+75, wCenter - size + 45, screenHeight - size-330, 2);
+   //draw2Dline(wCenter - size+45, screenHeight - size+75, wCenter - size + 45, screenHeight - size-330, 2);
+   draw2Dline(wCenter - size, hCenter - size, wCenter - size, hCenter + size, 2);
 
-   //Draw the right line (offsets were just calculated by looking at bounds of world once player was mapped)
-   draw2Dline(screenWidth - size-60, screenHeight - size+75, screenWidth-size-60, screenHeight-size-330, 2);
-   
-   //Draw the bottom line (offsets were just calculated by looking at bounds of world once player was mapped)
-   draw2Dline(wCenter - size + 45, screenHeight - size-330, screenWidth-size-60, screenHeight-size-330, 2);
+   //Draw the right line
+   //draw2Dline(screenWidth - size-60, screenHeight - size+75, screenWidth-size-60, screenHeight-size-330, 2);
+   draw2Dline(wCenter + size, hCenter + size, wCenter + size, hCenter - size, 2);
+
+   //Draw the bottom line
+   //draw2Dline(wCenter - size + 45, screenHeight - size-330, screenWidth-size-60, screenHeight-size-330, 2);
+   draw2Dline(wCenter + size, hCenter - size, wCenter - size, hCenter - size, 2);  
 }
 
 
@@ -353,8 +358,8 @@ void draw_entity_position(float x, float y, float z, float size, GLfloat colour[
 
       /* Since the mini map is basically the exact same */
       /* Scale down the coords 100x to fit within the box */
-      x = x * (-size/100.0);
-      z = z * (-size/100.0);
+      x = x * -(size/100.0);
+      z = z * -(size/100.0);
 
       /* Place the square at the top of the screen */
       z = screenHeight - z;
@@ -364,16 +369,15 @@ void draw_entity_position(float x, float y, float z, float size, GLfloat colour[
 
    } else if(displayMap == 2){
       
-      x *= (-2 * size)/100;
-      z *= (-2 * size)/100;
+      x = x * -(2 * size)/100;
+      z = z * -(2 * size)/100;
     
-      x += ((float) screenWidth/2) - size;
-      z += ((float) screenHeight/2) - size;
+      x = x + ((float) screenWidth/2) - size;
+      z = z + ((float) screenHeight/2) - size;
    }
 
    /* draw a dot where the entity is positioned */
    draw2Dbox(x-2, z-2, x+2, z+2);
-
 }
 
 
@@ -456,11 +460,11 @@ clock_t global_timer;
          /* Apply gravity at all times */
          applyGravity();
 
-         /* give a 50% chance to switch a wall */   
+         /* give a 5% chance to switch a wall */   
          probability = rand() % 2;
-         //if(probability == 1){
-            //animateInternalWalls();
-         //}
+         if(probability == 1){
+            animateInternalWalls();
+         }
 
          if(projectile_flag) {
             animate_projectile();
@@ -691,17 +695,17 @@ void animateInternalWalls()
             /* Slide the wall out of the pillar in a different direction (draw it) */
             if(probability == 0) {
                draw_internal_wall(i,j,'L', 6);
-               draw_internal_wall(j,i,'L', 6);
+               //draw_internal_wall(j,i,'L', 6);
 
             } else if (probability == 1) {
                draw_internal_wall(i,j,'R', 6);
-               draw_internal_wall(j,i,'R', 6);
+               //draw_internal_wall(j,i,'R', 6);
             } else if (probability == 2) {
                draw_internal_wall(i,j,'U', 6);
-               draw_internal_wall(j,i,'U', 6);
+               //draw_internal_wall(j,i,'U', 6);
             } else if (probability == 3) {
                draw_internal_wall(i,j,'D', 6);
-               draw_internal_wall(j,i,'D', 6);
+               //draw_internal_wall(j,i,'D', 6);
             }    
          }
       }
