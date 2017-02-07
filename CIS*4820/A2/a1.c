@@ -14,6 +14,9 @@
          1. https://www.tutorialspoint.com/c_standard_library/c_function_sin.htm
          2. http://www.splung.com/content/sid/2/page/projectiles
          3. http://stackoverflow.com/questions/26091520/how-do-i-make-a-function-that-fires-a-bullet-from-the-gun-in-a-straight-line-to
+
+      Text to screen function:
+         1. http://stackoverflow.com/questions/2183270/what-is-the-easiest-way-to-print-text-to-screen-in-opengl
 */
 
 
@@ -261,10 +264,15 @@ float x, y, z;
 void draw_map_small() {
 float ratio = 1024/(float) screenWidth;
 float size = 200/ratio;
+float textSize, cOffset;
+char coordText[99];
+float x, y, z;
+int i, len;
 //int screenWidth = 1024;
 //int screenHeight = 768;
 
    GLfloat black[] = {0.0, 0.0, 0.0, 1.0};
+   GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
    set2Dcolour(black);
 
    //Draw the upper line
@@ -278,6 +286,22 @@ float size = 200/ratio;
    
    //Draw the bottom line
    draw2Dline(screenWidth-1, screenHeight-size, screenWidth-size, screenHeight-size, 2);
+
+   /* Get the coordniates to printf */
+   getViewPosition(&x,&y,&z);
+   sprintf(coordText, "X:%d  Z:%d", (int)(x * -1), (int)(z * -1)); 
+   
+   /* Adjust the text height and width position according to the size of the screen */
+   textSize = (screenHeight/WORLDX);
+   cOffset = textSize*WORLDZ;
+   glRasterPos2f(textSize+(4*size), cOffset-200);
+
+   /* Draw the coordniates */ 
+   set2Dcolour(green);
+   len = (int)strlen(coordText);
+   for (i = 0; i < len; i++) {
+      glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, coordText[i]);
+   }
 }
 
 
@@ -292,6 +316,10 @@ void draw_map_large() {
 float ratio = 1024.0/(float) screenWidth;
 float size;
 float wCenter, hCenter;
+float textSize, cOffset;
+char coordText[99];
+float x, y, z;
+int i, len;
 //int screenWidth = 1024;
 //int screenHeight = 768;
 
@@ -303,7 +331,8 @@ float wCenter, hCenter;
    /* minimap = size of 200 */
    size = 400/(2 * ratio);
 
-   GLfloat black[] = {0.0, .0, 0.0, 1.0};
+   GLfloat black[] = {0.0, 0.0, 0.0, 1.0};
+   GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
    set2Dcolour(black);
 
    //Draw the upper line
@@ -321,6 +350,23 @@ float wCenter, hCenter;
    //Draw the bottom line
    //draw2Dline(wCenter - size + 45, screenHeight - size-330, screenWidth-size-60, screenHeight-size-330, 2);
    draw2Dline(wCenter + size, hCenter - size, wCenter - size, hCenter - size, 2);  
+
+   /* Get the coordniates to printf */
+   getViewPosition(&x,&y,&z);
+   sprintf(coordText, "X:%d  Z:%d", (int)(x * -1), (int)(z * -1)); 
+   
+   /* Adjust the text height and width position according to the size of the screen */
+   textSize = (screenHeight/WORLDX);
+   cOffset = textSize*WORLDZ;
+   glRasterPos2f(textSize+(2*size), cOffset-100);
+
+   /* Draw the coordniates */ 
+   set2Dcolour(green);
+   glColor3f( 1.0, 1.0, 1.0 );
+   len = (int)strlen(coordText);
+   for (i = 0; i < len; i++) {
+      glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, coordText[i]);
+   }
 }
 
 
@@ -334,7 +380,7 @@ float wCenter, hCenter;
 void locate_walls(float size, GLfloat colour[]) {
 int i, k;
 
-   /* search the ground floor of the entire world, map if an objec was found on the map */
+   /* search the ground floor of the entire world, draw if an object was found on the map */
    for(i=0; i<WORLDX; i++)
          for(k=0; k<WORLDZ; k++)
             if(world[i][25][k] != 0) {
@@ -449,7 +495,7 @@ clock_t global_timer;
    } else {
 
       /* check the last time it was updated to the current time, */
-      if ((clock() - global_timer) / (CLOCKS_PER_SEC) >= 1) {
+      if ((clock() - global_timer) / (CLOCKS_PER_SEC) >= 10) {
 
          /* Control the rate of update() using real time */
          global_timer = clock();
@@ -903,5 +949,7 @@ void test_wall2()
    draw_wall_3high(8, 6, 6);
    draw_wall_3high(8, 5, 6);
 }
+
+
 
 
