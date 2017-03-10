@@ -560,8 +560,17 @@ clock_t global_timer;
             animate_projectile();
          }
 
-         if(mob2_shoot_flag) {
+         if(mob2_shoot_flag == 1.0) {
             ai_shoot_animation(2);
+         }
+         if(mob3_shoot_flag == 1.0) {
+            ai_shoot_animation(3);
+         }
+         if(mob4_shoot_flag == 1.0) {
+            ai_shoot_animation(4);
+         }
+         if(mob5_shoot_flag == 1.0) {
+            ai_shoot_animation(5);
          }
 
          // Animate the X mob
@@ -590,9 +599,10 @@ clock_t global_timer;
             draw_O_ai_3();
          }
 
-         //ai_move_O();
          ai_move(2);
-
+         ai_move(3);
+         ai_move(4);
+         ai_move(5);
          
       }
    }
@@ -1136,24 +1146,40 @@ float x,y,z, dir;
 float player_x, player_y, player_z;
 
    getViewPosition(&player_x,&player_y,&player_z);
-
+   printf("turning %d\n", ai);
    if(ai == 2) {
       x = mob2_x;
       z = mob2_z;
       y = mob2_y;
-   } else {
-      return;
+   } else if(ai == 3) {
+      x = mob3_x;
+      z = mob3_z;
+      y = mob3_y;
+   } else if(ai == 4) {
+      x = mob4_x;
+      z = mob4_z;
+      y = mob4_y;
+   } else if(ai == 5) {
+      x = mob5_x;
+      z = mob5_z;
+      y = mob5_y;
    }
 
    dir = atan2((int)z - (player_z*-1), (int)x - (player_x * -1)) * (180/PI);
 
    if(ai == 2) {
       mob2_r = 270-dir;
-   } else {
-      return;
+      setMobPosition(ai, x, y, z, mob2_r);
+   } else if(ai == 3) {
+      mob3_r = 270-dir;
+      setMobPosition(ai, x, y, z, mob3_r);
+   } else if(ai == 4) {
+      mob4_r = 270-dir;
+      setMobPosition(ai, x, y, z, mob4_r);
+   } else if(ai == 5) {
+      mob5_r = 270-dir;
+      setMobPosition(ai, x, y, z, mob5_r);
    }
-   
-   setMobPosition(ai, x, y, z, mob2_r);
 }
 
 
@@ -1219,8 +1245,18 @@ float x,y,z;
       x = mob2_shot_x;
       z = mob2_shot_z;
       y = mob2_shot_y;
-   } else {
-      return;
+   } else if(mob_num == 3) {
+      x = mob3_shot_x;
+      z = mob3_shot_z;
+      y = mob3_shot_y;
+   } else if(mob_num == 4) {
+      x = mob4_shot_x;
+      z = mob4_shot_z;
+      y = mob4_shot_y;
+   } else if(mob_num == 5) {
+      x = mob5_shot_x;
+      z = mob5_shot_z;
+      y = mob5_shot_y;
    }
 
    getViewOrientation(&x_VO, &y_VO, &z_VO);
@@ -1235,7 +1271,15 @@ float x,y,z;
 
    /* check if it hit a cube */
    if(world[(int)x][(int)y][(int)z] != 0){
-      mob2_shoot_flag = 0.0;
+      if(mob_num == 2) {
+         mob2_shoot_flag = 0.0;
+      } else if(mob_num == 3) {
+         mob3_shoot_flag = 0.0;
+      } else if(mob_num == 4) {
+         mob4_shoot_flag = 0.0;
+      } else if(mob_num == 5) {
+         mob5_shoot_flag = 0.0;
+      }
       hideMob(mob_num+4);
    }
 
@@ -1243,7 +1287,15 @@ float x,y,z;
    /* without the -1's, i was getting a bus error 10 for some reason? */
   if ((((int)x < 0) || (int)x>= WORLDX-1) || ((int)y < 0 || (int)y >= WORLDY-1) 
          || (((int)z < 0) || (int)z >= WORLDZ-1)) {
-      mob2_shoot_flag = 0.0;
+      if(mob_num == 2) {
+         mob2_shoot_flag = 0.0;
+      } else if(mob_num == 3) {
+         mob3_shoot_flag = 0.0;
+      } else if(mob_num == 4) {
+         mob4_shoot_flag = 0.0;
+      } else if(mob_num == 5) {
+         mob5_shoot_flag = 0.0;
+      }
       hideMob(mob_num+4);
    }
 
@@ -1251,11 +1303,19 @@ float x,y,z;
       mob2_shot_x = x;
       mob2_shot_z = z;
       mob2_shot_y = y;
-   } else {
-      return;
+   } else if(mob_num == 3) {
+      mob3_shot_x = x;
+      mob3_shot_z = z;
+      mob3_shot_y = y;
+   } else if(mob_num == 4) {
+      mob4_shot_x = x;
+      mob4_shot_z = z;
+      mob4_shot_y = y;
+   } else if(mob_num == 5) {
+      mob5_shot_x = x;
+      mob5_shot_z = z;
+      mob5_shot_y = y;
    }
-
-
 }
 
 
@@ -1282,21 +1342,21 @@ float player_x, player_y, player_z;
 
    /* Move Forward */
    if(probability == 0) {
-      new_x += .15;
-      new_z += .15;
+      new_x += .05;
+      new_z += .05;
 
    /* Move Left */
    } else if(probability == 1) {
-      new_x += .15;
+      new_x += .05;
 
    /* Move right */
    } else if(probability == 2) {
-      new_z += .15;
+      new_z += .05;
 
    /* Move Backward */
    } else if(probability == 3) {
-      new_x -= .15;
-      new_z -= .15;
+      new_x -= .05;
+      new_z -= .05;
    }
 
    /* Check if the next position is empty */
