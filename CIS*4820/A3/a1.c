@@ -1077,16 +1077,43 @@ int i;
       turn_ai_towards_player(ai);
    }
 
-      if(mob2_shoot_flag != 1.0 && ai_find_player(2) == 1) {
-         if ((clock() - shot_timer2) / (CLOCKS_PER_SEC) >= .50) {
-            shot_timer2 = clock();
-            ai_shoot(2);
-         }
+   if(mob2_shoot_flag != 1.0 && ai_find_player(2) == 1) {
+      if ((clock() - shot_timer2) / (CLOCKS_PER_SEC) >= .050) {
+         shot_timer2 = clock();
+         ai_shoot(2);
       }
+   }
+   if(mob3_shoot_flag != 1.0 && ai_find_player(3) == 1) {
+      if ((clock() - shot_timer3) / (CLOCKS_PER_SEC) >= .050) {
+         shot_timer2 = clock();
+         ai_shoot(3);
+      }
+   }
+   if(mob4_shoot_flag != 1.0 && ai_find_player(4) == 1) {
+      if ((clock() - shot_timer4) / (CLOCKS_PER_SEC) >= .050) {
+         shot_timer2 = clock();
+         ai_shoot(4);
+      }
+   }
+   if(mob5_shoot_flag != 1.0 && ai_find_player(5) == 1) {
+      if ((clock() - shot_timer5) / (CLOCKS_PER_SEC) >= .050) {
+         shot_timer2 = clock();
+         ai_shoot(5);
+      }
+   }
 
-      if(check_if_ai_is_in_wall(mob2_x,mob2_y,mob2_z)){
-         mob2_x -= 1;
-      }
+   if(check_if_ai_is_in_wall(mob2_x,mob2_y,mob2_z)){
+      mob2_x -= 1;
+   }
+   if(check_if_ai_is_in_wall(mob3_x,mob3_y,mob3_z)){
+      mob3_x -= 1;
+   }
+   if(check_if_ai_is_in_wall(mob4_x,mob4_y,mob4_z)){
+      mob4_x -= 1;
+   }
+   if(check_if_ai_is_in_wall(mob5_x,mob5_y,mob5_z)){
+      mob5_x -= 1;
+   }
 }
 
 void turn_ai_towards_player(int ai) {
@@ -1132,12 +1159,12 @@ int ai_find_player(int ai) {
    player_z *= -1.0;
 
    /*Check x range*/
-   if (abs(x - player_x) > 6.0) {
+   if (abs(x - player_x) > 12.0) {
       return 0;
    }
         
    /*Check z range*/
-   if (abs(z - player_z) > 6.0) {
+   if (abs(z - player_z) > 12.0) {
       return 0;
    }
 
