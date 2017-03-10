@@ -546,10 +546,10 @@ clock_t global_timer;
          global_timer = clock();
 
          /* if not in fly mode, gravity will be applied to the viewpoint */
-         if(!flycontrol) applyGravity();
+         //if(!flycontrol) applyGravity();
       
          /* Apply gravity at all times */
-         //applyGravity();
+         applyGravity();
 
          /* give a 50% chance to switch a wall */   
          probability = rand() % 2;
@@ -814,9 +814,9 @@ int offset;
       mob4_z = 4.0;
       createMob(4, mob4_x, mob4_y, mob4_z, 0.0);
 
-      mob5_x = 5.0;
+      mob5_x = 6.0;
       mob5_y = 25.0;
-      mob5_z = 22.0;
+      mob5_z = 8.0;
       createMob(5, mob5_x, mob5_y, mob5_z, 0.0);
 
       xX = 35;
@@ -826,8 +826,6 @@ int offset;
       xO = 45;
       yO = 25;
       zO = 37;
-
-
    }
 
 	/* starts the graphics processing loop */
