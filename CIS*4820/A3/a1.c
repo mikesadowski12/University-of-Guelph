@@ -792,6 +792,21 @@ int offset;
       mob2_z = 21.0;
       createMob(2, mob2_x, mob2_y, mob2_z, 0.0);
 
+      mob3_x = 15.0;
+      mob3_y = 25.0;
+      mob3_z = 14.0;
+      createMob(3, mob3_x, mob3_y, mob3_z, 0.0);
+
+      mob4_x = 21.0;
+      mob4_y = 25.0;
+      mob4_z = 4.0;
+      createMob(4, mob4_x, mob4_y, mob4_z, 0.0);
+
+      mob5_x = 5.0;
+      mob5_y = 25.0;
+      mob5_z = 21.0;
+      createMob(5, mob5_x, mob5_y, mob5_z, 0.0);
+
       xX = 35;
       yX = 25; 
       zX = 31;
