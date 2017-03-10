@@ -563,6 +563,7 @@ clock_t global_timer;
          if(mob2_shoot_flag == 1.0) {
             ai_shoot_animation(2);
          }
+         
          if(mob3_shoot_flag == 1.0) {
             ai_shoot_animation(3);
          }
@@ -814,7 +815,7 @@ int offset;
 
       mob5_x = 5.0;
       mob5_y = 25.0;
-      mob5_z = 21.0;
+      mob5_z = 22.0;
       createMob(5, mob5_x, mob5_y, mob5_z, 0.0);
 
       xX = 35;
@@ -1097,34 +1098,35 @@ int i;
    
    srand(time(NULL));
 
-   //roam_ai(ai);
+   roam_ai(ai);
+
    if (ai_find_player(ai) == 1) {
       turn_ai_towards_player(ai);
    }
 
    if(mob2_shoot_flag != 1.0 && ai_find_player(2) == 1) {
-      if ((clock() - shot_timer2) / (CLOCKS_PER_SEC) >= .050) {
+      //if ((clock() - shot_timer2) / (CLOCKS_PER_SEC) >= .050) {
          shot_timer2 = clock();
          ai_shoot(2);
-      }
+      //}
    }
    if(mob3_shoot_flag != 1.0 && ai_find_player(3) == 1) {
-      if ((clock() - shot_timer3) / (CLOCKS_PER_SEC) >= .050) {
+      //if ((clock() - shot_timer3) / (CLOCKS_PER_SEC) >= .050) {
          shot_timer2 = clock();
          ai_shoot(3);
-      }
+      //}
    }
    if(mob4_shoot_flag != 1.0 && ai_find_player(4) == 1) {
-      if ((clock() - shot_timer4) / (CLOCKS_PER_SEC) >= .050) {
+      //if ((clock() - shot_timer4) / (CLOCKS_PER_SEC) >= .050) {
          shot_timer2 = clock();
          ai_shoot(4);
-      }
+      //}
    }
    if(mob5_shoot_flag != 1.0 && ai_find_player(5) == 1) {
-      if ((clock() - shot_timer5) / (CLOCKS_PER_SEC) >= .050) {
+      //if ((clock() - shot_timer5) / (CLOCKS_PER_SEC) >= .050) {
          shot_timer2 = clock();
          ai_shoot(5);
-      }
+      //}
    }
 
    if(check_if_ai_is_in_wall(mob2_x,mob2_y,mob2_z)){
@@ -1146,7 +1148,7 @@ float x,y,z, dir;
 float player_x, player_y, player_z;
 
    getViewPosition(&player_x,&player_y,&player_z);
-   printf("turning %d\n", ai);
+
    if(ai == 2) {
       x = mob2_x;
       z = mob2_z;
@@ -1191,8 +1193,18 @@ int ai_find_player(int ai) {
       x = mob2_x;
       z = mob2_z;
       y = mob2_y;
-   } else {
-      return 5;
+   } else if(ai == 3) {
+      x = mob3_x;
+      z = mob3_z;
+      y = mob3_y;
+   } else if(ai == 4) {
+      x = mob4_x;
+      z = mob4_z;
+      y = mob4_y;
+   } else if(ai == 5) {
+      x = mob5_x;
+      z = mob5_z;
+      y = mob5_y;
    }
 
    getViewPosition(&player_x, &player_y, &player_z);
@@ -1200,12 +1212,12 @@ int ai_find_player(int ai) {
    player_z *= -1.0;
 
    /*Check x range*/
-   if (abs(x - player_x) > 12.0) {
+   if (abs(x - player_x) > 10.0) {
       return 0;
    }
         
    /*Check z range*/
-   if (abs(z - player_z) > 12.0) {
+   if (abs(z - player_z) > 10.0) {
       return 0;
    }
 
@@ -1223,17 +1235,47 @@ int ai_find_player(int ai) {
 void ai_shoot(int ai) {
 float x,y,z;
    
-   if(ai == 2 && mob2_shoot_flag == 0.0) {
-      mob2_shoot_flag = 1.0;
-      mob2_shot_x = mob2_x;
-      mob2_shot_z = mob2_z;
-      mob2_shot_y = mob2_y;
-      mob2_shot_r = mob2_r;
-      showMob(ai+4);
-      createMob(ai+4, mob2_shot_x, mob2_shot_y, mob2_shot_z, mob2_shot_r); 
-   } else {
-      return;
-   }
+   if(ai == 2) {
+      if (mob2_shoot_flag == 0.0) {
+         mob2_shoot_flag = 1.0;
+         mob2_shot_x = mob2_x;
+         mob2_shot_z = mob2_z;
+         mob2_shot_y = mob2_y;
+         mob2_shot_r = mob2_r;
+         showMob(ai+4);
+         createMob(ai+4, mob2_shot_x, mob2_shot_y, mob2_shot_z, mob2_shot_r); 
+      }
+   } else if(ai == 3) {
+      if (mob3_shoot_flag == 0.0) {
+         mob3_shoot_flag = 1.0;
+         mob3_shot_x = mob3_x;
+         mob3_shot_z = mob3_z;
+         mob3_shot_y = mob3_y;
+         mob3_shot_r = mob3_r;
+         showMob(ai+4);
+         createMob(ai+4, mob3_shot_x, mob3_shot_y, mob3_shot_z, mob3_shot_r); 
+      }
+   } else if(ai == 4) {
+      if (mob4_shoot_flag == 0.0) {
+         mob4_shoot_flag = 1.0;
+         mob4_shot_x = mob4_x;
+         mob4_shot_z = mob4_z;
+         mob4_shot_y = mob4_y;
+         mob4_shot_r = mob4_r;
+         showMob(ai+4);
+         createMob(ai+4, mob4_shot_x, mob4_shot_y, mob4_shot_z, mob4_shot_r); 
+      }
+   } else if(ai == 5) {
+      if (mob5_shoot_flag == 0.0) {
+         mob5_shoot_flag = 1.0;
+         mob5_shot_x = mob5_x;
+         mob5_shot_z = mob5_z;
+         mob5_shot_y = mob5_y;
+         mob5_shot_r = mob5_r;
+         showMob(ai+4);
+         createMob(ai+4, mob5_shot_x, mob5_shot_y, mob5_shot_z, mob5_shot_r); 
+      }
+   }      
 }
 
 
@@ -1328,8 +1370,18 @@ float player_x, player_y, player_z;
       new_x = mob2_x;
       new_z = mob2_z;
       y = mob2_y;
-   } else {
-      return;
+   } else if(ai == 3) {
+      new_x = mob3_x;
+      new_z = mob3_z;
+      y = mob3_y;
+   } else if(ai == 4) {
+      new_x = mob4_x;
+      new_z = mob4_z;
+      y = mob4_y;
+   } else if(ai == 5) {
+      new_x = mob5_x;
+      new_z = mob5_z;
+      y = mob5_y;
    }
 
    getViewPosition(&player_x, &player_y, &player_z);
@@ -1361,26 +1413,35 @@ float player_x, player_y, player_z;
 
    /* Check if the next position is empty */
    if (world[(int)new_x+1][(int)y][(int)new_z+1] != 0 || world[(int)new_x-1][(int)y][(int)new_z-1]) {
-      //printf("HITTING BLOCK\n");
       return;
    }
 
    /* Check if the next position is position of the player */
    if (new_x == (int)player_x && new_z == (int)player_z) {
-      //printf("HITTING PLAYER\n");
       return;
    }  
 
    /* check if it hit the boundary of the world */
    /* without the -1's, i was getting a bus error 10 for some reason? */
    if ((((int)(new_x) < 0) || (int)(new_x) >= WORLDX-1) || (((int)(new_z) < 0) || (int)(new_z) >= WORLDZ-1)) {
-      //printf("HITTING BOUNDARY\n");
       return;
    }
 
+   if(ai == 2) {
+      mob2_x = new_x;
+      mob2_z = new_z; 
+   } else if(ai == 3) {
+      mob3_x = new_x;
+      mob3_z = new_z; 
+   } else if(ai == 4) {
+      mob4_x = new_x;
+      mob4_z = new_z; 
+   } else if(ai == 5) {
+      mob5_x = new_x;
+      mob5_z = new_z; 
+   }
+
    /* Next position is OK to move to */
-   mob2_x = new_x;
-   mob2_z = new_z;  
    setMobPosition(ai, new_x, y, new_z, 0.0);
 }
 
