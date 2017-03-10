@@ -172,7 +172,19 @@ int xO, yO, zO;
 float mob2_x, mob2_y, mob2_z, mob2_r, mob2_dead, mob2_shoot_flag;
 float mob2_shot_x, mob2_shot_y, mob2_shot_z, mob2_shot_r; 
 
+float mob3_x, mob3_y, mob3_z, mob3_r, mob3_dead, mob3_shoot_flag;
+float mob3_shot_x, mob3_shot_y, mob3_shot_z, mob3_shot_r; 
 
+float mob4_x, mob4_y, mob4_z, mob4_r, mob4_dead, mob4_shoot_flag;
+float mob4_shot_x, mob4_shot_y, mob4_shot_z, mob4_shot_r; 
+
+float mob5_x, mob5_y, mob5_z, mob5_r, mob5_dead, mob5_shoot_flag;
+float mob5_shot_x, mob5_shot_y, mob5_shot_z, mob5_shot_r; 
+
+clock_t shot_timer2;
+clock_t shot_timer3;
+clock_t shot_timer4;
+clock_t shot_timer5;
 
 /********* end of extern variable declarations **************/
 
@@ -1058,23 +1070,23 @@ void test_wall2()
 void ai_move(int ai) {
 int i;
    
+   srand(time(NULL));
+
    //roam_ai(ai);
    if (ai_find_player(ai) == 1) {
       turn_ai_towards_player(ai);
+   }
 
-      if(mob2_shoot_flag != 1.0) {
-         ai_shoot(ai);
-      } else {
-         //printf("AI: %d,  %d\n", ai, ai*2);
-         //ai_shoot_animation(ai);
+      if(mob2_shoot_flag != 1.0 && ai_find_player(2) == 1) {
+         if ((clock() - shot_timer2) / (CLOCKS_PER_SEC) >= .50) {
+            shot_timer2 = clock();
+            ai_shoot(2);
+         }
       }
 
       if(check_if_ai_is_in_wall(mob2_x,mob2_y,mob2_z)){
          mob2_x -= 1;
       }
-
-
-   } 
 }
 
 void turn_ai_towards_player(int ai) {
@@ -1150,7 +1162,6 @@ float x,y,z;
       mob2_shot_y = mob2_y;
       mob2_shot_r = mob2_r;
       showMob(ai+4);
-      printf("bang\n");
       createMob(ai+4, mob2_shot_x, mob2_shot_y, mob2_shot_z, mob2_shot_r); 
    } else {
       return;
