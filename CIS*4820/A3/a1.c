@@ -38,6 +38,7 @@
 
 #define PI 3.14159265
 #define TORADIANS (PI / 180)
+#define SHOTSPEED .5
 
 	/* mouse function called by GLUT when a button is pressed or released */
 void mouse(int, int, int, int);
@@ -553,7 +554,7 @@ clock_t global_timer;
          /* give a 50% chance to switch a wall */   
          probability = rand() % 2;
          if(probability == 1){
-            //animateInternalWalls();
+            animateInternalWalls();
          }
 
          if(projectile_flag) {
@@ -1095,7 +1096,7 @@ void test_wall2()
 */
 void ai_move(int ai) {
 int i;
-   
+
    srand(time(NULL));
 
    roam_ai(ai);
@@ -1105,28 +1106,28 @@ int i;
    }
 
    if(mob2_shoot_flag != 1.0 && ai_find_player(2) == 1) {
-      //if ((clock() - shot_timer2) / (CLOCKS_PER_SEC) >= .050) {
+      if ((clock() - shot_timer2) / (CLOCKS_PER_SEC) >= SHOTSPEED) {
          shot_timer2 = clock();
          ai_shoot(2);
-      //}
+      }
    }
    if(mob3_shoot_flag != 1.0 && ai_find_player(3) == 1) {
-      //if ((clock() - shot_timer3) / (CLOCKS_PER_SEC) >= .050) {
-         shot_timer2 = clock();
+      if ((clock() - shot_timer3) / (CLOCKS_PER_SEC) >= SHOTSPEED) {
+         shot_timer3 = clock();
          ai_shoot(3);
-      //}
+      }
    }
    if(mob4_shoot_flag != 1.0 && ai_find_player(4) == 1) {
-      //if ((clock() - shot_timer4) / (CLOCKS_PER_SEC) >= .050) {
-         shot_timer2 = clock();
+      if ((clock() - shot_timer4) / (CLOCKS_PER_SEC) >= SHOTSPEED) {
+         shot_timer4 = clock();
          ai_shoot(4);
-      //}
+      }
    }
    if(mob5_shoot_flag != 1.0 && ai_find_player(5) == 1) {
-      //if ((clock() - shot_timer5) / (CLOCKS_PER_SEC) >= .050) {
-         shot_timer2 = clock();
+      if ((clock() - shot_timer5) / (CLOCKS_PER_SEC) >= SHOTSPEED) {
+         shot_timer5 = clock();
          ai_shoot(5);
-      //}
+      }
    }
 
    if(check_if_ai_is_in_wall(mob2_x,mob2_y,mob2_z)){
