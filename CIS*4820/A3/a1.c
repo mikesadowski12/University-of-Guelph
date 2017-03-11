@@ -546,10 +546,10 @@ clock_t global_timer;
          global_timer = clock();
 
          /* if not in fly mode, gravity will be applied to the viewpoint */
-         if(!flycontrol) applyGravity();
+         //if(!flycontrol) applyGravity();
       
          /* Apply gravity at all times */
-         //applyGravity();
+         applyGravity();
 
          /* give a 50% chance to switch a wall */   
          probability = rand() % 2;
