@@ -546,10 +546,10 @@ clock_t global_timer;
          global_timer = clock();
 
          /* if not in fly mode, gravity will be applied to the viewpoint */
-         //if(!flycontrol) applyGravity();
+         if(!flycontrol) applyGravity();
       
          /* Apply gravity at all times */
-         applyGravity();
+         //applyGravity();
 
          /* give a 50% chance to switch a wall */   
          probability = rand() % 2;
@@ -1146,9 +1146,50 @@ int i;
    if(check_if_ai_is_in_wall(mob5_x,mob5_y,mob5_z)){
       mob5_x -= 1;
    }
+
+
+   if (mob2_x < 0 || mob2_x >= WORLDX-1){
+      mob2_x = 5.0;
+      mob2_y = 25.0;
+      mob2_z = 21.0;
+      createMob(2, mob2_x, mob2_y, mob2_z, 0.0);  
+   }
+   if (mob3_x < 0 || mob3_x >= WORLDX-1){
+      mob3_x = 15.0;
+      mob3_y = 25.0;
+      mob3_z = 14.0;
+      createMob(3, mob3_x, mob3_y, mob3_z, 0.0);
+   }
+   if (mob4_x < 0 || mob4_x >= WORLDX-1){
+      mob4_x = 21.0;
+      mob4_y = 25.0;
+      mob4_z = 4.0;
+      createMob(4, mob4_x, mob4_y, mob4_z, 0.0);
+   }
+   if (mob5_x < 0 || mob5_x >= WORLDX-1){
+      mob5_x = 6.0;
+      mob5_y = 25.0;
+      mob5_z = 8.0;
+      createMob(5, mob5_x, mob5_y, mob5_z, 0.0);
+   }
+
+   if((mob2_x == mob3_x && mob2_z == mob3_z) || (mob2_x == mob4_x && mob2_z == mob4_z) 
+      || (mob2_x == mob5_x && mob2_z == mob5_z)) {
+         mob2_x -= 1;
+   } else if((mob3_x == mob2_x && mob3_z == mob2_z) || (mob3_x == mob4_x && mob3_z == mob4_z) 
+      || (mob3_x == mob5_x && mob3_z == mob5_z)) {
+         mob3_x -= 1;
+   } else if((mob4_x == mob2_x && mob4_z == mob2_z) || (mob4_x == mob3_x && mob4_z == mob3_z) 
+      || (mob4_x == mob5_x && mob4_z == mob5_z)) {
+         mob4_x -= 1;
+   } else if((mob5_x == mob2_x && mob5_z == mob2_z) || (mob5_x == mob3_x && mob5_z == mob3_z) 
+      || (mob5_x == mob4_x && mob5_z == mob4_z)) {
+         mob5_x -= 1;
+   }
+
 }
 
-
+      
 
 /* 
  * Name: turn_ai_towards_player()
