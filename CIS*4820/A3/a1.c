@@ -1092,6 +1092,12 @@ void test_wall2()
 - 3. If the agent sees the player pointing towards at them then they should move
 -    out of the way.
 */
+/* 
+ * Name: ai_move()
+ * Description: Makes the AI roam around and the decision to shoot or not
+ * Parameters: none
+ * Return: none
+*/
 void ai_move(int ai) {
 int i;
 
@@ -1142,6 +1148,14 @@ int i;
    }
 }
 
+
+
+/* 
+ * Name: turn_ai_towards_player()
+ * Description: Makes the AI's rotation face the player's if he is close enough
+ * Parameters: ai = ai to control
+ * Return: none
+*/
 void turn_ai_towards_player(int ai) {
 float x,y,z, dir;
 float player_x, player_y, player_z;
@@ -1184,6 +1198,13 @@ float player_x, player_y, player_z;
 }
 
 
+
+/* 
+ * Name: turn_ai_towards_player()
+ * Description: Determine if player is close enough
+ * Parameters: ai = ai to control
+ * Return: none
+*/
 int ai_find_player(int ai) {
    float player_x, player_y, player_z;
    float x, y, z;
@@ -1227,7 +1248,7 @@ int ai_find_player(int ai) {
 
 /* 
  * Name: ai_shoot()
- * Description: Draws the projectile 
+ * Description: Draws the projectile that AI is shooting at its location
  * Parameters: none
  * Return: none
 */
@@ -1279,6 +1300,12 @@ float x,y,z;
 
 
 
+/* 
+ * Name: ai_shoot_animation()
+ * Description: Animates each AI's bullet
+ * Parameters: ai = ai to control
+ * Return: none
+*/
 void ai_shoot_animation(int mob_num){
 float x,y,z;
    
@@ -1360,6 +1387,13 @@ float x,y,z;
 }
 
 
+
+/* 
+ * Name: roam_ai()
+ * Description: Allows AI to roam around the maze
+ * Parameters: ai = ai to control
+ * Return: none
+*/
 void roam_ai(int ai) {
 int probability;
 float new_x, new_z, y;
