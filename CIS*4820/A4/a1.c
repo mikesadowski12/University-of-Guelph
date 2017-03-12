@@ -108,6 +108,12 @@ void spawn_key();
 void spawn_mobs();
 void display_health();
 void print_hit_message();
+void random_location(int *num);
+void spawn_powerups();
+
+int teleport_flag();
+int bounce_flag();
+int rain_flag();
 
 /*******************************************/
 
@@ -206,6 +212,14 @@ int init_flag;
 
 int health;
 
+int teleport_cube1_x, teleport_cube1_y, teleport_cube1_z; 
+int teleport_cube2_x, teleport_cube2_y, teleport_cube2_z; 
+
+int bounce_cube1_x, bounce_cube1_y, bounce_cube1_z; 
+int bounce_cube2_x, bounce_cube2_y, bounce_cube2_z; 
+
+int rain_cube1_x, rain_cube1_y, rain_cube1_z;
+int rain_cube2_x, rain_cube2_y, rain_cube2_z;
 
 /********* end of extern variable declarations **************/
 
@@ -694,7 +708,7 @@ char c;
          /* give a 50% chance to switch a wall */   
          probability = rand() % 2;
          if(probability == 1){
-            //animateInternalWalls();
+            animateInternalWalls();
          }
 
          if(projectile_flag) {
@@ -766,17 +780,180 @@ char c;
             initialize_new_maze();
          }
 
+         if (teleport_flag()){
+
+         }
+
+         if(bounce_flag()) {
+
+         }
+
+         if(rain_flag()) {
+
+         }
       }
    }
 }
+   
 
+
+int teleport_flag() {
+float x,y,z;
+   
+   getOldViewPosition(&x,&y,&z);
+
+   if ((int)x*-1 == teleport_cube1_x && (int)(y*-1) == teleport_cube1_y+1 && (int)z*-1 == teleport_cube1_z) {
+      world[teleport_cube1_x][teleport_cube1_y][teleport_cube1_z] = 0;
+      teleport_cube1_x = 0;
+      teleport_cube1_y = 0;
+      teleport_cube1_z = 0;
+      return 1;
+   }
+   if ((int)x*-1 == teleport_cube2_x && (int)(y*-1) == teleport_cube2_y+1 && (int)z*-1 == teleport_cube2_z) {
+      world[teleport_cube2_x][teleport_cube2_y][teleport_cube2_z] = 0;
+      teleport_cube2_x = 0;
+      teleport_cube2_y = 0;
+      teleport_cube2_z = 0;
+      world[teleport_cube2_x][teleport_cube2_y][teleport_cube2_z] = 0;
+      return 1;
+   }
+
+   return 0;
+}
+int bounce_flag() {
+float x,y,z;
+   
+   getOldViewPosition(&x,&y,&z);
+
+   if ((int)x*-1 == bounce_cube1_x && (int)(y*-1) == bounce_cube1_y+1 && (int)z*-1 == bounce_cube1_z) {
+      world[bounce_cube1_x][bounce_cube1_y][bounce_cube1_z] = 0;
+      bounce_cube1_x = 0;
+      bounce_cube1_y = 0;
+      bounce_cube1_z = 0;
+      return 1;
+   }
+   if ((int)x*-1 == bounce_cube2_x && (int)(y*-1) == bounce_cube2_y+1 && (int)z*-1 == bounce_cube2_z) {
+      world[bounce_cube2_x][bounce_cube2_y][bounce_cube2_z] = 0;
+      bounce_cube2_x = 0;
+      bounce_cube2_y = 0;
+      bounce_cube2_z = 0;
+      return 1;
+   }
+
+   return 0;
+}
+int rain_flag() {
+float x,y,z;
+   
+   getOldViewPosition(&x,&y,&z);
+
+   if ((int)x*-1 == rain_cube1_x && (int)(y*-1) == rain_cube1_y+1 && (int)z*-1 == rain_cube1_z) {
+      world[rain_cube1_x][rain_cube1_y][rain_cube1_z] = 0;
+      rain_cube1_x = 0;
+      rain_cube1_y = 0;
+      rain_cube1_z = 0;
+      return 1;
+   }
+   if ((int)x*-1 == rain_cube2_x && (int)(y*-1) == rain_cube2_y+1 && (int)z*-1 == rain_cube2_z) {
+      world[rain_cube2_x][rain_cube2_y][rain_cube2_z] = 0;
+      rain_cube2_x = 0;
+      rain_cube2_y = 0;
+      rain_cube2_z = 0;
+      return 1;
+   }
+
+   return 0;
+}
+
+void spawn_powerups() {
+   teleport_cube1_y = 25;
+   teleport_cube2_y = 25;
+   bounce_cube1_y = 25;
+   bounce_cube2_y = 25;
+   rain_cube1_y = 25;
+   rain_cube2_y = 25;
+
+   /* clear existing power ups */
+   world[teleport_cube1_x][teleport_cube1_y][teleport_cube1_z] = 0;
+   world[teleport_cube2_x][teleport_cube2_y][teleport_cube2_z] = 0;
+   world[bounce_cube1_x][bounce_cube1_y][bounce_cube1_z] = 0;
+   world[bounce_cube2_x][bounce_cube2_y][bounce_cube2_z] = 0;
+   world[rain_cube1_x][rain_cube1_y][rain_cube1_z] = 0;
+   world[rain_cube2_x][rain_cube2_y][rain_cube2_z] = 0;
+
+   /* choose new locations for power ups */
+   /*teleport cubes */
+   do {
+      random_location(&teleport_cube1_x);
+      random_location(&teleport_cube1_z);
+   } while (world[teleport_cube1_x][teleport_cube1_y][teleport_cube1_z] != 0 || (teleport_cube1_x <= 3 && teleport_cube1_z <= 3));
+   do {
+      random_location(&teleport_cube2_x);
+      random_location(&teleport_cube2_z);
+   } while (world[teleport_cube2_x][teleport_cube2_y][teleport_cube2_z] != 0 || (teleport_cube2_x <= 3 && teleport_cube2_z <= 3));
+
+   /* bounce cubes */
+   do {
+      random_location(&bounce_cube1_x);
+      random_location(&bounce_cube1_z);
+   } while (world[bounce_cube1_x][bounce_cube1_y][bounce_cube1_z] != 0 || (bounce_cube1_x <= 3 && bounce_cube1_z <= 3));
+   do {
+      random_location(&bounce_cube2_x);
+      random_location(&bounce_cube2_z);
+   } while (world[bounce_cube2_x][bounce_cube2_y][bounce_cube2_z] != 0 || (bounce_cube2_x <= 3 && bounce_cube2_z <= 3));
+
+   /* rain cubes */
+   do {
+      random_location(&rain_cube1_x);
+      random_location(&rain_cube1_z);
+   } while (world[rain_cube1_x][rain_cube1_y][rain_cube1_z] != 0 || (rain_cube1_x <= 3 && rain_cube1_z <= 3));
+   do {
+      random_location(&rain_cube2_x);
+      random_location(&rain_cube2_z);
+   } while (world[rain_cube2_x][rain_cube2_y][rain_cube2_z] != 0 || (rain_cube2_x <= 3 && rain_cube2_z <= 3));
+
+   world[teleport_cube1_x][teleport_cube1_y][teleport_cube1_z] = 3;
+   world[teleport_cube2_x][teleport_cube2_y][teleport_cube2_z] = 3;
+   world[bounce_cube1_x][bounce_cube1_y][bounce_cube1_z] = 1;
+   world[bounce_cube2_x][bounce_cube2_y][bounce_cube2_z] = 1;
+   world[rain_cube1_x][rain_cube1_y][rain_cube1_z] = 8;
+   world[rain_cube2_x][rain_cube2_y][rain_cube2_z] = 8;
+
+}
+
+
+void initialize_new_maze() {
+
+   if ((clock() - newgame_timer) / (CLOCKS_PER_SEC) >= 0.1) {
+      game_over_flag = 0;
+      init_flag = 0;
+      spawn_key();
+      setViewPosition(-1, -25, -1);
+      spawn_mobs();
+      health = 5;
+      spawn_powerups();
+   }  
+}
+
+
+void random_location(int *num) {
+   do {
+      *num = rand() % 23;
+   } while(*num % 4 == 0);  
+}
 
 void spawn_key() {
+      world[key_x][key_y][key_z] = 0;
 
       /* Place key on ground */
-      key_x = 23;
+      //key_x = 23;
+      do {
+         random_location(&key_x);
+         random_location(&key_z);
+      } while(key_x <=3 && key_z <= 3);
+
       key_y = 25;
-      key_z = 19;
+      //key_z = 19;
       key_found = 0;
 
       world[key_x][key_y][key_z] = 5;
@@ -825,20 +1002,6 @@ void spawn_mobs() {
 
 
 
-}
-
-
-
-void initialize_new_maze() {
-
-   if ((clock() - newgame_timer) / (CLOCKS_PER_SEC) >= 0.1) {
-      game_over_flag = 0;
-      init_flag = 0;
-      spawn_key();
-      setViewPosition(-3, -25, -2);
-      spawn_mobs();
-      health = 5;
-   }  
 }
 
 
@@ -1189,7 +1352,7 @@ int offset;
       //drawTestBlocks();
 
       /* Start the viewpoint in a corner of the maze */
-      setViewPosition(-3, -25, -2);
+      setViewPosition(-1, -25, -1);
 
       spawn_mobs();
 
@@ -1201,12 +1364,9 @@ int offset;
       yO = 25;
       zO = 37;
 
-      
-
       spawn_key();
       health = 5;
-
-      
+      spawn_powerups();
 
       /* Draw white door */
       world[0][25][2] = 5;
