@@ -98,6 +98,16 @@ void ai_shoot(int ai);
 void turn_ai_towards_player(int ai);
 
 /****** A4 *****/
+int is_key_found();
+void print_key_message();
+void initialize_new_maze();
+int game_over();
+void print_game_over_message();
+void initialize_new_maze();
+void spawn_key();
+void spawn_mobs();
+void display_health();
+void print_hit_message();
 
 /*******************************************/
 
@@ -186,6 +196,16 @@ clock_t shot_timer2;
 clock_t shot_timer3;
 clock_t shot_timer4;
 clock_t shot_timer5;
+clock_t newgame_timer;
+
+
+int key_x, key_y, key_z, key_found;
+
+int game_over_flag;
+int init_flag;
+
+int health;
+
 
 /********* end of extern variable declarations **************/
 
@@ -232,6 +252,8 @@ void collisionResponse() {
       getViewPosition(&x, &y, &z);
       setViewPosition(x-1, -25, z-1);
    }
+
+   getOldViewPosition(&x, &y, &z);
 }
 
 
@@ -278,6 +300,7 @@ GLfloat blue[] = {0.0, 0.0, 1.0, 1.0};
 float ratio = 1024/(float) screenWidth;
 float size = 200/ratio;
 float x, y, z;
+char c;
 
    getViewPosition(&x,&y,&z);
 
@@ -296,9 +319,123 @@ float x, y, z;
    if(projectile_flag) {
       draw_entity_position(x_VP, y_VP, z_VP, size, red);   
    }
+
+   if(key_found && !game_over_flag) {
+      print_key_message();
+   }
+
+   if(health == 0) {
+      game_over_flag = 1;
+
+      if(!init_flag) {
+         newgame_timer = clock();
+         init_flag = 1;
+      }
+   }
+
+   /* Check if mob bullets hit the viewpoint */
+   if(  (abs( (x *-1) - mob2_shot_x ) >= 0 && abs( (x *-1) - mob2_shot_x ) <= 0.5)  
+      && (abs( (y *-1) - mob2_shot_y ) >= 0 && abs( (y *-1) - mob2_shot_y ) <= 0.5) 
+      && (abs( (z *-1) - mob2_shot_z ) >= 0 && abs( (z *-1) - mob2_shot_z ) <= 0.5) ) {
+      health--;
+   }
+   if(  (abs( (x *-1) - mob3_shot_x ) >= 0 && abs( (x *-1) - mob3_shot_x ) <= 0.5)  
+      && (abs( (y *-1) - mob3_shot_y ) >= 0 && abs( (y *-1) - mob3_shot_y ) <= 0.5) 
+      && (abs( (z *-1) - mob3_shot_z ) >= 0 && abs( (z *-1) - mob3_shot_z ) <= 0.5) ) {
+      health--;
+   }
+   if(  (abs( (x *-1) - mob4_shot_x ) >= 0 && abs( (x_VP *-1) - mob4_shot_x ) <= 0.5)  
+      && (abs( (y *-1) - mob4_shot_y ) >= 0 && abs( (y_VP *-1) - mob4_shot_y ) <= 0.5) 
+      && (abs( (z *-1) - mob4_shot_z ) >= 0 && abs( (z_VP *-1) - mob4_shot_z ) <= 0.5) ) {
+      health--;
+   }
+   if(  (abs( (x *-1) - mob5_shot_x ) >= 0 && abs( (x *-1) - mob5_shot_x ) <= 0.5)  
+      && (abs( (y *-1) - mob5_shot_y ) >= 0 && abs( (y *-1) - mob5_shot_y ) <= 0.5) 
+      && (abs( (z *-1) - mob5_shot_z ) >= 0 && abs( (z *-1) - mob5_shot_z ) <= 0.5) ) {
+      
+      health--;
+   }    
+
+   if(game_over_flag) {
+      print_game_over_message();
+   } else {
+      display_health();
+   }
+
+   if (health < 5) {
+      print_hit_message();
+   }
+
+}
+
+void print_hit_message() {
+float ratio = 1024.0/(float) screenWidth;
+float size;
+float wCenter, hCenter;
+float textSize, cOffset;
+char coordText[99];
+float x, y, z;
+int i, len;
+//int screenWidth = 1024;
+//int screenHeight = 768;
+
+   /* Get the centre of the width/height */
+   wCenter = (float) screenWidth/2;
+   hCenter = (float) screenHeight/2;
+
+   //GLfloat black[] = {0.0, 0.0, 0.0, 1.0};
+   //GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
+   //set2Dcolour(black);
+
+   sprintf(coordText, "You were hit!"); 
+   
+   glRasterPos2f(3, 500-(health*4));
+
+   /* Draw the coordniates */ 
+   //set2Dcolour(green);
+   glColor3f( 1.0, 1.0, 1.0 );
+   len = (int)strlen(coordText);
+   for (i = 0; i < len; i++) {
+      glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, coordText[i]);
+   }
 }
 
 
+void display_health() {
+float ratio = 1024.0/(float) screenWidth;
+float size;
+float wCenter, hCenter;
+float textSize, cOffset;
+char coordText[99];
+float x, y, z;
+int i, len;
+//int screenWidth = 1024;
+//int screenHeight = 768;
+
+   /* Get the centre of the width/height */
+   wCenter = (float) screenWidth/2;
+   hCenter = (float) screenHeight/2;
+
+   //GLfloat black[] = {0.0, 0.0, 0.0, 1.0};
+   //GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
+   //set2Dcolour(black);
+
+   sprintf(coordText, "Health:"); 
+   
+   glRasterPos2f(wCenter-150, hCenter+280);
+
+   /* Draw the coordniates */ 
+   //set2Dcolour(green);
+   glColor3f( 1.0, 1.0, 1.0 );
+   len = (int)strlen(coordText);
+   for (i = 0; i < len; i++) {
+      glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, coordText[i]);
+   }
+
+   for(i = 0; i < health; i++) {
+      draw2Dbox(wCenter-20, hCenter+270, wCenter-70+(i*25), hCenter+300);
+   }
+}
 
 /* 
  * Name: draw_map_small()
@@ -412,6 +549,8 @@ int i, len;
    for (i = 0; i < len; i++) {
       glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, coordText[i]);
    }
+
+
 }
 
 
@@ -482,6 +621,7 @@ void update() {
 int i, j, k, probability;
 float *la;
 clock_t global_timer;
+char c;
 
    probability = 0;
    srand(time(NULL));
@@ -554,7 +694,7 @@ clock_t global_timer;
          /* give a 50% chance to switch a wall */   
          probability = rand() % 2;
          if(probability == 1){
-            animateInternalWalls();
+            //animateInternalWalls();
          }
 
          if(projectile_flag) {
@@ -601,14 +741,202 @@ clock_t global_timer;
             draw_O_ai_3();
          }
 
-         ai_move(2);
-         ai_move(3);
-         ai_move(4);
-         ai_move(5);
+         if(!mob2_dead) {ai_move(2);}
+         if(!mob3_dead) {ai_move(3);}
+         if(!mob4_dead) {ai_move(4);}
+         if(!mob5_dead) {ai_move(5);}
          
+         if(is_key_found() && !key_found) {
+            world[key_x][key_y][key_z] = 0;
+            key_found = 1;
+         }
+
+         if(key_found && !game_over_flag) {
+            if(game_over() && !game_over_flag){
+               game_over_flag = 1;
+
+               if(!init_flag) {
+                  newgame_timer = clock();
+                  init_flag = 1;
+               }
+            }
+         }
+
+         if(game_over_flag) {
+            initialize_new_maze();
+         }
+
       }
    }
 }
+
+
+void spawn_key() {
+
+      /* Place key on ground */
+      key_x = 23;
+      key_y = 25;
+      key_z = 19;
+      key_found = 0;
+
+      world[key_x][key_y][key_z] = 5;
+}
+
+void spawn_mobs() {
+      mob2_x = 5.0;
+      mob2_y = 25.0;
+      mob2_z = 21.0;
+      mob2_dead = 0;
+      createMob(2, mob2_x, mob2_y, mob2_z, 0.0);
+
+      mob3_x = 15.0;
+      mob3_y = 25.0;
+      mob3_z = 14.0;
+      mob3_dead = 0;
+      createMob(3, mob3_x, mob3_y, mob3_z, 0.0);
+
+      mob4_x = 21.0;
+      mob4_y = 25.0;
+      mob4_z = 4.0;
+      mob4_dead = 0;
+      createMob(4, mob4_x, mob4_y, mob4_z, 0.0);
+
+      mob5_x = 6.0;
+      mob5_y = 25.0;
+      mob5_z = 8.0;
+      mob5_dead = 0;
+      createMob(5, mob5_x, mob5_y, mob5_z, 0.0);
+
+      mob2_shot_x = 999;
+      mob3_shot_x = 999;
+      mob4_shot_x = 999;
+      mob5_shot_x = 999;
+
+      mob2_shot_y = 999;
+      mob3_shot_y = 999;
+      mob4_shot_y = 999;
+      mob5_shot_y = 999;
+
+      mob2_shot_z = 999;
+      mob3_shot_z = 999;
+      mob4_shot_z = 999;
+      mob5_shot_z = 999;
+
+
+
+
+}
+
+
+
+void initialize_new_maze() {
+
+   if ((clock() - newgame_timer) / (CLOCKS_PER_SEC) >= 0.1) {
+      game_over_flag = 0;
+      init_flag = 0;
+      spawn_key();
+      setViewPosition(-3, -25, -2);
+      spawn_mobs();
+      health = 5;
+   }  
+}
+
+
+
+int game_over() {
+float x,y,z;
+   
+   getOldViewPosition(&x,&y,&z);
+   //printf("LOOKING: %d %d %d\n",(int)x*-1,(int)y,(int)z);
+
+   if (((int)x*-1 == 1 && (int)(y*-1) == 25 && (int)z*-1 == 2) && key_found) {
+      return 1;
+   }
+
+   return 0;
+}
+
+void print_game_over_message() {
+float ratio = 1024.0/(float) screenWidth;
+float size;
+float wCenter, hCenter;
+float textSize, cOffset;
+char coordText[99];
+float x, y, z;
+int i, len;
+//int screenWidth = 1024;
+//int screenHeight = 768;
+
+   /* Get the centre of the width/height */
+   wCenter = (float) screenWidth/2;
+   hCenter = (float) screenHeight/2;
+
+   //GLfloat black[] = {0.0, 0.0, 0.0, 1.0};
+   //GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
+   //set2Dcolour(black);
+
+   sprintf(coordText, "Re-initializing maze, please wait"); 
+   
+   glRasterPos2f(wCenter-50, hCenter+270);
+
+   /* Draw the coordniates */ 
+   //set2Dcolour(green);
+   glColor3f( 1.0, 1.0, 1.0 );
+   len = (int)strlen(coordText);
+   for (i = 0; i < len; i++) {
+      glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, coordText[i]);
+   }
+}
+
+void print_key_message() {
+char coordText[99];
+int i, len;
+//int screenWidth = 1024;
+//int screenHeight = 768;
+
+   //GLfloat black[] = {0.0, 0.0, 0.0, 1.0};
+   //GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
+   //set2Dcolour(black);
+
+   sprintf(coordText, "Key has been picked up"); 
+   
+   glRasterPos2f(3, 3);
+
+   /* Draw the coordniates */ 
+   //set2Dcolour(green);
+   glColor3f( 1.0, 1.0, 1.0 );
+   len = (int)strlen(coordText);
+   for (i = 0; i < len; i++) {
+      glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, coordText[i]);
+   }
+}
+
+/*    if(key_found) {
+      sprintf(coordText, "Key has been picked up"); 
+   
+      glRasterPos2f(3, 3);
+
+      glColor3f( 1.0, 1.0, 1.0 );
+      len = (int)strlen(coordText);
+      for (i = 0; i < len; i++) {
+         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, coordText[i]);
+      } 
+   }*/
+
+int is_key_found() {
+float x,y,z;
+   
+   getOldViewPosition(&x,&y,&z);
+   //printf("LOOKING: %d %d %d\n",(int)x*-1,(int)y,(int)z);
+
+   if ((int)x*-1 == key_x && (int)(y*-1) == key_y+1 && (int)z*-1 == key_z) {
+      return 1;
+   }
+
+   return 0;
+}
+
+
 
 int check_if_ai_is_in_wall(float x, float y, float z) {
    if (world[(int)x][(int)y][(int)z] != 0) {
@@ -668,7 +996,49 @@ void animate_projectile() {
       hideMob(1);
       
       /* remove the cube that was hit */
-      world[(int)(x_VP * -1)][(int)(y_VP * -1)][(int)(z_VP * -1)] = 0;
+      if(world[(int)(x_VP * -1)][(int)(y_VP * -1)][(int)(z_VP * -1)] != 0) {
+         if(world[(int)(x_VP * -1)][(int)(y_VP * -1)][(int)(z_VP * -1)] == 8){
+            world[(int)(x_VP * -1)][(int)(y_VP * -1)][(int)(z_VP * -1)] = 0;
+         }
+      }  
+
+      /* Check if bullet hit the mobs */
+      if(  (abs( (x_VP *-1) - mob2_x ) >= 0 && abs( (x_VP *-1) - mob2_x ) <= 1)  
+         && (abs( (y_VP *-1) - mob2_y ) >= 0 && abs( (y_VP *-1) - mob2_y ) <= 1) 
+         && (abs( (z_VP *-1) - mob2_z ) >= 0 && abs( (z_VP *-1) - mob2_z ) <= 1) ) {
+         mob2_x = 10000;
+         mob2_y = 10000;
+         mob2_z = 10000;
+         mob2_dead = 1;
+         hideMob(2);
+      }
+      if(  (abs( (x_VP *-1) - mob3_x ) >= 0 && abs( (x_VP *-1) - mob3_x ) <= 1)  
+         && (abs( (y_VP *-1) - mob3_y ) >= 0 && abs( (y_VP *-1) - mob3_y ) <= 1) 
+         && (abs( (z_VP *-1) - mob3_z ) >= 0 && abs( (z_VP *-1) - mob3_z ) <= 1) ) {
+         mob3_x = 10000;
+         mob3_y = 10000;
+         mob3_z = 10000;
+         mob3_dead = 1;
+         hideMob(3);
+      }
+      if(  (abs( (x_VP *-1) - mob4_x ) >= 0 && abs( (x_VP *-1) - mob4_x ) <= 1)  
+         && (abs( (y_VP *-1) - mob4_y ) >= 0 && abs( (y_VP *-1) - mob4_y ) <= 1) 
+         && (abs( (z_VP *-1) - mob4_z ) >= 0 && abs( (z_VP *-1) - mob4_z ) <= 1) ) {
+         mob4_x = 10000;
+         mob4_y = 10000;
+         mob4_z = 10000;
+         mob4_dead = 1;
+         hideMob(4);
+      }
+      if(  (abs( (x_VP *-1) - mob5_x ) >= 0 && abs( (x_VP *-1) - mob5_x ) <= 1)  
+         && (abs( (y_VP *-1) - mob5_y ) >= 0 && abs( (y_VP *-1) - mob5_y ) <= 1) 
+         && (abs( (z_VP *-1) - mob5_z ) >= 0 && abs( (z_VP *-1) - mob5_z ) <= 1) ) {
+         mob5_x = 10000;
+         mob5_y = 10000;
+         mob5_z = 10000;
+         mob5_dead = 1;       
+         hideMob(5);
+      }      
    }
 }
 
@@ -676,7 +1046,7 @@ void animate_projectile() {
 
 /* 
  * Name: fire_projectile()
- * Description: Animates the internal walls by selecting a random pillar, erasing its wall, and re drawing a new one
+ * Description: 
  * Parameters: none
  * Return: none
 */
@@ -710,6 +1080,28 @@ int projectile_collision_detection() {
    /* without the -1's, i was getting a bus error 10 for some reason? */
    if ((((int)(x_VP * -1) < 0) || (int)(x_VP * -1) >= WORLDX-1) || ((int)(y_VP * -1) < 0 || (int)(y_VP * -1) >= WORLDY-1) 
          || (((int)(z_VP * -1) < 0) || (int)(z_VP * -1) >= WORLDZ-1)) {
+      return 1;
+   }
+
+   /* Check if bullet hit the mobs */
+   if(  (abs( (x_VP *-1) - mob2_x ) >= 0 && abs( (x_VP *-1) - mob2_x ) <= 0.5)  
+      && (abs( (y_VP *-1) - mob2_y ) >= 0 && abs( (y_VP *-1) - mob2_y ) <= 0.5) 
+      && (abs( (z_VP *-1) - mob2_z ) >= 0 && abs( (z_VP *-1) - mob2_z ) <= 0.5) ) {
+      return 1;
+   }
+   if(  (abs( (x_VP *-1) - mob3_x ) >= 0 && abs( (x_VP *-1) - mob3_x ) <= 0.5)  
+      && (abs( (y_VP *-1) - mob3_y ) >= 0 && abs( (y_VP *-1) - mob3_y ) <= 0.5) 
+      && (abs( (z_VP *-1) - mob3_z ) >= 0 && abs( (z_VP *-1) - mob3_z ) <= 0.5) ) {
+      return 1;
+   }
+   if(  (abs( (x_VP *-1) - mob4_x ) >= 0 && abs( (x_VP *-1) - mob4_x ) <= 0.5)  
+      && (abs( (y_VP *-1) - mob4_y ) >= 0 && abs( (y_VP *-1) - mob4_y ) <= 0.5) 
+      && (abs( (z_VP *-1) - mob4_z ) >= 0 && abs( (z_VP *-1) - mob4_z ) <= 0.5) ) {
+      return 1;
+   }
+   if(  (abs( (x_VP *-1) - mob5_x ) >= 0 && abs( (x_VP *-1) - mob5_x ) <= 0.5)  
+      && (abs( (y_VP *-1) - mob5_y ) >= 0 && abs( (y_VP *-1) - mob5_y ) <= 0.5) 
+      && (abs( (z_VP *-1) - mob5_z ) >= 0 && abs( (z_VP *-1) - mob5_z ) <= 0.5) ) {
       return 1;
    }
 
@@ -799,25 +1191,7 @@ int offset;
       /* Start the viewpoint in a corner of the maze */
       setViewPosition(-3, -25, -2);
 
-      mob2_x = 5.0;
-      mob2_y = 25.0;
-      mob2_z = 21.0;
-      createMob(2, mob2_x, mob2_y, mob2_z, 0.0);
-
-      mob3_x = 15.0;
-      mob3_y = 25.0;
-      mob3_z = 14.0;
-      createMob(3, mob3_x, mob3_y, mob3_z, 0.0);
-
-      mob4_x = 21.0;
-      mob4_y = 25.0;
-      mob4_z = 4.0;
-      createMob(4, mob4_x, mob4_y, mob4_z, 0.0);
-
-      mob5_x = 6.0;
-      mob5_y = 25.0;
-      mob5_z = 8.0;
-      createMob(5, mob5_x, mob5_y, mob5_z, 0.0);
+      spawn_mobs();
 
       xX = 35;
       yX = 25; 
@@ -826,6 +1200,21 @@ int offset;
       xO = 45;
       yO = 25;
       zO = 37;
+
+      
+
+      spawn_key();
+      health = 5;
+
+      
+
+      /* Draw white door */
+      world[0][25][2] = 5;
+      world[0][26][2] = 5;
+
+      game_over_flag = 0;
+      init_flag = 0;
+
    }
 
 	/* starts the graphics processing loop */
@@ -1101,6 +1490,16 @@ void test_wall2()
 void ai_move(int ai) {
 int i;
 
+   if(ai == 2 && mob2_dead == 1) {
+      return;
+   } else if(ai == 3 && mob3_dead == 1) {
+      return;
+   } else if(ai == 4 && mob4_dead == 1) {
+      return;
+   } else if(ai == 5 && mob5_dead == 1) {
+      return;
+   }
+
    srand(time(NULL));
 
    roam_ai(ai);
@@ -1148,25 +1547,25 @@ int i;
    }
 
 
-   if (mob2_x < 0 || mob2_x >= WORLDX-1){
+   if ((mob2_x < 0 || mob2_x >= WORLDX-1) && !mob2_dead){
       mob2_x = 5.0;
       mob2_y = 25.0;
       mob2_z = 21.0;
       createMob(2, mob2_x, mob2_y, mob2_z, 0.0);  
    }
-   if (mob3_x < 0 || mob3_x >= WORLDX-1){
+   if ((mob3_x < 0 || mob3_x >= WORLDX-1) && !mob3_dead){
       mob3_x = 15.0;
       mob3_y = 25.0;
       mob3_z = 14.0;
       createMob(3, mob3_x, mob3_y, mob3_z, 0.0);
    }
-   if (mob4_x < 0 || mob4_x >= WORLDX-1){
+   if ((mob4_x < 0 || mob4_x >= WORLDX-1) && !mob4_dead){
       mob4_x = 21.0;
       mob4_y = 25.0;
       mob4_z = 4.0;
       createMob(4, mob4_x, mob4_y, mob4_z, 0.0);
    }
-   if (mob5_x < 0 || mob5_x >= WORLDX-1){
+   if ((mob5_x < 0 || mob5_x >= WORLDX-1) && !mob5_dead){
       mob5_x = 6.0;
       mob5_y = 25.0;
       mob5_z = 8.0;
