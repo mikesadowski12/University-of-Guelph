@@ -382,6 +382,14 @@ char c;
 
 }
 
+
+
+/* 
+ * Name: print_hit_message()
+ * Description: draws a message indicating user was it
+ * Parameters: 
+ * Return: none
+*/
 void print_hit_message() {
 float ratio = 1024.0/(float) screenWidth;
 float size;
@@ -415,6 +423,13 @@ int i, len;
 }
 
 
+
+/* 
+ * Name: display_health()
+ * Description: draws a health bar
+ * Parameters: 
+ * Return: none
+*/
 void display_health() {
 float ratio = 1024.0/(float) screenWidth;
 float size;
@@ -797,6 +812,12 @@ char c;
    
 
 
+/* 
+ * Name: teleport_flag() bounce_flag() rain_flag()
+ * Description: Determine if player hit a power up cube
+ * Parameters: 
+ * Return: none
+*/
 int teleport_flag() {
 float x,y,z;
    
@@ -865,6 +886,14 @@ float x,y,z;
    return 0;
 }
 
+
+
+/* 
+ * Name: spawn_powerups()
+ * Description: Spawn the different power ups randomly on the map
+ * Parameters: 
+ * Return: none
+*/
 void spawn_powerups() {
    teleport_cube1_y = 25;
    teleport_cube2_y = 25;
@@ -922,6 +951,13 @@ void spawn_powerups() {
 }
 
 
+
+/* 
+ * Name: initialize_new_maze()
+ * Description: initialize a new game
+ * Parameters: 
+ * Return: none
+*/
 void initialize_new_maze() {
 
    if ((clock() - newgame_timer) / (CLOCKS_PER_SEC) >= 0.1) {
@@ -936,12 +972,27 @@ void initialize_new_maze() {
 }
 
 
+
+/* 
+ * Name: random_location()
+ * Description: pick a random position for x,z coords
+ * Parameters: num = number chosen
+ * Return: none
+*/
 void random_location(int *num) {
    do {
       *num = rand() % 23;
    } while(*num % 4 == 0);  
 }
 
+
+
+/* 
+ * Name: spawn_key()
+ * Description: pick a random position for key
+ * Parameters: none
+ * Return: none
+*/
 void spawn_key() {
       world[key_x][key_y][key_z] = 0;
 
@@ -959,6 +1010,14 @@ void spawn_key() {
       world[key_x][key_y][key_z] = 5;
 }
 
+
+
+/* 
+ * Name: spawn_mobs()
+ * Description: spawn mobs in their position 
+ * Parameters: none
+ * Return: none
+*/
 void spawn_mobs() {
       mob2_x = 5.0;
       mob2_y = 25.0;
@@ -998,14 +1057,16 @@ void spawn_mobs() {
       mob3_shot_z = 999;
       mob4_shot_z = 999;
       mob5_shot_z = 999;
-
-
-
-
 }
 
 
 
+/* 
+ * Name: game_over()
+ * Description: game is over when player runs into the door with the key
+ * Parameters: none
+ * Return: none
+*/
 int game_over() {
 float x,y,z;
    
@@ -1019,6 +1080,14 @@ float x,y,z;
    return 0;
 }
 
+
+
+/* 
+ * Name: print_game_over_message()
+ * Description: Print that the game has ended
+ * Parameters: none
+ * Return: none
+*/
 void print_game_over_message() {
 float ratio = 1024.0/(float) screenWidth;
 float size;
@@ -1038,9 +1107,9 @@ int i, len;
    //GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
    //set2Dcolour(black);
 
-   sprintf(coordText, "Re-initializing maze, please wait"); 
+   sprintf(coordText, "Game Over, Re-initializing maze - please wait"); 
    
-   glRasterPos2f(wCenter-50, hCenter+270);
+   glRasterPos2f(wCenter-100, hCenter+270);
 
    /* Draw the coordniates */ 
    //set2Dcolour(green);
@@ -1051,6 +1120,14 @@ int i, len;
    }
 }
 
+
+
+/* 
+ * Name: print_key_message()
+ * Description: Print that the key is picked up
+ * Parameters: none
+ * Return: none
+*/
 void print_key_message() {
 char coordText[99];
 int i, len;
@@ -1074,18 +1151,14 @@ int i, len;
    }
 }
 
-/*    if(key_found) {
-      sprintf(coordText, "Key has been picked up"); 
-   
-      glRasterPos2f(3, 3);
 
-      glColor3f( 1.0, 1.0, 1.0 );
-      len = (int)strlen(coordText);
-      for (i = 0; i < len; i++) {
-         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, coordText[i]);
-      } 
-   }*/
 
+/* 
+ * Name: is_key_found()
+ * Description: Check if player has found the key
+ * Parameters: none
+ * Return: none
+*/
 int is_key_found() {
 float x,y,z;
    
@@ -1100,7 +1173,12 @@ float x,y,z;
 }
 
 
-
+/* 
+ * Name: check_if_ai_is_in_wall()
+ * Description: Check if AI got inside of a cube
+ * Parameters: none
+ * Return: none
+*/
 int check_if_ai_is_in_wall(float x, float y, float z) {
    if (world[(int)x][(int)y][(int)z] != 0) {
       return 1;
