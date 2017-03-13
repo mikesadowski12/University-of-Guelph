@@ -115,6 +115,12 @@ int teleport_flag();
 int bounce_flag();
 int rain_flag();
 
+void teleport();
+void bounce();
+void make_it_rain();
+void animate_rain();
+void animate_bounce();
+
 /*******************************************/
 
 	/* initialize graphics library */
@@ -221,6 +227,10 @@ int bounce_cube2_x, bounce_cube2_y, bounce_cube2_z;
 int rain_cube1_x, rain_cube1_y, rain_cube1_z;
 int rain_cube2_x, rain_cube2_y, rain_cube2_z;
 
+int animate_rain_flag;
+
+int bounce_x, bounce_z;
+
 /********* end of extern variable declarations **************/
 
 
@@ -240,6 +250,15 @@ void collisionResponse() {
    /* This is to keep viewpoint on the platform of the world at all times */
    if ((((x * -1) < 0) || (x * -1) >= WORLDX) || ((y * -1) < 0 || (y * -1) >= WORLDY) 
          || (((z * -1) < 0) || (z * -1) >= WORLDZ)) {
+      getOldViewPosition(&x,&y,&z);
+      setViewPosition(x,y,z);
+   }
+
+   getViewPosition(&x, &y, &z);
+
+   /* Keep the viewpoint in bounds of the entire world, determined by the WORLDX, WORLDY, WORLDZ variables in graphics.h */
+   /* This is to keep viewpoint on the platform of the world at all times */
+   if (((x * -1) >= 24 || (z * -1) >= 24 || (x * -1) <= 1 || (z * -1) <= 1)  && (y * -1) > 25) { 
       getOldViewPosition(&x,&y,&z);
       setViewPosition(x,y,z);
    }
@@ -269,7 +288,6 @@ void collisionResponse() {
 
    getOldViewPosition(&x, &y, &z);
 }
-
 
 
 	/******* draw2D() *******/
@@ -326,7 +344,7 @@ char c;
    }
 
    /* draw all entities in the world*/
-   draw_entity_position(x, y, z, size, green);
+   draw_entity_position(x, y, z, size, green); 
    locate_walls(size, blue);
 
    /* only draw the projectile if there is one (once it hits something, it should disappear) */
@@ -380,6 +398,8 @@ char c;
       print_hit_message();
    }
 
+   draw_entity_position(teleport_cube2_x, teleport_cube2_y, teleport_cube2_z, size, red);
+
 }
 
 
@@ -404,10 +424,6 @@ int i, len;
    /* Get the centre of the width/height */
    wCenter = (float) screenWidth/2;
    hCenter = (float) screenHeight/2;
-
-   //GLfloat black[] = {0.0, 0.0, 0.0, 1.0};
-   //GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
-   //set2Dcolour(black);
 
    sprintf(coordText, "You were hit!"); 
    
@@ -592,11 +608,27 @@ int i, len;
 */
 void locate_walls(float size, GLfloat colour[]) {
 int i, k;
+GLfloat red[] = {1.0, 0.0, 0.0, 1.0};
+GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
+GLfloat yellow[] = {255.0, 255.0, 0.0, 1.0};
+GLfloat orange[] = {255.0, 165.0, 0.0, 1.0};
+GLfloat white[] = {255.0, 255.0, 255.0, 1.0};
 
    /* search the ground floor of the entire world, draw if an object was found on the map */
    for(i=0; i<WORLDX; i++)
          for(k=0; k<WORLDZ; k++)
-            if(world[i][25][k] != 0) {
+
+            if(world[i][25][k] == 7) {
+               draw_entity_position((float) i * -1, (float) 25 * -1, (float) k * -1, size, orange);
+            } else if(world[i][25][k] == 1) {
+               draw_entity_position((float) i * -1, (float) 25 * -1, (float) k * -1, size, green);
+            } else if(world[i][25][k] == 8) {
+               draw_entity_position((float) i * -1, (float) 25 * -1, (float) k * -1, size, yellow);
+            } else if(world[i][25][k] == 3) {
+               draw_entity_position((float) i * -1, (float) 25 * -1, (float) k * -1, size, red);
+            } else if (world[i][25][k] == 5) {
+               draw_entity_position((float) i * -1, (float) 25 * -1, (float) k * -1, size, white);
+            } else if(world[i][25][k] != 0) {
                draw_entity_position((float) i * -1, (float) 25 * -1, (float) k * -1, size, colour);
             }               
 }
@@ -796,20 +828,147 @@ char c;
          }
 
          if (teleport_flag()){
-
+            teleport();
          }
 
          if(bounce_flag()) {
-
+            bounce();
          }
 
          if(rain_flag()) {
-
+            make_it_rain();
          }
+
+         animate_rain();
+
+         if (bounce_x != 0 && bounce_z != 0) {
+            //animate_bounce();
+         }
+
       }
    }
 }
+
+
+
+/* 
+ * Name: teleport()
+ * Description: Teleport the player to a random location in the maze
+ * Parameters: 
+ * Return: none
+*/
+void teleport() {
+int x, z;
+
+   do {
+      random_location(&x);  
+      random_location(&z);  
+   } while (world[x][25][z] != 0);
    
+   setViewPosition((x * -1), -25, (z * -1));
+}
+
+
+
+/* 
+ * Name: bounce()
+ * Description: Choose a location to bounce the player to in the maze
+ * Parameters: 
+ * Return: none
+*/
+void bounce() {
+   do {
+      random_location(&bounce_x);  
+      random_location(&bounce_z);  
+   } while (world[bounce_x][25][bounce_z] != 0);
+}
+
+void animate_bounce() {
+int j,k,new_x,new_z;
+float i;
+float x,y,z;
+   getOldViewPosition(&x,&y,&z);
+   x *= -1;
+   y *= -1;
+   z *= -1;
+
+
+   if (y <=26) {
+      for(i = 0; i < 50; i += 0.15) {
+         y += i;
+
+         if (y >= 50) {
+            break;
+         }
+      }
+   }
+
+
+
+   bounce_x = 0;
+   bounce_z = 0;
+
+   /*if(y != 50) {
+      y += 0.5;
+   } else if (x != bounce_x) {
+
+   } else if (z != bounce_z) {
+
+   } else {
+      bounce_x = 0;
+      bounce_z = 0;
+   }*/
+
+   setViewPosition((x * -1), (y * -1), (z * -1));
+}
+
+/* 
+ * Name: make_it_rain()
+ * Description: Spawn the orang blocks to start falling down as rain
+ * Parameters: 
+ * Return: none
+*/
+void make_it_rain() {
+int i, x, z;
+   animate_rain_flag = 1;
+
+   for(i = 0; i < 15; i++) {
+      do {
+         random_location(&x);  
+         random_location(&z);  
+      } while (world[x][25][z] != 0);
+
+      world[x][45][z] = 7;
+   }
+}
+
+
+
+/* 
+ * Name: animate_rain()
+ * Description: Animate the orange blocks falling down from the sky
+ * Parameters: 
+ * Return: none
+*/
+void animate_rain() {
+int i,j,k;
+
+   for(i = 1; i <= 23; i++) {
+      for (j = 1; j <= 23; j++) {
+         for(k = 25; k <= 45; k++) {
+
+            if(world[i][k][j] == 7) {
+               if (k != 25) {
+                  world[i][k][j] = 0;
+                  world[i][k-1][j] = 7;
+               } 
+            }
+         }
+      }
+   }
+   
+}
+
 
 
 /* 
@@ -959,6 +1118,7 @@ void spawn_powerups() {
  * Return: none
 */
 void initialize_new_maze() {
+int i,j,k;
 
    if ((clock() - newgame_timer) / (CLOCKS_PER_SEC) >= 0.1) {
       game_over_flag = 0;
@@ -968,6 +1128,17 @@ void initialize_new_maze() {
       spawn_mobs();
       health = 5;
       spawn_powerups();
+      animate_rain_flag = 0;
+
+      /* clear the fallen blocks */
+      for(i = 1; i <= 23; i++) {
+         for (j = 1; j <= 23; j++) {
+            if(world[i][25][j] == 7) {
+               world[i][25][j] = 0;
+            }
+
+         }
+      }
    }  
 }
 
@@ -1107,7 +1278,7 @@ int i, len;
    //GLfloat green[] = {0.0, 1.0, 0.0, 1.0};
    //set2Dcolour(black);
 
-   sprintf(coordText, "Game Over, Re-initializing maze - please wait"); 
+   sprintf(coordText, "Game Over: Re-initializing maze - please wait"); 
    
    glRasterPos2f(wCenter-100, hCenter+270);
 
@@ -1238,7 +1409,7 @@ void animate_projectile() {
       
       /* remove the cube that was hit */
       if(world[(int)(x_VP * -1)][(int)(y_VP * -1)][(int)(z_VP * -1)] != 0) {
-         if(world[(int)(x_VP * -1)][(int)(y_VP * -1)][(int)(z_VP * -1)] == 8){
+         if(world[(int)(x_VP * -1)][(int)(y_VP * -1)][(int)(z_VP * -1)] == 7){
             world[(int)(x_VP * -1)][(int)(y_VP * -1)][(int)(z_VP * -1)] = 0;
          }
       }  
@@ -1445,6 +1616,7 @@ int offset;
       spawn_key();
       health = 5;
       spawn_powerups();
+      animate_rain_flag = 0;
 
       /* Draw white door */
       world[0][25][2] = 5;
@@ -1452,6 +1624,9 @@ int offset;
 
       game_over_flag = 0;
       init_flag = 0;
+
+      bounce_x = 0;
+      bounce_z = 0;
 
    }
 
@@ -1521,17 +1696,23 @@ void animateInternalWalls()
 void applyGravity()
 {
 float x, y, z;
+int i, j, k;
 
    /* Get the position of the ViewPoint */
    getViewPosition(&x, &y, &z);
 
    /* if no block underneath viewpoint, move viewpoint -1 in the y direction */
-   if (world[(int)(x * -1)][(int)((y * -1) - 0.5)][(int)(z * -1)] == 0) {
+   if(bounce_x != 0 && bounce_z != 0 && (y * -1) <= 40 ) {
+      setViewPosition(x, y - 0.15, z);
+
+      if((y * -1)+1 >= 40) {
+         bounce_x = 0;
+         bounce_z = 0;
+      }
+   } else if (world[(int)(x * -1)][(int)((y * -1) - 0.5)][(int)(z * -1)] == 0) {
       setViewPosition(x, y + 0.05, z);
    }
 }
-
-
 
 /* 
  * Name: draw_internal_wall()
