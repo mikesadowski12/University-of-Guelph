@@ -9,9 +9,9 @@ so I just made them with mobs
 
 
 
--red is teleport
--green is bounce
--yellow cube is now the rain (instead of blue)
--3 hits and you die, once your health goes down maze re-initializes
+-red is teleport (completely random location every time)
+-green is bounce (you fly into the air and control where you land)
+-yellow cube is now the rain instead of blue (rains down orange cubes that do nothing and can be shot)
+-you die once your health goes down to 0, maze re-initializes after
 -bringing the key to the door re-initializes maze as well
--everything but the door is placed in a random location every time (2 of each power up)
+-everything but the door is placed in a random location every time except for the first maze, it is the same every time (2 of each power up)
